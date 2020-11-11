@@ -1,0 +1,72 @@
+plugins {
+    // Apply the java Plugin to add support for Java.
+    id 'java'
+    id 'checkstyle'
+    id "idea"
+    id "io.spring.dependency-management"
+    id "org.ajoberstar.grgit"
+    id "io.swagger.swaggerhub"
+}
+
+
+
+repositories {
+
+    jcenter()
+    mavenCentral()
+//    maven { will customize for the site specific info
+//        url 'https://nexus.client.com:8443/repository/maven-public/'
+//        credentials {
+//            username System.getenv("NEXUS_USERNAME")
+//            password System.getenv("NEXUS_PASSWORD")
+//        }
+//    }
+}
+
+
+dependencies {
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: "${jackson_version}"
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+
+    testCompileOnly group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+    // Use JUnit Jupiter API for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: "${mockito_version}"
+//    testImplementation group: 'org.mockito', name: 'mockito-core', version: "${mockito_version}"
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.11.1'
+    //since this is a spring boot starter, assume spring at all levels
+    testImplementation(group: 'org.springframework.boot', name:'spring-boot-starter-test', version: "${spring_boot_version}") {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+tasks.named('test') {
+    // Use junit platform for unit tests.
+    useJUnitPlatform()
+}
+
+checkstyle {
+    toolVersion "8.24"
+    configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+    configProperties = [
+            'checkstyle.cache.file': "${buildDir}/checkstyle.cache",
+    ]
+    ignoreFailures = true
+    showViolations = true
+
+}
+
+checkstyleMain {
+    source = "src/main/java"
+}
+checkstyleTest {
+    source = "src/test/java"
+}
+
+

@@ -1,0 +1,15 @@
+plugins {
+    id 'demo.java-library-conventions'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+dependencies {
+    implementation project(':persistence:api')
+    compile group: 'io.opentracing.contrib', name: 'opentracing-spring-cloud-jdbc-starter', version: '0.3.12'
+
+}

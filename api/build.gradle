@@ -1,0 +1,15 @@
+plugins {
+    id 'demo.java-library-conventions'
+    // Apply the java-library plugin for API and implementation separation.
+}
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+dependencies {
+    implementation group: 'org.springframework', name: 'spring-webmvc'
+}
+
+
