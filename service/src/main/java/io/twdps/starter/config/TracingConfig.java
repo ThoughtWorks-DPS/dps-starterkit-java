@@ -1,8 +1,8 @@
 package io.twdps.starter.config;
 
 import static zipkin2.codec.SpanBytesDecoder.JSON_V2;
-import static zipkin2.codec.SpanBytesEncoder.JSON_V1;
 import static zipkin2.codec.SpanBytesDecoder.PROTO3;
+import static zipkin2.codec.SpanBytesEncoder.JSON_V1;
 
 import brave.Tracing;
 import brave.handler.SpanHandler;
@@ -23,49 +23,50 @@ import zipkin2.reporter.okhttp3.OkHttpSender;
 @Configuration
 @ConditionalOnProperty(prefix = "opentracing.zipkin", name = "enabled", havingValue = "true")
 public class TracingConfig {
-    @Value("${spring.application.name:unknown-spring-boot}")
-    private String serviceName;
 
-    @Bean
-    public Tracer tracer(SpanHandler spanHandler, Sampler sampler) {
+  @Value("${spring.application.name:unknown-spring-boot}")
+  private String serviceName;
 
-        var braveTracing = Tracing.newBuilder()
-                .localServiceName(serviceName)
-                .supportsJoin(false)
-                .addSpanHandler(spanHandler)
-                .build();
-        // use this to create an OpenTracing Tracer
-        return BraveTracer.create(braveTracing);
+  @Bean
+  public Tracer tracer(SpanHandler spanHandler, Sampler sampler) {
+
+    var braveTracing = Tracing.newBuilder()
+        .localServiceName(serviceName)
+        .supportsJoin(false)
+        .addSpanHandler(spanHandler)
+        .build();
+    // use this to create an OpenTracing Tracer
+    return BraveTracer.create(braveTracing);
+  }
+
+  @Bean
+  public SpanHandler spanHandler(ZipkinConfigurationProperties properties) {
+    var url = properties.getHttpSender().getBaseUrl();
+    if (properties.getHttpSender().getEncoder().name().equals(JSON_V2.name())
+        || properties.getHttpSender().getEncoder().name().equals(PROTO3.name())) {
+      url += (url.endsWith("/") ? "" : "/") + "api/v2/spans";
+    } else if (properties.getHttpSender().getEncoder().name().equals(JSON_V1.name())) {
+      url += (url.endsWith("/") ? "" : "/") + "api/v1/spans";
+    }
+    return AsyncZipkinSpanHandler.create(OkHttpSender.create(url));
+  }
+
+  @Bean
+  public Sampler sampler(ZipkinConfigurationProperties properties) {
+    if (properties.getBoundarySampler().getRate() != null) {
+      return BoundarySampler.create(properties.getBoundarySampler().getRate());
     }
 
-    @Bean
-    public SpanHandler spanHandler(ZipkinConfigurationProperties properties) {
-        var url = properties.getHttpSender().getBaseUrl();
-        if (properties.getHttpSender().getEncoder().name().equals(JSON_V2.name())
-                || properties.getHttpSender().getEncoder().name().equals(PROTO3.name())) {
-            url += (url.endsWith("/") ? "" : "/") + "api/v2/spans";
-        } else if (properties.getHttpSender().getEncoder().name().equals(JSON_V1.name())) {
-            url += (url.endsWith("/") ? "" : "/") + "api/v1/spans";
-        }
-        return AsyncZipkinSpanHandler.create(OkHttpSender.create(url));
+    if (properties.getCountingSampler().getRate() != null) {
+      return CountingSampler.create(properties.getCountingSampler().getRate());
     }
 
-    @Bean
-    public Sampler sampler(ZipkinConfigurationProperties properties) {
-        if (properties.getBoundarySampler().getRate() != null) {
-            return BoundarySampler.create(properties.getBoundarySampler().getRate());
-        }
+    return Sampler.ALWAYS_SAMPLE;
+  }
 
-        if (properties.getCountingSampler().getRate() != null) {
-            return CountingSampler.create(properties.getCountingSampler().getRate());
-        }
-
-        return Sampler.ALWAYS_SAMPLE;
-    }
-
-    @Bean
-    public ZipkinTracerCustomizer zipkinTracerCustomizer() {
-        return (Tracing.Builder builder) -> builder.supportsJoin(false);
-    }
+  @Bean
+  public ZipkinTracerCustomizer zipkinTracerCustomizer() {
+    return (Tracing.Builder builder) -> builder.supportsJoin(false);
+  }
 }
 

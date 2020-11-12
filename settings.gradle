@@ -6,6 +6,6 @@
  * Detailed information about configuring a multi-project build in Gradle can be found
  * in the user manual at https://docs.gradle.org/6.7/userguide/multi_project_builds.html
  */
-spring_boot_version = "2.3.4.RELEASE"
+
 rootProject.name = 'springboot-starter'
-include('api', 'impl', 'persistence:api','persistence:impl','service','spi')
+include('api', 'SpiImpl', 'persistence:model','persistence:impl','service','spi')

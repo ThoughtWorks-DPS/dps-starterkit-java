@@ -4,8 +4,10 @@ plugins {
     id 'checkstyle'
     id "idea"
     id "io.spring.dependency-management"
+    id 'jacoco'
     id "org.ajoberstar.grgit"
     id "io.swagger.swaggerhub"
+    id "com.diffplug.spotless"
 }
 
 
@@ -28,7 +30,8 @@ dependencies {
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: "${jackson_version}"
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
-    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombok_version}", "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
@@ -52,7 +55,7 @@ tasks.named('test') {
 }
 
 checkstyle {
-    toolVersion "8.24"
+    toolVersion "8.36"
     configFile = rootProject.file('config/checkstyle/checkstyle.xml')
     configProperties = [
             'checkstyle.cache.file': "${buildDir}/checkstyle.cache",
@@ -69,4 +72,15 @@ checkstyleTest {
     source = "src/test/java"
 }
 
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/jacoco")
+}
 
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+}

@@ -1,0 +1,72 @@
+version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/openjdk:11-jdk
+  working_directory: ~/repo
+  environment:
+    DOCKER_REGISTRY: docker.pkg.github.com/thoughtworks-dps/dps-multi-module-starterkit-java
+
+
+jobs:
+  build:
+    <<: *defaults
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: ./gradlew dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      - run:
+          name: Run tests
+          command: ./gradlew test
+
+  publish:
+    <<: *defaults
+
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+
+      - run:
+          name: What's my build number?
+          command: echo $CIRCLE_BUILD_NUM
+
+      - run:
+          name: Build Image
+          command: ./gradlew docker -PdockerRegistry=$DOCKER_REGISTRY -PbuildNumber=$CIRCLE_BUILD_NUM
+
+      - run:
+          name: Docker authentication
+          command: |
+            echo $PAT | docker login docker.pkg.github.com --username $DOCKER_USER --password-stdin
+
+      - run:
+          name: Publish Docker Image
+          command: ./gradlew dockerPush -PdockerRegistry=$DOCKER_REGISTRY -PbuildNumber=$CIRCLE_BUILD_NUM
+
+workflows:
+  version: 2
+
+  build_test_publish:
+    jobs:
+      - build
+#      - publish:
+#          requires:
+#            - build

@@ -4,5 +4,6 @@ import brave.Tracing;
 
 @FunctionalInterface
 public interface ZipkinTracerCustomizer {
-    void customize(Tracing.Builder builder);
+
+  void customize(Tracing.Builder builder);
 }

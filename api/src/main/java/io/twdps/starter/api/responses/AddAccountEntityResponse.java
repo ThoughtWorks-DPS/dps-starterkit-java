@@ -5,8 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class LookupEntityResponse {
+public class AddAccountEntityResponse {
 
-  private String userName;
-  private String fullName;
+  private String response;
 }
