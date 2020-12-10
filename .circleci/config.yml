@@ -73,7 +73,7 @@ jobs:
       - run:
           name: Docker authentication
           command: |
-            bash echo DOCKER_PASSWORD | docker login hub.docker.com --username $DOCKER_USER --password-stdin
+            echo $DOCKER_PASSWORD | docker login hub.docker.com --username $DOCKER_USER --password-stdin
 
       - run:
           name: Publish Docker Image
