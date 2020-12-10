@@ -70,7 +70,7 @@ jobs:
 
       - run:
           name: Docker authentication
-          shell: secrethub run -- /bin/sh -eo pipefail
+          shell: secrethub run -- /bin/sh -e
           command: |
             echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin
 
