@@ -10,19 +10,19 @@ plugins {
     id "com.diffplug.spotless"
 }
 
-
+sourceCompatibility = '11'
 
 repositories {
 
     jcenter()
     mavenCentral()
-//    maven { will customize for the site specific info
-//        url 'https://nexus.client.com:8443/repository/maven-public/'
-//        credentials {
-//            username System.getenv("NEXUS_USERNAME")
-//            password System.getenv("NEXUS_PASSWORD")
-//        }
-//    }
+    maven {
+        url "https://maven.pkg.github.com/ThoughtWorks-DPS/dps-multi-module-starterkit-java"
+        credentials {
+            username "ranbirchawla"
+            password "fe3b44cad1d844707bdf7bfa6360d961a6f8e1e7"
+        }
+    }
 }
 
 

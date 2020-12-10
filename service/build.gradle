@@ -22,7 +22,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'io.twdps.starter.config.Service'
+    mainClass = 'io.twdps.starter.Service'
 }
 
 //ext {

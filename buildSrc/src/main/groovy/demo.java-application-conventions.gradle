@@ -13,7 +13,7 @@ plugins {
 
 group = 'tw.dps'
 version = '0.0.1-SNAPSHOT'
-//sourceCompatibility = '11'
+
 
 ext {
     dockerRegistry =  project.hasProperty("dockerRegistry") ? "${project.dockerRegistry}" : "${group}"

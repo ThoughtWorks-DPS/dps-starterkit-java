@@ -11,9 +11,11 @@ import io.twdps.starter.persistence.mapper.LookupEntityResponseMapper;
 import io.twdps.starter.persistence.model.AccountEntity;
 import io.twdps.starter.spi.AccountManager;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -38,7 +40,7 @@ public class AccountEntityController implements EntityResource {
   }
 
   @Override
-  public ResponseEntity<ResponseDataInArray<LookupEntityResponse>> findEntityByUserName(
+  public ResponseEntity<ResponseDataInArray<LookupEntityResponse>> findEntityByLastName(
       String lastName) {
     List<AccountEntity> accountEntities = accountManager.findByLastName(lastName);
 
@@ -49,6 +51,18 @@ public class AccountEntityController implements EntityResource {
           HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @Override
+  public  ResponseEntity<LookupEntityResponse> findEntityByUsername(
+      @PathVariable(value = "userName") String userName) {
+    Optional<AccountEntity> accountEntity = accountManager.findByUserName(userName);
+    if(accountEntity.isPresent()) {
+      return new ResponseEntity<>(lookupEntityResponseMapper.toLookupEntityResponse(accountEntity.get()),HttpStatus.OK);
+    }
+    else {
+      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
   }
 

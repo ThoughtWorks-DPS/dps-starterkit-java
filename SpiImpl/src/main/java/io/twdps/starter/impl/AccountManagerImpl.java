@@ -5,6 +5,7 @@ import io.twdps.starter.persistence.model.AccountEntity;
 import io.twdps.starter.persistence.model.AccountEntityRepository;
 import io.twdps.starter.spi.AccountManager;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,4 +31,9 @@ public class AccountManagerImpl implements AccountManager {
     return responseList;
   }
 
+  public Optional<AccountEntity> findByUserName(String userName) {
+    log.info("looking up by username:{}",userName);
+    Optional<AccountEntity> accountEntity = Optional.ofNullable(accountEntityRepository.findByUserName(userName));
+    return accountEntity;
+  }
 }

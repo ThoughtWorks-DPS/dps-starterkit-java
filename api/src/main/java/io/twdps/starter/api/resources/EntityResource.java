@@ -23,6 +23,11 @@ public interface EntityResource {
 
   @GetMapping("/lastname/{lastname}")
   @ResponseStatus(HttpStatus.OK)
-  ResponseEntity<ResponseDataInArray<LookupEntityResponse>> findEntityByUserName(
+  ResponseEntity<ResponseDataInArray<LookupEntityResponse>> findEntityByLastName(
       @PathVariable(value = "lastname") String lastName);
+
+  @GetMapping("/username/{username}")
+  @ResponseStatus(HttpStatus.OK)
+  ResponseEntity<LookupEntityResponse> findEntityByUsername(
+      @PathVariable(value = "userName") String userName);
 }

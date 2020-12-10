@@ -12,4 +12,25 @@ dependencies {
     implementation group: 'org.springframework', name: 'spring-webmvc'
 }
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'io.twdps.starter.java-multi-module'
+            artifactId = 'api'
+            version = '1.1'
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            // change to point to your repo, e.g. http://my.org/repo
+            def releasesRepoUrl = "https://maven.pkg.github.com/ThoughtWorks-DPS/dps-multi-module-starterkit-java"
+            def snapshotsRepoUrl = "https://maven.pkg.github.com/ThoughtWorks-DPS/dps-multi-module-starterkit-java"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            url = "https://maven.pkg.github.com/ThoughtWorks-DPS/dps-multi-module-starterkit-java"
+        }
+    }
+}
+
+
 

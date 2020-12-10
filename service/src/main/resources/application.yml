@@ -39,8 +39,8 @@ spring:
 
   #TODO: integrate with secrets mgmt and integrate liquibase
   datasource:
-    url: "jdbc:postgresql://localhost:5432/starterkit"
-    username: starterkit
+    url: "jdbc:postgresql://postgres1:5432/skdb"
+    username: skuser
     password: localT3st!
   jpa:
     show-sql: false
@@ -64,4 +64,4 @@ spring:
 opentracing:
   zipkin:
     enabled: true
-    http-sender.baseUrl: http://localhost:9411
+    http-sender.baseUrl: http://jaeger:9411
