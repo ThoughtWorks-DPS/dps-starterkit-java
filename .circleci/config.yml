@@ -47,8 +47,6 @@ jobs:
     executor: build-agent
     environment:
       DOCKER_REGISTRY: twdps
-      GITHUB_TOKEN:  secrethub://twdps/di/svc/github/access-token
-      GITHUB_USERNAME: secrethub://twdps/di/svc/github/username
       DOCKER_USER: secrethub://twdps/di/svc/dockerhub/username
       DOCKER_PASSWORD: secrethub://twdps/di/svc/dockerhub/password
 
@@ -72,6 +70,7 @@ jobs:
 
       - run:
           name: Docker authentication
+          secrethub run -- /bin/sh -eo pipefail
           command: |
             echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin
 
