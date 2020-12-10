@@ -46,11 +46,11 @@ jobs:
   publish:
     executor: build-agent
     environment:
-      DOCKER_REGISTRY: docker.pkg.github.com/thoughtworks-dps/dps-multi-module-starterkit-java
+      DOCKER_REGISTRY: twdps
       GITHUB_TOKEN:  secrethub://twdps/di/svc/github/access-token
       GITHUB_USERNAME: secrethub://twdps/di/svc/github/username
-      DOCKER_USER: secrethub://twdps/di/svc/github/username
-      PAT: secrethub://twdps/di/svc/github/access-token
+      DOCKER_USER: secrethub://twdps/di/svc/dockerhub/username
+      DOCKER_PASSWORD: secrethub://twdps/di/svc/dockerhub/password
 
     <<: *defaults
     steps:
@@ -73,7 +73,7 @@ jobs:
       - run:
           name: Docker authentication
           command: |
-            bash echo $PAT | docker login docker.pkg.github.com --username $DOCKER_USER --password-stdin
+            bash echo DOCKER_PASSWORD | docker login hub.docker.com --username $DOCKER_USER --password-stdin
 
       - run:
           name: Publish Docker Image

@@ -52,9 +52,9 @@ bootJar {
 
 docker {
     dependsOn(assemble)
-    name "${dockerRegistry}/starter-java"
-    tag "Build ${dockerImageVersion}", "${dockerRegistry}/starter-java:${dockerImageVersion}"
-    tag "Latest", "${dockerRegistry}/starter-java:latest"
+    name "${dockerRegistry}/dps-multi-module-starterkit-java"
+    tag "Build ${dockerImageVersion}", "${dockerRegistry}/dps-multi-module-starterkit-java:${dockerImageVersion}"
+    tag "Latest", "${dockerRegistry}/dps-multi-module-starterkit-java:latest"
     noCache true
     files "build/libs/${bootJar.archiveFileName.get()}"
     buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
