@@ -1,4 +1,14 @@
-version: 2
+version: 2.1
+
+orbs:
+  secrethub: secrethub/cli@1.0.0
+executors:
+  build-agent:
+    docker:
+      - image: circleci/openjdk:11-jdk
+  deploy-agent:
+    docker:
+      - image:  twdps/di-circleci-infra-image:stable
 
 defaults: &defaults
   docker:
@@ -10,6 +20,7 @@ defaults: &defaults
 
 jobs:
   build:
+    executor: build-agent
     <<: *defaults
 
     steps:
@@ -33,11 +44,15 @@ jobs:
           command: ./gradlew test
 
   publish:
-
+    executor: build-agent
     environment:
       DOCKER_REGISTRY: docker.pkg.github.com/thoughtworks-dps/dps-multi-module-starterkit-java
+      GITHUB_TOKEN:  secrethub://twdps/di/svc/github/access-token
+      GITHUB_USERNAME: secrethub://twdps/di/svc/github/username
+      DOCKER_USER: secrethub://twdps/di/svc/github/username
+      PAT: secrethub://twdps/di/svc/github/access-token
+
     <<: *defaults
-    shell: secrethub run -- /bin/sh -eo pipefail
     steps:
       - checkout
       - setup_remote_docker
