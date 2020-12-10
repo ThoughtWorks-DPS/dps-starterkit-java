@@ -19,8 +19,8 @@ repositories {
     maven {
         url "https://maven.pkg.github.com/ThoughtWorks-DPS/dps-multi-module-starterkit-java"
         credentials {
-            username "ranbirchawla"
-            password "fe3b44cad1d844707bdf7bfa6360d961a6f8e1e7"
+            username ""
+            password ""
         }
     }
 }
