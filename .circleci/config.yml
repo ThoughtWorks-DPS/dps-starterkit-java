@@ -44,6 +44,7 @@ jobs:
           command: ./gradlew test
 
   publish:
+    context: twdps-di
     executor: build-agent
     environment:
       DOCKER_REGISTRY: docker.pkg.github.com/thoughtworks-dps/dps-multi-module-starterkit-java
