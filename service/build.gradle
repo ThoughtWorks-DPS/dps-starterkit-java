@@ -32,8 +32,7 @@ ext {
 //    // that doesn't work when the head is detachede, which is the case
 //    // when running on the pipeline
 //    gitBranchName = System.getProperty("git.branchName", "local")
-
-    dockerImageVersion = project.hasProperty("buildNumber") ? "${project.version}-${project.buildNumber}" : project.version
+      dockerImageVersion = project.hasProperty("buildNumber") ? "${project.version}-${project.buildNumber}" : project.version
 
 }
 
@@ -55,7 +54,7 @@ docker {
     dependsOn(assemble)
     name "${dockerRegistry}/starter-java"
     tag "Build ${dockerImageVersion}", "${dockerRegistry}/starter-java:${dockerImageVersion}"
-    tag "Latest", "${dockerRegistry}/starter-java:latest"*/
+    tag "Latest", "${dockerRegistry}/starter-java:latest"
     noCache true
     files "build/libs/${bootJar.archiveFileName.get()}"
     buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
