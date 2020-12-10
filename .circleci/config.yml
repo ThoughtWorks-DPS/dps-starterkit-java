@@ -17,7 +17,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-{{ checksum "service/build.gradle" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
@@ -26,7 +26,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
+          key: v1-dependencies-{{ checksum "service/build.gradle" }}
 
       - run:
           name: Run tests
@@ -54,8 +54,8 @@ jobs:
           command: echo $CIRCLE_BUILD_NUM
 
       - run:
-          name: Build Image
-          command: ./gradlew docker -PdockerRegistry=$DOCKER_REGISTRY -PbuildNumber=$CIRCLE_BUILD_NUM
+          name: What's my docker env and username?
+          command: echo "$DOCKER_REGISTRY:$GITHUB_USERNAME"
 
       - run:
           name: Docker authentication
@@ -63,8 +63,12 @@ jobs:
             echo $PAT | docker login docker.pkg.github.com --username $DOCKER_USER --password-stdin
 
       - run:
+          name: Build Image
+          command: ./gradlew docker -PdockerRegistry=docker.pkg.github.com/thoughtworks-dps/dps-multi-module-starterkit-java -PbuildNumber=$CIRCLE_BUILD_NUM
+
+      - run:
           name: Publish Docker Image
-          command: ./gradlew dockerPush -PdockerRegistry=$DOCKER_REGISTRY -PbuildNumber=$CIRCLE_BUILD_NUM
+          command: ./gradlew dockerPush -PdockerRegistry=docker.pkg.github.com/thoughtworks-dps/dps-multi-module-starterkit-java -PbuildNumber=$CIRCLE_BUILD_NUM
 
 workflows:
   version: 2

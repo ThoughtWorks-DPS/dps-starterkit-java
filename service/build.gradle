@@ -25,14 +25,19 @@ application {
     mainClass = 'io.twdps.starter.Service'
 }
 
-//ext {
+ext {
 //    gitRevision = grgit.head().id
 //    gitAbbRevision = grgit.head().abbreviatedId
 //    // Please don't change for 'gitBranchName = grgit.branch.current().name'
-//    // that doesn't work when the head is detached, which is the case
+//    // that doesn't work when the head is detachede, which is the case
 //    // when running on the pipeline
 //    gitBranchName = System.getProperty("git.branchName", "local")
-//}
+
+    dockerImageVersion = project.hasProperty("buildNumber") ? "${project.version}-${project.buildNumber}" : project.version
+
+}
+
+
 
 bootJar {
     manifest {
@@ -49,7 +54,8 @@ bootJar {
 docker {
     dependsOn(assemble)
     name "${dockerRegistry}/starter-java"
-    tag "${dockerImageVersion}", "latest"
+    tag "Build ${dockerImageVersion}", "${dockerRegistry}/starter-java:${dockerImageVersion}"
+    tag "Latest", "${dockerRegistry}/starter-java:latest"*/
     noCache true
     files "build/libs/${bootJar.archiveFileName.get()}"
     buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
