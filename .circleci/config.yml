@@ -54,7 +54,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-
+      - secrethub/install
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "service/build.gradle" }}
