@@ -67,6 +67,6 @@ workflows:
   build_test_publish:
     jobs:
       - build
-#      - publish:
-#          requires:
-#            - build
+      - publish:
+          requires:
+            - build
