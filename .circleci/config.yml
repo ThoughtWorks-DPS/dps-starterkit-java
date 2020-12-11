@@ -8,14 +8,12 @@ executors:
       - image: circleci/openjdk:11-jdk
   deploy-agent:
     docker:
-      - image:  twdps/di-circleci-infra-image:stable
+      - image: twdps/di-circleci-infra-image:stable
 
 defaults: &defaults
-  docker:
-    - image: circleci/openjdk:11-jdk
   working_directory: ~/repo
   environment:
-    DOCKER_REGISTRY: docker.pkg.github.com/thoughtworks-dps/dps-multi-module-starterkit-java
+    DOCKER_REGISTRY: twdps
 
 
 jobs:
@@ -78,6 +76,55 @@ jobs:
           name: Publish Docker Image
           command: ./gradlew dockerPush -PdockerRegistry=$DOCKER_REGISTRY -PbuildNumber=$CIRCLE_BUILD_NUM
 
+  dev-deploy:
+    executor: deploy-agent
+    environment:
+      AWS_DEFAULT_REGION: us-east-2
+      DOCKER_REGISTRY: twdps
+      DOCKER_USER: secrethub://twdps/di/svc/dockerhub/username
+      DOCKER_PASSWORD: secrethub://twdps/di/svc/dockerhub/password
+      POSTGRES_USER: secrethub://twdps/di/svc/aurora/psql/username
+      POSTGRES_ENDPOINT: secrethub://twdps/di/svc/aurora/psql/endpoint
+      POSTGRES_PASSWORD: secrethub://twdps/di/svc/aurora/psql/starter/password
+    <<: *defaults
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: pull kubeconfig
+          shell: secrethub run -- /bin/sh -e
+          command: |
+            mkdir ~/.kube
+            SECRETHUB_VAR_ENV=sandbox secrethub inject -i tpl/kubeconfig.tpl -o ~/.kube/config
+      - run:
+          name: Create registry secrets
+          shell: secrethub run -- /bin/sh -e
+          command: |
+            kubectl create secret docker-registry docker-hub-pull-secret -n di-dev \
+                        --docker-username=$DOCKER_USER \
+                        --docker-password=$DOCKER_PASSWORD \
+                        --dry-run=client -o yaml | kubectl apply -f -
+      - run:
+          name: Create postgres secrets
+          shell: secrethub run -- /bin/sh -e
+          command: |
+            kubectl create secret generic psql-secret -n di-dev \
+                        --from-literal=psql-username=$POSTGRES_USER \
+                        --from-literal=psql-password=$POSTGRES_PASSWORD \
+                        --from-literal=psql-endpoint=$POSTGRES_ENDPOINT \
+                        --dry-run=client -o yaml | kubectl apply -f -
+  #    - run:
+  #        name: run helm chart
+  #        shell: secrethub run -- /bin/sh -eo pipefail
+  #        command: |
+  #          helm upgrade poc-va-starter-java helm \
+  #                        --install \
+  #                        --wait \
+  #                        -f helm/api-2-dev.yaml \
+  #                        -n api-2-dev \
+  #                        --set tag="latest" \
+  #                        --set env.name.SECRETHUB_HELLO="$SECRETHUB_HELLO"
+
 workflows:
   version: 2
 
@@ -88,3 +135,8 @@ workflows:
           context: twdps-di
           requires:
             - build
+      - dev-deploy:
+          context: twdps-di
+          requires:
+            - build
+            - publish
