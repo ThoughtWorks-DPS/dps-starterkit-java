@@ -18,11 +18,11 @@ styraLabels:
 initContainerName: dbinit
 
 image:
-  repository: docker.pkg.github.com/thoughtworks-dps/dps-multi-module-starterkit-java/dps-multi-module-starterkit-java
+  repository: twdps/dps-multi-module-starterkit-java
   imagePullPolicy: IfNotPresent
   tag: "latest"
 
-imagePullSecret: github-packages-secret
+imagePullSecret: docker-hub-pull-secret
 
 resources:
   requests:
@@ -88,6 +88,13 @@ tolerations: []
 
 affinity: {}
 
+secrets:
+  psql:
+    name: psql-secret
+    username_key: psql-username
+    password_key: psql-password
+
+
 nsAnyVars:
   - name: JAVA_OPTS
     value: -Xmx512m
@@ -97,3 +104,8 @@ nsAnyVars:
     value: "true"
   - name: ZIPKIN_URL
     value: "http://jaeger-collector.istio-system:14268/api/traces"
+
+nsSpecificVars:
+  di-dev:
+    - name: SPRING_APPLICATION_DATASOURCE_URL
+      value:

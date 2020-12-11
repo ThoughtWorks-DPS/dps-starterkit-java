@@ -52,3 +52,14 @@ spec:
           readinessProbe:
       {{- toYaml .Values.readinessProbe | nindent 12}}
       {{- end }}
+      env:
+        - name: SPRING_APPLICATION_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.psql.name }}
+              key: {{ .Values.secrets.psql.username_key }}
+        - name: SPRING_APPLICATION_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.psql.name } }
+              key: {{ .Values.secrets.psql.password_key }}

@@ -37,7 +37,7 @@ spring:
   application:
     name: "starter-api"
 
-  #TODO: integrate with secrets mgmt and integrate liquibase
+  #TODO: integrate with secrets mgmt and integrate flyway
   datasource:
     url: "jdbc:postgresql://postgres1:5432/skdb"
     username: skuser

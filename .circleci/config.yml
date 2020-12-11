@@ -111,9 +111,9 @@ jobs:
             kubectl create secret generic psql-secret -n di-dev \
                         --from-literal=psql-username=$POSTGRES_USER \
                         --from-literal=psql-password=$POSTGRES_PASSWORD \
-                        --from-literal=psql-endpoint=$POSTGRES_ENDPOINT \
                         --dry-run=client -o yaml | kubectl apply -f -
-  #    - run:
+  # need something to combine the endpoint, the port and the db name
+  #  - run:
   #        name: run helm chart
   #        shell: secrethub run -- /bin/sh -eo pipefail
   #        command: |
