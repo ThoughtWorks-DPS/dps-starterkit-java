@@ -2,7 +2,7 @@ name: java-starter-kit
 owner: twdps-labs
 environment:
 namespace:
-cluster:
+cluster: sandbox
 version: 0.1
 replicaCount: 1
 #TUNE as required for application
@@ -11,11 +11,13 @@ podDisruptionBudget: 20%
 labels:
   app: java-starter-kit
 
+blueVersion: false
+
 styraLabels:
   styra.io/opa-injection: disabled
   styra.io/system: java-starter-kit
 
-initContainerName: dbinit
+initContainerName: twdps/dps-psql-init:latest
 
 image:
   repository: twdps/dps-multi-module-starterkit-java
@@ -40,8 +42,7 @@ service:
 ingress:
   pathPrefix: "/java-starter-kit/"
   hosts:
-    - java-starter-kit.{{ .Values.namespace }}.{{ .Values.cluster }}.infoarmor.com
-    - api.{{ .Values.environment }}.infoarmor.io
+    - java-starter-kit.{{ .Values.namespace }}.{{ .Values.cluster }}.twdps.io
     - java-starter-kit.{{ .Values.namespace }}.svc.cluster.local
   gateways:
     - internal-gateway.istio-system
@@ -93,13 +94,14 @@ secrets:
     name: psql-secret
     username_key: psql-username
     password_key: psql-password
+    root_username_key: psql_root_username
+    root_password_key: psql_root_password
+    psql_endpoint_key: psql_endpoint
 
 
 nsAnyVars:
   - name: JAVA_OPTS
     value: -Xmx512m
-  - name: SPRING_PROFILE
-    value: dpd
   - name: ZIPKIN_ENABLED
     value: "true"
   - name: ZIPKIN_URL

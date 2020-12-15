@@ -63,6 +63,10 @@ jobs:
           command: echo $CIRCLE_BUILD_NUM
 
       - run:
+          name: Build init container
+          command: docker build init-container/ -t twdps/dps-psql-init:$CIRCLE_BUILD_NUM
+
+      - run:
           name: Build Image
           command: ./gradlew docker -PdockerRegistry=$DOCKER_REGISTRY -PbuildNumber=$CIRCLE_BUILD_NUM
 
@@ -71,6 +75,10 @@ jobs:
           shell: secrethub run -- /bin/sh -e
           command: |
             echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin
+
+      - run:
+          name: Push init container
+          command: docker push twdps/dps-psql-init:$CIRCLE_BUILD_NUM
 
       - run:
           name: Publish Docker Image
@@ -83,8 +91,10 @@ jobs:
       DOCKER_REGISTRY: twdps
       DOCKER_USER: secrethub://twdps/di/svc/dockerhub/username
       DOCKER_PASSWORD: secrethub://twdps/di/svc/dockerhub/password
-      POSTGRES_USER: secrethub://twdps/di/svc/aurora/psql/username
       POSTGRES_ENDPOINT: secrethub://twdps/di/svc/aurora/psql/endpoint
+      POSTGRES_ROOT_USER: secrethub://twdps/di/svc/aurora/psql/username
+      POSTGRESS_ROOT_PASSWORD: secrethub://twdps/di/svc/aurora/psql/password
+      POSTGRES_USER: secrethub://twdps/di/svc/aurora/starter/psql/username
       POSTGRES_PASSWORD: secrethub://twdps/di/svc/aurora/psql/starter/password
     <<: *defaults
     steps:
@@ -111,6 +121,9 @@ jobs:
             kubectl create secret generic psql-secret -n di-dev \
                         --from-literal=psql-username=$POSTGRES_USER \
                         --from-literal=psql-password=$POSTGRES_PASSWORD \
+                        --from-literal=psql_root_username=$POSTGRES_ROOT_USER \
+                        --from-literal=psql_root_password=$POSTGRESS_ROOT_PASSWORD \
+                        --from-literal=psql_endpoint=$POSTGRES_ENDPOINT \
                         --dry-run=client -o yaml | kubectl apply -f -
   # need something to combine the endpoint, the port and the db name
   #  - run:

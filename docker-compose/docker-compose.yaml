@@ -11,12 +11,14 @@ services:
       - ~/docker/volumes/postgres:/var/lib/postgresql/data
 
   db_init:
-    image: twdps/db-init
+    image: twdps/dps-psql-init
     environment:
-      POSTGRES_URL: "postgres://postgres:docker@postgres1:5432"
-      USERNAME: skuser
-      DBNAME: skdb
-      PASSWORD: localT3st!
+      POSTGRES_HOST: postgres1
+      POSTGRES_ROOT_USER: postgres
+      POSTGRES_ROOT_PASSWORD: docker
+      POSTGRES_USER: skuser
+      POSTGRES_PASSWORD: localT3st!
+      POSTGRES_DBNAME: skdb2
     depends_on:
       - postgres1
 

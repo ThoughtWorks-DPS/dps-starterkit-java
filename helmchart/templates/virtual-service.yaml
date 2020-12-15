@@ -1,0 +1,51 @@
+---
+{{- $allVars := . -}}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- toYaml .Values.labels | nindent 4 }}
+spec:
+  hosts:
+    {{- range .Values.ingress.hosts }}
+    - {{ tpl . $allVars }}
+    {{- end }}
+    {{- if eq .Values.environment "di-dev" }}
+    - dev.{{ .Values.cluster }}.twdps.io
+    {{- else }}
+    - api.{{ .Values.cluster }}.twdps.io
+    {{- end }}
+  gateways:
+    {{- range .Values.ingress.gateways }}
+    - {{ tpl . $allVars }}
+    {{- end }}
+  http:
+      {{- if .Values.blueVersion }}
+    - name: blue
+      match:
+        - headers:
+            x-header-based-routing:
+              exact: "true"
+          uri:
+            prefix: {{ .Values.ingress.pathPrefix }}
+          ignoreUriCase: true
+      route:
+        - destination:
+            host: "{{ .Chart.Name }}.{{ .Values.namespace }}.svc.cluster.local"
+            port:
+              number: 80
+            subset: blue
+      {{- end }}
+    - name: green
+      match:
+        - uri:
+            prefix: {{ .Values.ingress.pathPrefix }}
+          ignoreUriCase: true
+      route:
+        - destination:
+            host: "{{ .Chart.Name }}.{{ .Values.namespace }}.svc.cluster.local"
+            port:
+              number: 80
+            subset: green
