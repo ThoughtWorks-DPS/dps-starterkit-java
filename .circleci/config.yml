@@ -94,7 +94,7 @@ jobs:
       POSTGRES_ENDPOINT: secrethub://twdps/di/svc/aurora/psql/endpoint
       POSTGRES_ROOT_USER: secrethub://twdps/di/svc/aurora/psql/username
       POSTGRESS_ROOT_PASSWORD: secrethub://twdps/di/svc/aurora/psql/password
-      POSTGRES_USER: secrethub://twdps/di/svc/aurora/starter/psql/username
+      POSTGRES_USER: secrethub://twdps/di/svc/aurora/psql/starter/username
       POSTGRES_PASSWORD: secrethub://twdps/di/svc/aurora/psql/starter/password
     <<: *defaults
     steps:
