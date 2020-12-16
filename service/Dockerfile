@@ -1,5 +1,6 @@
 FROM openjdk:11
-ARG JAR_FILE
-COPY ${JAR_FILE} starter-java.jar
-COPY entrypoint.sh entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+COPY bin/entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY build/libs/*.jar /
+
+CMD ["sh", "/usr/local/bin/entrypoint.sh"]

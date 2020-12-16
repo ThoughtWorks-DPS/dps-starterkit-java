@@ -39,7 +39,7 @@ spring:
 
   #TODO: integrate with secrets mgmt and integrate flyway
   datasource:
-    url: "jdbc:postgresql://postgres1:5432/skdb"
+    url: "jdbc:postgresql://localhost:5432/skdb"
     username: skuser
     password: localT3st!
   jpa:

@@ -64,11 +64,15 @@ jobs:
 
       - run:
           name: Build init container
-          command: docker build init-container/ -t twdps/dps-psql-init:$CIRCLE_BUILD_NUM
+          command: docker build init-container -t twdps/dps-psql-init:$CIRCLE_BUILD_NUM
+
+      - run:
+          name: Build Jar
+          command: ./gradlew build -x test
 
       - run:
           name: Build Image
-          command: ./gradlew docker -PdockerRegistry=$DOCKER_REGISTRY -PbuildNumber=$CIRCLE_BUILD_NUM
+          command: docker build service -t twdps/dps-multi-module-starterkit-java:$CIRCLE_BUILD_NUM
 
       - run:
           name: Docker authentication
@@ -82,7 +86,7 @@ jobs:
 
       - run:
           name: Publish Docker Image
-          command: ./gradlew dockerPush -PdockerRegistry=$DOCKER_REGISTRY -PbuildNumber=$CIRCLE_BUILD_NUM
+          command: docker push twdps/dps-multi-module-starterkit-java:$CIRCLE_BUILD_NUM
 
   dev-deploy:
     executor: deploy-agent

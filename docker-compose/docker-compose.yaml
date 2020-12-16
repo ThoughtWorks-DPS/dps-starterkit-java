@@ -23,12 +23,14 @@ services:
       - postgres1
 
   starter-java:
-    image: tw.dps/starter-java
+    image: twdps/dps-multi-module-starterkit-java:latest
     hostname: starter
     ports:
       - "8080:8080"
       - "8081:8081"
-#    environment:
+    environment:
+      POSTGRES_HOST: postgres1
+      POSTGRES_DBNAME: skdb2
 #    volumes:
     depends_on:
       - postgres1

@@ -2,8 +2,6 @@
 plugins {
     id 'demo.java-application-conventions'
     id 'demo.java-open-tracing-common-conventions'
-    id "com.palantir.docker" apply true
-    id "com.palantir.docker-run" apply true
 }
 
 dependencies {
@@ -32,11 +30,8 @@ ext {
 //    // that doesn't work when the head is detachede, which is the case
 //    // when running on the pipeline
 //    gitBranchName = System.getProperty("git.branchName", "local")
-      dockerImageVersion = project.hasProperty("buildNumber") ? "${project.version}-${project.buildNumber}" : project.version
 
 }
-
-
 
 bootJar {
     manifest {
@@ -50,18 +45,3 @@ bootJar {
     archiveFileName = "starter-java.jar"
 }
 
-docker {
-    dependsOn(assemble)
-    name "${dockerRegistry}/dps-multi-module-starterkit-java"
-    tag "Build ${dockerImageVersion}", "${dockerRegistry}/dps-multi-module-starterkit-java:${dockerImageVersion}"
-    tag "Latest", "${dockerRegistry}/dps-multi-module-starterkit-java:latest"
-    noCache true
-    files "build/libs/${bootJar.archiveFileName.get()}"
-    files "entrypoint.sh"
-}
-
-dockerRun {
-    name project.name
-    image "${dockerRegistry}/starter-java:${dockerImageVersion}"
-    ports '8080:8081'
-}
