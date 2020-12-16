@@ -83,12 +83,12 @@ spec:
           env:
             - name: POSTGRES_DBNAME
               value: skdb
-            - name: SPRING_APPLICATION_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.psql.name }}
                   key: {{ .Values.secrets.psql.psql_username_key }}
-            - name: SPRING_APPLICATION_DATASOURCE_PASSWORD
+            - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.psql.name }}

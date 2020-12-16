@@ -109,4 +109,4 @@ nsAnyVars:
 nsSpecificVars:
   di-dev:
     - name: POSTGRES_DBNAME
-      value: skdb
+      value: starterkit
