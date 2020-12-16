@@ -57,6 +57,7 @@ docker {
     tag "Latest", "${dockerRegistry}/dps-multi-module-starterkit-java:latest"
     noCache true
     files "build/libs/${bootJar.archiveFileName.get()}"
+    files "entrypoint.sh"
     buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
 }
 

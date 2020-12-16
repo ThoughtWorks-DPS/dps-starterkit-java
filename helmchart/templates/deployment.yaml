@@ -38,28 +38,30 @@ spec:
             - name: POSTGRES_HOST
               valueFrom:
                 secretKeyRef:
-                  name: { { .Values.secrets.psql.name } }
-                  key: { { .Values.secrets.psql.psql_endpoint_key } }
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_endpoint_key }}
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.psql.name }}
-                  key: {{ .Values.secrets.psql.username_key }}
+                  key: {{ .Values.secrets.psql.psql_username_key }}
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.psql.name }}
-                  key: {{ .Values.secrets.psql.password_key }}
+                  key: {{ .Values.secrets.psql.psql_password_key }}
             - name: POSTGRES_ROOT_USER
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.psql.name }}
                   key: {{ .Values.secrets.psql.psql_root_username_key }}
-            - name: POSTGRESS_ROOT_PASSWORD
+            - name: POSTGRES_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.psql.name }}
                   key: {{ .Values.secrets.psql.psql_root_password_key }}
+            - name: POSTGRES_DBNAME
+              value: skdb
 
       containers:
         - name: {{ .Chart.Name }}
@@ -79,13 +81,20 @@ spec:
       {{- toYaml .Values.readinessProbe | nindent 12}}
       {{- end }}
           env:
+            - name: POSTGRES_DBNAME
+              value: skdb
             - name: SPRING_APPLICATION_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.psql.name }}
-                  key: {{ .Values.secrets.psql.username_key }}
+                  key: {{ .Values.secrets.psql.psql_username_key }}
             - name: SPRING_APPLICATION_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secrets.psql.name }}
-                  key: {{ .Values.secrets.psql.password_key }}
+                  key: {{ .Values.secrets.psql.psql_password_key }}
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_endpoint_key }}

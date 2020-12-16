@@ -92,12 +92,11 @@ affinity: {}
 secrets:
   psql:
     name: psql-secret
-    username_key: psql-username
-    password_key: psql-password
-    root_username_key: psql_root_username
-    root_password_key: psql_root_password
+    psql_username_key: psql-username
+    psql_password_key: psql-password
+    psql_root_username_key: psql_root_username
+    psql_root_password_key: psql_root_password
     psql_endpoint_key: psql_endpoint
-
 
 nsAnyVars:
   - name: JAVA_OPTS
@@ -109,5 +108,5 @@ nsAnyVars:
 
 nsSpecificVars:
   di-dev:
-    - name: SPRING_APPLICATION_DATASOURCE_URL
-      value:
+    - name: POSTGRES_DBNAME
+      value: skdb
