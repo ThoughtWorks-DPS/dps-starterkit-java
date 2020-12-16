@@ -64,7 +64,11 @@ jobs:
 
       - run:
           name: Build init container
-          command: docker build init-container -t twdps/dps-psql-init:$CIRCLE_BUILD_NUM
+          command: docker build init-container -t twdps/dps-psql-init:lastest
+
+      - run:
+          name: Tag init container
+          command: docker tag twdps/dps-psql-init:lastest twdps/dps-psql-init:$CIRCLE_BUILD_NUM
 
       - run:
           name: Build Jar
@@ -72,7 +76,11 @@ jobs:
 
       - run:
           name: Build Image
-          command: docker build service -t twdps/dps-multi-module-starterkit-java:$CIRCLE_BUILD_NUM
+          command: docker build service -t twdps/dps-multi-module-starterkit-java:latest
+
+      - run:
+          name: Tag Main Image
+          command: docker tag twdps/dps-multi-module-starterkit-java:latest twdps/dps-multi-module-starterkit-java:$CIRCLE_BUILD_NUM
 
       - run:
           name: Docker authentication
@@ -82,11 +90,11 @@ jobs:
 
       - run:
           name: Push init container
-          command: docker push twdps/dps-psql-init:$CIRCLE_BUILD_NUM
+          command: docker push twdps/dps-psql-init:lastest
 
       - run:
           name: Publish Docker Image
-          command: docker push twdps/dps-multi-module-starterkit-java:$CIRCLE_BUILD_NUM
+          command: docker push twdps/dps-multi-module-starterkit-java:latest
 
   dev-deploy:
     executor: deploy-agent
