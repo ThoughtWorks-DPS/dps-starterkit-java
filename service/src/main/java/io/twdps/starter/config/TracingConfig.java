@@ -13,6 +13,7 @@ import brave.sampler.Sampler;
 import io.opentracing.Tracer;
 import io.twdps.starter.config.properties.ZipkinConfigurationProperties;
 import io.twdps.starter.tracing.ZipkinTracerCustomizer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import zipkin2.reporter.brave.AsyncZipkinSpanHandler;
 import zipkin2.reporter.okhttp3.OkHttpSender;
 
+@Slf4j
 @Configuration
 @ConditionalOnProperty(prefix = "opentracing.zipkin", name = "enabled", havingValue = "true")
 public class TracingConfig {
@@ -42,6 +44,7 @@ public class TracingConfig {
   @Bean
   public SpanHandler spanHandler(ZipkinConfigurationProperties properties) {
     var url = properties.getHttpSender().getBaseUrl();
+    log.info("Zipkin URL:{}",url);
     if (properties.getHttpSender().getEncoder().name().equals(JSON_V2.name())
         || properties.getHttpSender().getEncoder().name().equals(PROTO3.name())) {
       url += (url.endsWith("/") ? "" : "/") + "api/v2/spans";

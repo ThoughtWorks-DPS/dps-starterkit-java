@@ -64,4 +64,4 @@ spring:
 opentracing:
   zipkin:
     enabled: true
-    http-sender.baseUrl: http://jaeger:9411
+    http-sender.baseUrl: http://zipkin.istio-system.svc.cluster.local:9411
