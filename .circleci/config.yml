@@ -90,7 +90,7 @@ jobs:
 
       - run:
           name: Push init container
-          command: docker push twdps/dps-psql-init:lastest
+          command: docker push twdps/dps-psql-init:latest
 
       - run:
           name: Publish Docker Image
