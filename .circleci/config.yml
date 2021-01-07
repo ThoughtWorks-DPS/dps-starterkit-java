@@ -64,7 +64,7 @@ jobs:
 
       - run:
           name: Build init container
-          command: docker build init-container -t twdps/dps-psql-init:lastest
+          command: docker build init-container -t twdps/dps-psql-init:latest
 
       - run:
           name: Tag init container
