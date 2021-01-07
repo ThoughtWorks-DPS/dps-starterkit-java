@@ -10,6 +10,7 @@ podDisruptionBudget: 20%
 
 labels:
   app: java-starter-kit
+  deployment: green
 
 blueVersion: false
 
@@ -40,13 +41,12 @@ service:
 
 #The .Values.environment is computed by the deploy plugin - it returns//uses values like dev, qa, pre, prod etc
 ingress:
-  pathPrefix: "/starter/"
+  pathPrefix: "/starter"
   hosts:
     - java-starter-kit.{{ .Values.namespace }}.{{ .Values.cluster }}.twdps.io
     - java-starter-kit.{{ .Values.namespace }}.svc.cluster.local
   gateways:
-    - istio-system/external-{{ .Values.environment }}-gateway
-    - istio-system/internal-{{ .Values.environment }}-gateway
+    - istio-system/api-gateway-{{ .Values.environment }}
     - mesh
 
 ports:

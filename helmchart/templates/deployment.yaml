@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}
-  namespace: {{ .Values.environment }}
+  namespace: {{ .Values.namespace }}
   labels:
     {{- toYaml .Values.labels | nindent 4 }}
       {{- if .Values.styraLabels -}}
