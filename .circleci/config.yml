@@ -68,7 +68,7 @@ jobs:
 
       - run:
           name: Tag init container
-          command: docker tag twdps/dps-psql-init:lastest twdps/dps-psql-init:$CIRCLE_BUILD_NUM
+          command: docker tag twdps/dps-psql-init:latest twdps/dps-psql-init:$CIRCLE_BUILD_NUM
 
       - run:
           name: Build Jar
