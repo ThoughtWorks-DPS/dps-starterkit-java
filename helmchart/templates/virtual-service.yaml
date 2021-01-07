@@ -12,7 +12,7 @@ spec:
     {{- range .Values.ingress.hosts }}
     - {{ tpl . $allVars }}
     {{- end }}
-    {{- if eq .Values.environment "di-dev" }}
+    {{- if eq .Values.environment "dev" }}
     - dev.{{ .Values.cluster }}.twdps.io
     {{- else }}
     - api.{{ .Values.cluster }}.twdps.io

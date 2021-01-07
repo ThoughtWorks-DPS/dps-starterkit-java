@@ -31,37 +31,37 @@ spec:
     spec:
       imagePullSecrets:
         - name: {{ .Chart.Name }}-pull-secret
-#      initContainers:
-#        - name: db-init
-#          image: {{ .Values.initContainerName }}
-#          env:
-#            - name: POSTGRES_HOST
-#              valueFrom:
-#                secretKeyRef:
-#                  name: {{ .Values.secrets.psql.name }}
-#                  key: {{ .Values.secrets.psql.psql_endpoint_key }}
-#            - name: POSTGRES_USER
-#              valueFrom:
-#                secretKeyRef:
-#                  name: {{ .Values.secrets.psql.name }}
-#                  key: {{ .Values.secrets.psql.psql_username_key }}
-#            - name: POSTGRES_PASSWORD
-#              valueFrom:
-#                secretKeyRef:
-#                  name: {{ .Values.secrets.psql.name }}
-#                  key: {{ .Values.secrets.psql.psql_password_key }}
-#            - name: POSTGRES_ROOT_USER
-#              valueFrom:
-#                secretKeyRef:
-#                  name: {{ .Values.secrets.psql.name }}
-#                  key: {{ .Values.secrets.psql.psql_root_username_key }}
-#            - name: POSTGRES_ROOT_PASSWORD
-#              valueFrom:
-#                secretKeyRef:
-#                  name: {{ .Values.secrets.psql.name }}
-#                  key: {{ .Values.secrets.psql.psql_root_password_key }}
-#            - name: POSTGRES_DBNAME
-#              value: skdb
+      initContainers:
+        - name: db-init
+          image: {{ .Values.initContainerName }}
+          env:
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_endpoint_key }}
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_username_key }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_password_key }}
+            - name: POSTGRES_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_root_username_key }}
+            - name: POSTGRES_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_root_password_key }}
+            - name: POSTGRES_DBNAME
+              value: skdb
 
       containers:
         - name: {{ .Chart.Name }}
