@@ -31,6 +31,7 @@ spec:
     spec:
       imagePullSecrets:
         - name: {{ .Chart.Name }}-pull-secret
+      {{ if .Values.rds.initContainer }}
       initContainers:
         - name: db-init
           image: {{ .Values.initContainerName }}
@@ -62,8 +63,8 @@ spec:
                   name: {{ .Values.secrets.psql.name }}
                   key: {{ .Values.secrets.psql.psql_root_password_key }}
             - name: POSTGRES_DBNAME
-              value: skdb
-
+              value: {{ .Values.rds.dbName }}
+      {{ end }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -83,7 +84,7 @@ spec:
       {{- end }}
           env:
             - name: POSTGRES_DBNAME
-              value: skdb
+              value: {{ .Values.rds.dbName }}
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:

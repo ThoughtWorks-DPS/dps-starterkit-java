@@ -49,6 +49,11 @@ ingress:
     - istio-system/api-gateway-{{ .Values.environment }}
     - mesh
 
+rds:
+  migration: false
+  initContainer: false
+  dbName: skdb
+
 ports:
   - name: http
     containerPort: 8080

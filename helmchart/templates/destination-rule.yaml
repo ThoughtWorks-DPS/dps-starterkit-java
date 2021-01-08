@@ -6,9 +6,9 @@ metadata:
 spec:
   host: "{{ .Chart.Name }}.{{ .Values.namespace }}.svc.cluster.local"
   subsets:
-#    - name: blue
-#      labels:
-#        deployment: "blue"
+    - name: blue
+      labels:
+        deployment: "blue"
     - name: green
       labels:
         deployment: "green"
