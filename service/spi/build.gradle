@@ -1,0 +1,12 @@
+plugins {
+    id 'demo.java-library-conventions'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+dependencies {
+}

@@ -9,7 +9,7 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation group: 'org.springframework', name: 'spring-webmvc'
+    implementation 'org.springframework:spring-webmvc'
 }
 
 publishing {

@@ -10,6 +10,6 @@ dependencyManagement {
 
 dependencies {
     implementation project(':persistence:model')
-    compile group: 'io.opentracing.contrib', name: 'opentracing-spring-cloud-jdbc-starter', version: '0.3.12'
+    compile "io.opentracing.contrib:opentracing-spring-cloud-jdbc-starter:${opentracing_spring_cloud_jdbc_starter_version}"
 
 }

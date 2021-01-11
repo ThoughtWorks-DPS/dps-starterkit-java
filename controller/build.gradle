@@ -1,0 +1,24 @@
+
+plugins {
+    id 'demo.java-common-conventions'
+    id 'demo.java-open-tracing-common-conventions'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+dependencies {
+    implementation project(':api')
+    implementation project(':service:impl')
+    implementation project(':service:spi')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    implementation "io.opentracing.contrib:opentracing-spring-web-starter:${opentracing_spring_web_starter_version}"
+//    implementation("org.postgresql:postgresql:${postgresql_version}")
+
+}
+
