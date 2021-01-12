@@ -76,7 +76,7 @@ jobs:
 
       - run:
           name: Build Image
-          command: docker build service -t twdps/dps-multi-module-starterkit-java:latest
+          command: docker build app -t twdps/dps-multi-module-starterkit-java:latest
 
       - run:
           name: Tag Main Image
