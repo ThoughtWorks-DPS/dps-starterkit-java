@@ -22,5 +22,5 @@ ext {
 dependencies {
     testImplementation group: 'org.mock-server', name: 'mockserver-netty', version: '5.8.1'
 // open tracing testing/mock support
-    testCompile(group: 'io.opentracing', name: 'opentracing-mock', version: '0.33.0')
+    testImplementation(group: 'io.opentracing', name: 'opentracing-mock', version: '0.33.0')
 }

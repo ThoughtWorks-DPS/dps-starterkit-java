@@ -1,37 +1,35 @@
-
 plugins {
-    id 'demo.java-application-conventions'
-    id 'demo.java-open-tracing-common-conventions'
+    id 'starter.std.java.application-conventions'
+    id 'starter.java.open-tracing-common-conventions'
+    id 'starter.java.config-conventions'
 }
 
 dependencies {
+    annotationBom platform("io.twdps.starter:starter-bom:${dps_starter_boot_version}")
+
     implementation project(':api')
     implementation project(':controller')
     implementation project(':persistence:model')
     implementation project(':persistence:impl')
     implementation project(':service:impl')
     implementation project(':service:spi')
-    implementation "org.springframework.boot:spring-boot-starter-web:${spring_boot_version}"
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    implementation "io.opentracing.contrib:opentracing-spring-web-starter:${spring_boot_web_starter_version}"
-    implementation("org.postgresql:postgresql:${postgresql_version}")
+    implementation "org.springframework.boot:spring-boot-starter-web"
+//    implementation "io.opentracing.contrib:opentracing-spring-web-starter"
 
+    implementation 'io.opentracing.brave:brave-opentracing'
+    implementation 'io.opentracing.contrib:opentracing-spring-web-starter'
+    implementation 'io.opentracing:opentracing-api'
+    implementation 'io.zipkin.reporter2:zipkin-reporter'
+    implementation 'io.zipkin.reporter2:zipkin-sender-okhttp3'
+    implementation "com.h2database:h2"
 }
+
+
 
 application {
     // Define the main class for the application.
     mainClass = 'io.twdps.starter.Service'
-}
-
-ext {
-//    gitRevision = grgit.head().id
-//    gitAbbRevision = grgit.head().abbreviatedId
-//    // Please don't change for 'gitBranchName = grgit.branch.current().name'
-//    // that doesn't work when the head is detachede, which is the case
-//    // when running on the pipeline
-//    gitBranchName = System.getProperty("git.branchName", "local")
-
 }
 
 bootJar {

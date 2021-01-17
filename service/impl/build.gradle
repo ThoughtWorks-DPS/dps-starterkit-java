@@ -3,20 +3,14 @@
  */
 
 plugins {
-    id 'demo.java-common-conventions'
-//    id 'checkstyle'
-}
-
-dependencyManagement {
-    imports {
-        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
-    }
+    id 'starter.std.java.library-conventions'
+    id 'starter.java.config-conventions'
 }
 
 dependencies {
+    annotationBom platform("io.twdps.starter:starter-bom:${dps_starter_boot_version}")
 
     implementation project(':persistence:model')
     implementation project(':service:spi')
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
 }

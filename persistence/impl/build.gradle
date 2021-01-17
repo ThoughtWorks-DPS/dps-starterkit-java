@@ -1,15 +1,11 @@
 plugins {
-    id 'demo.java-library-conventions'
-}
-
-dependencyManagement {
-    imports {
-        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
-    }
+    id 'starter.std.java.library-conventions'
+    id 'starter.java.config-conventions'
 }
 
 dependencies {
-    implementation project(':persistence:model')
-    compile "io.opentracing.contrib:opentracing-spring-cloud-jdbc-starter:${opentracing_spring_cloud_jdbc_starter_version}"
+    annotationBom platform("io.twdps.starter:starter-bom:${dps_starter_boot_version}")
 
+    implementation project(':persistence:model')
+    implementation "io.opentracing.contrib:opentracing-spring-cloud-jdbc-starter"
 }

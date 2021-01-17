@@ -1,18 +1,14 @@
 plugins {
-    id 'demo.java-library-conventions'
+    id 'starter.std.java.library-conventions'
+    id 'starter.java.config-conventions'
 }
 
-dependencyManagement {
-    imports {
-        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
-    }
-}
 
 dependencies {
-//    implementation project(':api')
+    annotationBom platform("io.twdps.starter:starter-bom:${dps_starter_boot_version}")
     // include jdbc tracing here since we are assuming for this version we are using JDBC SQL
-    implementation "io.opentracing.contrib:opentracing-spring-cloud-jdbc-starter:${opentracing_spring_cloud_jdbc_starter_version}"
+    implementation "io.opentracing.contrib:opentracing-spring-cloud-jdbc-starter"
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    testCompile "com.h2database:h2:${h2_version}"
+    testImplementation "com.h2database:h2:${h2_version}"
 
 }
