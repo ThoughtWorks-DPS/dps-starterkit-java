@@ -1,6 +1,5 @@
 plugins {
     id 'starter.std.java.application-conventions'
-    id 'starter.java.open-tracing-common-conventions'
     id 'starter.java.config-conventions'
 }
 
@@ -11,17 +10,12 @@ dependencies {
     implementation project(':controller')
     implementation project(':persistence:model')
     implementation project(':persistence:impl')
-    implementation project(':service:impl')
+    implementation project(':service:provider')
     implementation project(':service:spi')
+    implementation 'io.twdps.starter:tracing'
 
     implementation "org.springframework.boot:spring-boot-starter-web"
-//    implementation "io.opentracing.contrib:opentracing-spring-web-starter"
 
-    implementation 'io.opentracing.brave:brave-opentracing'
-    implementation 'io.opentracing.contrib:opentracing-spring-web-starter'
-    implementation 'io.opentracing:opentracing-api'
-    implementation 'io.zipkin.reporter2:zipkin-reporter'
-    implementation 'io.zipkin.reporter2:zipkin-sender-okhttp3'
     implementation "com.h2database:h2"
 }
 

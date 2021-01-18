@@ -3,7 +3,7 @@ package io.twdps.starter.controller.account.mapper;
 import io.twdps.starter.api.account.requests.AccountRequest;
 import io.twdps.starter.api.account.responses.AccountResponse;
 import io.twdps.starter.api.account.responses.AddAccountResponse;
-import io.twdps.starter.spi.account.model.Account;
+import io.twdps.starter.service.spi.account.model.Account;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
