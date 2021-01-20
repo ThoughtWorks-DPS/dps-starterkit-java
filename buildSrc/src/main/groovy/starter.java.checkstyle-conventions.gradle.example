@@ -6,16 +6,15 @@ plugins {
 configurations {
     checkstyleRules
 }
-dependencies {
-    checkstyleRules "io.twdps.starter:checkstyle:${dps_starter_boot_version}"
-}
 
+dependencies {
+    checkstyleRules platform('io.twdps.starter:checkstyle-bom')
+    checkstyleRules 'io.twdps.starter:checkstyle'
+}
 
 checkstyle {
     toolVersion "${checkstyle_version}"
-    // NOTE: Uncomment the `configFile` and comment out the `config` fromArchiveEntry if you
-    // want to manage checkstyle configurations for yourself
-    // configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+//    configFile = rootProject.file('config/checkstyle/checkstyle.xml')
     config project.resources.text.fromArchiveEntry(configurations.checkstyleRules, 'config/checkstyle/checkstyle.xml')
     configProperties = [
             'checkstyle.cache.file': "${buildDir}/checkstyle.cache",

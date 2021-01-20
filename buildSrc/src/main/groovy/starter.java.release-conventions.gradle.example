@@ -1,7 +1,4 @@
 plugins {
-
-    // Apply the java Plugin to add support for Java.
-//    id 'java'
     id 'pl.allegro.tech.build.axion-release'
 }
 

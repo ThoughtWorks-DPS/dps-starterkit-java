@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     annotationBom platform("io.twdps.starter:starter-bom:${dps_starter_boot_version}")
+    checkstyleRules platform("io.twdps.starter:checkstyle-bom:${dps_starter_boot_version}")
 
     implementation project(':persistence:model')
     implementation "io.opentracing.contrib:opentracing-spring-cloud-jdbc-starter"

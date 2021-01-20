@@ -1,7 +1,11 @@
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
         jcenter()
+    }
+    dependencies {
+        classpath "io.twdps.starter:plugins:${dps_starter_boot_version}"
     }
     // There's a conflict between versions of jgit between spotless and axion release plugin
     configurations.classpath {
@@ -10,7 +14,6 @@ buildscript {
         }
     }
 }
-
 
 plugins {
     id("org.ajoberstar.grgit") version "${grgit_version}" apply false
@@ -23,7 +26,8 @@ plugins {
     id("com.cdsap.talaiot.plugin.base") version "${talaiot_plugin_base_version}" apply false
     id("net.rdrei.android.buildtimetracker") version "${buildtimetracker_version}" apply false
     id("pl.allegro.tech.build.axion-release") version "${axion_release_plugin_version}" apply false
-    id("starter.metrics.build-time-tracker-conventions")
-    id("starter.java.release-conventions")
+//    id("io.twdps.starter.plugins") version "${dps_starter_boot_version}"
+    id("starter.metrics.build-time-tracker-conventions") version "${dps_starter_boot_version}"
+    id("starter.java.release-conventions") version "${dps_starter_boot_version}"
 }
 

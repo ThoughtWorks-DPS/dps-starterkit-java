@@ -10,5 +10,7 @@ configurations {
     implementation.extendsFrom(annotationBom)
     annotationProcessor.extendsFrom(annotationBom)
     testAnnotationProcessor.extendsFrom(annotationBom)
+
+    checkstyleRules
 }
 
