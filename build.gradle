@@ -29,6 +29,7 @@ plugins {
     id("net.rdrei.android.buildtimetracker") version "${buildtimetracker_version}" apply false
     id("pl.allegro.tech.build.axion-release") version "${axion_release_plugin_version}" apply false
 //    id("io.twdps.starter.plugins") version "${dps_starter_boot_version}"
+    id("io.gatling.gradle") version "${gatling_plugin_version}" apply false
     id("com.github.ben-manes.versions") version "${versions_plugin_version}" apply false
     id("se.patrikerdes.use-latest-versions") version "${use_latest_versions_plugin_version}" apply false
     id("starter.metrics.build-time-tracker-conventions") version "${dps_starter_boot_version}"
