@@ -2,7 +2,7 @@ package io.twdps.starter.service.provider.account;
 
 import io.twdps.starter.persistence.model.AccountEntityRepository;
 import io.twdps.starter.service.provider.account.mapper.AccountEntityMapper;
-import io.twdps.starter.service.spi.account.AccountManager;
+import io.twdps.starter.service.spi.account.AccountService;
 import io.twdps.starter.service.spi.account.model.Account;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,12 +12,12 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class AccountManagerImpl implements AccountManager {
+public class AccountServiceImpl implements AccountService {
 
   private AccountEntityRepository repository;
   private AccountEntityMapper mapper;
 
-  AccountManagerImpl(AccountEntityRepository repository,
+  AccountServiceImpl(AccountEntityRepository repository,
                      AccountEntityMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;

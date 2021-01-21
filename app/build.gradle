@@ -20,8 +20,6 @@ dependencies {
     implementation "com.h2database:h2"
 }
 
-
-
 application {
     // Define the main class for the application.
     mainClass = 'io.twdps.starter.Service'

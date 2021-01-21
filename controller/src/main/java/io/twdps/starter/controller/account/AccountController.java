@@ -6,7 +6,7 @@ import io.twdps.starter.api.account.responses.AccountResponse;
 import io.twdps.starter.api.account.responses.AddAccountResponse;
 import io.twdps.starter.api.responses.ArrayResponse;
 import io.twdps.starter.controller.account.mapper.AccountRequestMapper;
-import io.twdps.starter.service.spi.account.AccountManager;
+import io.twdps.starter.service.spi.account.AccountService;
 import io.twdps.starter.service.spi.account.model.Account;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RestController
 public class AccountController implements AccountResource {
 
-  private final AccountManager accountManager;
+  private final AccountService accountManager;
   private final AccountRequestMapper accountRequestMapper;
 
   /**
@@ -31,7 +31,7 @@ public class AccountController implements AccountResource {
    * @param accountRequestMapper instance of account request mappper
    */
   public AccountController(
-      AccountManager accountManager, AccountRequestMapper accountRequestMapper) {
+      AccountService accountManager, AccountRequestMapper accountRequestMapper) {
 
     this.accountManager = accountManager;
     this.accountRequestMapper = accountRequestMapper;

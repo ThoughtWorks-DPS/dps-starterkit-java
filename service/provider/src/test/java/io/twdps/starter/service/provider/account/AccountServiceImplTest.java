@@ -20,9 +20,9 @@ import java.util.Optional;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
-public class AccountManagerImplTest {
+public class AccountServiceImplTest {
 
-  private AccountManagerImpl manager;
+  private AccountServiceImpl manager;
 
   @Mock private AccountEntityRepository repository;
   @Mock private AccountEntityMapper mapper;
@@ -51,7 +51,7 @@ public class AccountManagerImplTest {
   @BeforeEach
   public void setup() {
 
-    manager = new AccountManagerImpl(repository, mapper);
+    manager = new AccountServiceImpl(repository, mapper);
 
     // use the real mapper to generate consistent objects to use in mapper stubs
     AccountEntityMapper real = Mappers.getMapper(AccountEntityMapper.class);
