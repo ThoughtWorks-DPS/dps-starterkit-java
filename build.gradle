@@ -6,6 +6,8 @@ buildscript {
     }
     dependencies {
         classpath "io.twdps.starter:plugins:${dps_starter_boot_version}"
+        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:${use_latest_versions_plugin_version}"
+        classpath "com.github.ben-manes:gradle-versions-plugin:${versions_plugin_version}"
     }
     // There's a conflict between versions of jgit between spotless and axion release plugin
     configurations.classpath {
@@ -27,6 +29,8 @@ plugins {
     id("net.rdrei.android.buildtimetracker") version "${buildtimetracker_version}" apply false
     id("pl.allegro.tech.build.axion-release") version "${axion_release_plugin_version}" apply false
 //    id("io.twdps.starter.plugins") version "${dps_starter_boot_version}"
+    id("com.github.ben-manes.versions") version "${versions_plugin_version}" apply false
+    id("se.patrikerdes.use-latest-versions") version "${use_latest_versions_plugin_version}" apply false
     id("starter.metrics.build-time-tracker-conventions") version "${dps_starter_boot_version}"
     id("starter.java.release-conventions") version "${dps_starter_boot_version}"
 }
