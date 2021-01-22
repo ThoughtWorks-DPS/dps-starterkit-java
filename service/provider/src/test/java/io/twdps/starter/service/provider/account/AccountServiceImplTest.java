@@ -97,7 +97,7 @@ public class AccountServiceImplTest {
     Mockito.when(repository.findById(Mockito.any())).thenReturn(emptyEntity);
 
     Optional<Account> result = manager.findById("bogus");
-    Assertions.assertThat(!result.isPresent());
+    Assertions.assertThat(!result.isPresent()).isTrue();
   }
 
   @Test
@@ -120,7 +120,7 @@ public class AccountServiceImplTest {
 
     Optional<Account> response = manager.findByUserName(username);
 
-    Assertions.assertThat(response.isPresent());
+    Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(added.getFirstName());
     Assertions.assertThat(response.get().getId()).isEqualTo(added.getId());
   }
@@ -133,7 +133,31 @@ public class AccountServiceImplTest {
 
     Optional<Account> response = manager.findByUserName(bogusName);
 
-    Assertions.assertThat(response.isEmpty());
+    Assertions.assertThat(response.isEmpty()).isTrue();
+  }
+
+  @Test
+  public void findByLastNameTest() {
+
+    createListMapperStubs();
+    Mockito.when(repository.findByLastName(username)).thenReturn(entityList);
+
+    List<Account> response = manager.findByLastName(username);
+
+    Assertions.assertThat(response.isEmpty()).isFalse();
+    Assertions.assertThat(response.get(0).getFirstName()).isEqualTo(added.getFirstName());
+    Assertions.assertThat(response.get(0).getId()).isEqualTo(added.getId());
+  }
+
+  @Test
+  public void findByLastNameFailedTest() {
+
+    createEmptyListMapperStubs();
+    Mockito.when(repository.findByLastName(bogusName)).thenReturn(Arrays.asList());
+
+    List<Account> response = manager.findByLastName(bogusName);
+
+    Assertions.assertThat(response.isEmpty()).isTrue();
   }
 
   @Test
@@ -144,7 +168,7 @@ public class AccountServiceImplTest {
 
     Optional<Account> response = manager.findById(identifier);
 
-    Assertions.assertThat(response.isPresent());
+    Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(added.getFirstName());
     Assertions.assertThat(response.get().getId()).isEqualTo(added.getId());
   }
@@ -157,7 +181,7 @@ public class AccountServiceImplTest {
 
     Optional<Account> response = manager.findById(bogusName);
 
-    Assertions.assertThat(response.isEmpty());
+    Assertions.assertThat(response.isEmpty()).isTrue();
   }
 
   @Test
@@ -192,7 +216,7 @@ public class AccountServiceImplTest {
 
     Optional<Account> response = manager.updateById(identifier, account);
 
-    Assertions.assertThat(response.isPresent());
+    Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(account.getFirstName());
     Assertions.assertThat(response.get().getId()).isEqualTo(identifier);
   }
@@ -205,7 +229,7 @@ public class AccountServiceImplTest {
 
     Optional<Account> response = manager.updateById(identifier, account);
 
-    Assertions.assertThat(response.isEmpty());
+    Assertions.assertThat(response.isEmpty()).isTrue();
   }
 
   @Test
@@ -216,7 +240,7 @@ public class AccountServiceImplTest {
 
     Optional<Account> response = manager.deleteById(identifier);
 
-    Assertions.assertThat(response.isPresent());
+    Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(added.getFirstName());
     Assertions.assertThat(response.get().getId()).isEqualTo(added.getId());
   }
@@ -229,6 +253,6 @@ public class AccountServiceImplTest {
 
     Optional<Account> response = manager.deleteById(bogusName);
 
-    Assertions.assertThat(response.isEmpty());
+    Assertions.assertThat(response.isEmpty()).isTrue();
   }
 }

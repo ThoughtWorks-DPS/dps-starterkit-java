@@ -54,6 +54,16 @@ public class AccountEntityMapperTest {
   }
 
   @Test
+  public void mapperOptionalEntityTest() {
+    Optional<AccountEntity> entity = Optional.of(createAccountEntity());
+
+    Optional<Account> response = mapper.toModel(entity);
+
+    assertThat(response.isPresent());
+    verifyAccount(response.get());
+  }
+
+  @Test
   public void mapperOptionalTest() {
     Optional<Account> account = Optional.of(createAccount(null));
 
