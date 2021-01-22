@@ -3,7 +3,7 @@ plugins {
     id 'java'
     id 'checkstyle'
     id "idea"
-    id "io.spring.dependency-management"
+//    id "io.spring.dependency-management"
     id 'jacoco'
     id "org.ajoberstar.grgit"
     id "io.swagger.swaggerhub"
@@ -14,39 +14,97 @@ sourceCompatibility = '11'
 
 repositories {
 
+    mavenLocal()
     jcenter()
     mavenCentral()
+    /*
     maven {
         url "https://maven.pkg.github.com/ThoughtWorks-DPS/dps-multi-module-starterkit-java"
         credentials {
             username ""
             password ""
         }
-    }
+    }*/
 }
 
+/*
+configurations {
+    springBom
+    compileOnly.extendsFrom(springBom)
+    annotationProcessor.extendsFrom(springBom)
+    implementation.extendsFrom(springBom)
+    testAnnotationProcessor.extendsFrom(springBom)
+
+    annotationBom
+    annotationProcessor.extendsFrom(annotationBom)
+    testAnnotationProcessor.extendsFrom(annotationBom)
+}
+*/
 
 dependencies {
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: "${jackson_version}"
+//    implementation platform('io.twdps.starter::starter-bom:0.0.1-SNAPSHOT')
+//    api platform('io.twdps.starter::starter-bom:0.0.1-SNAPSHOT')
+//    implementation platform("org.springframework.boot:spring-boot-dependencies:${spring_boot_version}")
+//    annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:${spring_boot_version}")
+//    testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:${spring_boot_version}")
+/*
+    constraints {
+        implementation 'io.twdps.starter:tracing'
+//        implementation "io.twdps.starter:tracing:0.0.1-SNAPSHOT"
+//        implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310${jackson_version}"
+        implementation "io.opentracing.brave:brave-opentracing:${brave_opentracing_version}"
+        implementation "io.opentracing.contrib:opentracing-spring-web-starter:${opentracing_spring_web_starter_version}"
+        implementation "io.opentracing.contrib:opentracing-spring-cloud-jdbc-starter:${opentracing_spring_cloud_jdbc_starter_version}"
+        implementation "io.opentracing:opentracing-api:${opentracing_api_version}"
+        implementation "io.zipkin.reporter2:zipkin-reporter:${zipkin_reporter_version}"
+        implementation "io.zipkin.reporter2:zipkin-sender-okhttp3:${zipkin_sender_okhttp3_version}"
+        implementation "gradle.plugin.org.jetbrains.intellij.plugins:gradle-intellij-plugin:${gradle_intellij_plugin_version}"
+//        implementation "org.assertj:assertj-core${assertj_core_version}"
+//        implementation "org.junit.jupiter:junit-jupiter-api:${junit_jupiter_api_version}"
+        implementation "org.mapstruct:mapstruct:${mapstruct_version}"
+        annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+//        implementation "org.mockito:mockito-core${mockito_version}"
+    //    implementation "org.projectlombok:lombok${lombok_version}"
+//        annotationProcessor "org.projectlombok:lombok${lombok_version}"
+//        testAnnotationProcessor "org.projectlombok:lombok${lombok_version}"
+        implementation "org.spockframework:spock-core:${spock_core_version}"
+//        implementation "org.springframework.boot:spring-boot-starter-web:${spring_boot_version}"
+        // TODO:  Not sure if this exclusion should be in the BOM
+//        api "org.springframework.boot:spring-boot-starter-test:${spring_boot_version}" {
+//            exclude "org.junit.vintage:junit-vintage-engine"
+//        }
 
-    compileOnly group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
-    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombok_version}", "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+        runtime "com.h2database:h2:${h2_version}"
+        runtime "io.opentracing:opentracing-mock:${opentracing_mock_version}"
+//        runtime "org.junit.jupiter:junit-jupiter-engine:${junit_jupiter_api_version}"
+        runtime "org.mock-server:mockserver-netty:${mockserver_netty_version}"
+        runtime "org.postgresql:postgresql:${postgresql_version}"
+    }
+*/
+//    implementation platform("io.twdps.starter:starter-bom:${dps_starter_boot_version}")
+//    annotationProcessor platform("io.twdps.starter:starter-bom:${dps_starter_boot_version}")
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
-    testCompileOnly group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
-    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+    compileOnly 'org.projectlombok:lombok'
+    implementation "org.mapstruct:mapstruct"
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.mapstruct:mapstruct-processor'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
     // Use JUnit Jupiter API for testing.
-    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_jupiter_api_version}"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
 
     // Use JUnit Jupiter Engine for testing.
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-    testCompile group: 'org.mockito', name: 'mockito-core', version: "${mockito_version}"
-//    testImplementation group: 'org.mockito', name: 'mockito-core', version: "${mockito_version}"
-    testImplementation group: 'org.assertj', name: 'assertj-core', version: "${assertj_core_version}"
+    testImplementation 'org.mockito:mockito-core'
+//    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.assertj:assertj-core'
     //since this is a spring boot starter, assume spring at all levels
-    testImplementation(group: 'org.springframework.boot', name:'spring-boot-starter-test', version: "${spring_boot_version}") {
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
 }
 
 tasks.named('test') {
@@ -74,7 +132,7 @@ checkstyleTest {
 
 jacoco {
     toolVersion = "${jacoco_version}"
-    reportsDir = file("$buildDir/jacoco")
+    reportsDirectory = file("$buildDir/jacoco")
 }
 
 test {

@@ -1,36 +1,10 @@
 plugins {
-    id 'demo.java-library-conventions'
-    // Apply the java-library plugin for API and implementation separation.
-}
-dependencyManagement {
-    imports {
-        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
-    }
+    id 'starter.std.java.library-conventions'
+    id 'starter.java.config-conventions'
 }
 
 dependencies {
+    annotationBom platform("io.twdps.starter:starter-bom:${dps_starter_boot_version}")
     implementation 'org.springframework:spring-webmvc'
 }
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = 'io.twdps.starter.java-multi-module'
-            artifactId = 'api'
-            version = '1.1'
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            // change to point to your repo, e.g. http://my.org/repo
-            def releasesRepoUrl = "https://maven.pkg.github.com/ThoughtWorks-DPS/dps-multi-module-starterkit-java"
-            def snapshotsRepoUrl = "https://maven.pkg.github.com/ThoughtWorks-DPS/dps-multi-module-starterkit-java"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            url = "https://maven.pkg.github.com/ThoughtWorks-DPS/dps-multi-module-starterkit-java"
-        }
-    }
-}
-
-
 

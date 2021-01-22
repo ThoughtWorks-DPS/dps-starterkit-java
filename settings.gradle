@@ -8,4 +8,5 @@
  */
 
 rootProject.name = 'springboot-starter'
-include('api', 'controller', 'persistence:model','persistence:impl','service:impl','service:spi', 'app', 'boot:tracing')
+include('api', 'controller', 'persistence:model','persistence:impl','service:impl','service:spi', 'app')
+//, 'boot:tracing'
