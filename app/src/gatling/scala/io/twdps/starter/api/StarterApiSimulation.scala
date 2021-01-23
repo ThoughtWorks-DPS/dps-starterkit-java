@@ -4,6 +4,8 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 
 import scala.concurrent.duration.DurationInt
+import scala.concurrent.duration._
+
 
 class StarterApiSimulation extends Simulation {
 
@@ -23,6 +25,6 @@ class StarterApiSimulation extends Simulation {
   setUp(scn
     .inject(
       atOnceUsers(10),
-      rampUsersPerSec(10) to 100 during (2 minutes))
+      rampUsersPerSec(10) to 100 during (2.minutes))
     .protocols(httpProtocol))
 }

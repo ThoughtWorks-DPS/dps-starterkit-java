@@ -39,16 +39,15 @@ spring:
 
   #TODO: integrate with secrets mgmt and integrate flyway
   datasource:
-    url: "jdbc:h2:mem:starterkitdb;DB_CLOSE_DELAY=-1"
-#    url: "jdbc:postgresql://localhost:5432/starterkitdb"
-    username: starterkituser
+    url: "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
+    username: skuser
     password: localT3st!
   jpa:
     show-sql: false
     generate-ddl: false
     hibernate:
       ddl-auto: create
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect
     properties:
       org.hibernate.envers.audit_table_suffix: _audit
       org.hibernate.envers.revision_field_name: revision_id
