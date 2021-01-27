@@ -15,12 +15,13 @@ class StarterApiSimulation extends Simulation {
     .acceptHeader("application/json") // Here are the common headers
 
   val scn = scenario("API Endpoint Simulation")
-    .exec(http("Create apple")
+    .exec(http("Create user account")
       .post("/starter")
       .body(StringBody("""{"userName":"mary.q.contrary", "firstName": "Mary", "lastName":"Contrary"}"""))
-      .asJson)
+      .asJson
+      .check(jsonPath("$.id").saveAs("userId")))
     .exec(http("Get account")
-      .get("/starter/1"))
+      .get("/starter/${userId}")) // 92534752-a39c-499c-aa13-528cd0143f7c
 
   setUp(scn
     .inject(
