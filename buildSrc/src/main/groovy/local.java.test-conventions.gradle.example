@@ -1,0 +1,12 @@
+plugins {
+    id 'java'
+    id 'starter.java.property-conventions'
+}
+
+test {
+    useJUnitPlatform {
+        excludeEngines 'junit-vintage'
+    }
+}
+
+
