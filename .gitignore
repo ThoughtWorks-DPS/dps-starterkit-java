@@ -4,23 +4,63 @@
 build/
 /out/
 /target/
+/reports/
 docker-machine-driver-hyperkit
 .DS_Store
 
 target/
 
-.settings
-.vscode
 .metals
 
 .pid
 .envrc
 .java-version
+.venv
 
-*.iml
 helmchart/envsecrets.env
 tasks/config.temp.dev
-.venv
 /bin
 opa/ingress/test.rego
 helmchart/opa-policies/ingress/test.rego
+
+local.properties
+
+HELP.md
+#!gradle/wrapper/gradle-wrapper.jar
+#!**/src/main/**/build/
+#!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### patch cruft
+*.orig
+*.rej
