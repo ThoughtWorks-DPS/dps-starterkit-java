@@ -16,7 +16,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'springboot-starter'
+rootProject.name = 'dps-multi-module-starterkit-java'
 include ':api'
 include ':controller'
 include ':persistence:model'
