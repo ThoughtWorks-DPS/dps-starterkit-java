@@ -1,7 +1,0 @@
-dependencies {
-    // Tracing support ==========================================================
-    implementation 'io.opentracing.brave:brave-opentracing'
-    implementation 'io.opentracing:opentracing-api'
-    implementation 'io.zipkin.reporter2:zipkin-reporter'
-    implementation 'io.zipkin.reporter2:zipkin-sender-okhttp3'
-}

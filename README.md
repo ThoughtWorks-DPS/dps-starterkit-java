@@ -6,8 +6,12 @@ This is the interface for the service, which should include the Request and Resp
 
 Open question: Should we use Lombok, Immutables, or POJO?
 
+## controller
 
-## spi Service Provider Interface
+The implementation of the API interface, should only depend on the service SPI.
+This has responsibility for transforming the SPI model to the API model.
+
+## service/spi Service Provider Interface
 
 This is an optional component, depending on the structure and domain of what is being built.
 Assume you should have it, you should be able to justify why you don't.
@@ -22,6 +26,19 @@ Email and SMS would be individual SPI implementations, because at the higher lev
 Further, there may be a future mechanism for notifications, which would only require a configuration capability for the user to select the new method, and a new SPI implementation registered with the service.
 
 It also helps a lot with testability.
+
+## service/provider
+
+This is the main implementation package, which implements the service.
+Ideally, it is a thin glue layer between the REST API and the SPI implementations.
+Data validation, security (if not already delegated out to Service Mesh), logging and metrics capture should happen here.
+
+Business logic should primarily reside behind the SPI interface(s) and the specific implementations  which execute the business logic.
+This pattern easily accomodates plugin architectures at the SPI level, supported by factory objects (<--Ranbir;).
+
+This has responsibility for translating from the SPI model to the Persistence model.
+
+This should only depend on the Persistence model, and perhaps other services SPIs.
 
 ## persitence/api
 
@@ -40,17 +57,7 @@ Depending on the choice on the persistence/api side (i.e. Spring JPA), we may or
 However, it's still useful to have in cases where custom queries need to be implemented.
 
 
-## impl
-
-This is the main implementation package, which implements the service.
-Ideally, it is a thin glue layer between the REST API and the SPI implementations.
-Data validation, security (if not already delegated out to Service Mesh), logging and metrics capture should happen here.
-
-Business logic should primarily reside behind the SPI interface(s) and the specific implementations  which execute the business logic.
-This pattern easily accomodates plugin architectures at the SPI level, supported by factory objects (<--Ranbir;).
-
-
-## service
+## app
 
 The main Spring Boot Application, which contains whatever specific configuration classes and includes the components which make up the application (persistence, api, spi, spi-implementation).
 
