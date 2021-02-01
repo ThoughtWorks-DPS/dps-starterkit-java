@@ -28,9 +28,9 @@ application {
     mainClass = 'io.twdps.starter.StarterApplication'
 }
 
-jar {
-    enabled = true
-}
+//jar {
+//    enabled = true
+//}
 
 bootJar {
     manifest {
@@ -43,6 +43,6 @@ bootJar {
         )
     }
     //archiveFileName = "starter-java.jar"
-    classifier = 'fatJar'
+//    classifier = 'fatJar'
 }
 
