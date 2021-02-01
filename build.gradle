@@ -36,3 +36,7 @@ plugins {
     id("starter.java.release-conventions") version "${dps_starter_boot_version}"
 }
 
+ext {
+    jacoco_enforce_violations = true
+    jacoco_minimum_coverage = 0.8
+}
