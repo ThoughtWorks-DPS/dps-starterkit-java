@@ -5,7 +5,7 @@ import io.twdps.starter.service.spi.account.model.Account;
 import java.util.List;
 import java.util.Optional;
 
-public interface AccountManager {
+public interface AccountService {
 
   Account add(Account account);
 

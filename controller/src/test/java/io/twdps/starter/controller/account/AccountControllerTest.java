@@ -5,7 +5,7 @@ import io.twdps.starter.api.account.responses.AccountResponse;
 import io.twdps.starter.api.account.responses.AddAccountResponse;
 import io.twdps.starter.api.responses.ArrayResponse;
 import io.twdps.starter.controller.account.mapper.AccountRequestMapper;
-import io.twdps.starter.service.spi.account.AccountManager;
+import io.twdps.starter.service.spi.account.AccountService;
 import io.twdps.starter.service.spi.account.model.Account;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ public class AccountControllerTest {
 
   private AccountController controller;
 
-  @Mock private AccountManager manager;
+  @Mock private AccountService manager;
   @Mock private AccountRequestMapper mapper;
 
   private final String username = "jsmith";
