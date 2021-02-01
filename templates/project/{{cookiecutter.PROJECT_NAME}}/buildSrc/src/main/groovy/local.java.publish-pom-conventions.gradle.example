@@ -1,0 +1,13 @@
+
+plugins {
+    id 'maven-publish'
+}
+
+publishing {
+    publications {
+        myPlatform(MavenPublication) {
+            from components.javaPlatform
+        }
+    }
+}
+

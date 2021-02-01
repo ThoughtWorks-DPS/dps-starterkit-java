@@ -1,0 +1,27 @@
+{
+  "PROJECT_NAME" : "dps-multi-module-starterkit-java",
+  "PACKAGE_NAME": "{{cookiecutter.PROJECT_NAME|lower|replace(' ', '-')|replace('_', '-')}}",
+  "PROJECT_DESCRIPTION": "Java API Starter from Template",
+  "PROJECT_OWNER": "starter-java@example.com",
+  "DOCKER_REGISTRY" : "docker.pkg.github.com/thoughtworks-dps/{{cookiecutter.PACKAGE_NAME}}",
+  "BASE_PACKAGE": "io.twdps.starter",
+  "PKG_TL_NAME": "{{cookiecutter.BASE_PACKAGE|lower|split('\\.')[0]}}",
+  "PKG_ORG_NAME": "{{cookiecutter.BASE_PACKAGE|lower|split('\\.')[1]}}",
+  "PKG_GROUP_NAME": "{{cookiecutter.BASE_PACKAGE|lower|split('\\.')[2]}}",
+  "SERVICE_NAME": "Example",
+  "PKG_SERVICE_NAME": "{{cookiecutter.SERVICE_NAME|lower}}",
+  "SERVICE_URL": "{{cookiecutter.SERVICE_NAME|lower}}",
+  "RESOURCE_NAME": "Account",
+  "RESOURCE_NAME_PLURAL": "{{cookiecutter.RESOURCE_NAME}}s",
+  "RESOURCE_URL": "{{cookiecutter.RESOURCE_NAME_PLURAL|lower}}",
+  "PKG_RESOURCE_NAME": "{{cookiecutter.RESOURCE_NAME|lower}}",
+  "SUB_RESOURCE_NAME": "Sub{{cookiecutter.RESOURCE_NAME}}",
+  "SUB_RESOURCE_NAME_PLURAL": "{{cookiecutter.SUB_RESOURCE_NAME}}s",
+  "SUB_RESOURCE_URL": "{{cookiecutter.SUB_RESOURCE_NAME_PLURAL|lower}}",
+  "PKG_SUB_RESOURCE_NAME": "{{cookiecutter.SUB_RESOURCE_NAME|lower}}",,,
+  "_copy_without_render": [
+    "secrethub.env",
+    "helm/templates/*",
+    "tpl/*"
+  ]
+}

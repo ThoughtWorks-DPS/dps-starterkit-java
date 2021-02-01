@@ -1,0 +1,21 @@
+
+plugins {
+    id 'starter.std.java.library-conventions'
+    id 'starter.java.config-conventions'
+}
+
+dependencies {
+    annotationBom platform("io.twdps.starter:starter-bom:${dps_starter_boot_version}")
+    checkstyleRules platform("io.twdps.starter:checkstyle-bom:${dps_starter_boot_version}")
+
+    implementation project(':api')
+    implementation project(':service:provider')
+    implementation project(':service:spi')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    implementation "io.opentracing.contrib:opentracing-spring-web-starter"
+//    implementation('org.postgresql:postgresql')
+
+}
+

@@ -1,0 +1,103 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- toYaml .Values.labels | nindent 4 }}
+      {{- if .Values.styraLabels -}}
+      {{- toYaml .Values.styraLabels | nindent 4 }}
+      {{- end}}
+  annotations:
+    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/version: {{ .Values.version | quote }}
+    app.kubernetes.io/owner: {{ .Values.owner }}
+    app.kubernetes.io/env: {{ .Values.environment }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- toYaml .Values.labels | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- toYaml .Values.labels | nindent 8 }}
+      annotations:
+        app.kubernetes.io/podname: {{ .Values.name }}
+        app.kubernetes.io/podversion: {{ .Values.version | quote }}
+        app.kubernetes.io/podowner: {{ .Values.owner }}
+        app.kubernetes.io/podenv: {{ .Values.environment }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Chart.Name }}-pull-secret
+      {{ if .Values.rds.initContainer }}
+      initContainers:
+        - name: db-init
+          image: {{ .Values.initContainerName }}
+          imagePullPolicy: Always
+          env:
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_endpoint_key }}
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_username_key }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_password_key }}
+            - name: POSTGRES_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_root_username_key }}
+            - name: POSTGRES_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_root_password_key }}
+            - name: POSTGRES_DBNAME
+              value: {{ .Values.rds.dbName }}
+      {{ end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          ports:
+      {{- toYaml .Values.ports | nindent 12 }}
+      {{- if .Values.nsPorts }}
+      {{- index .Values.nsPorts .Values.environment | toYaml | nindent 12 }}
+      {{ end }}
+      {{- if hasKey .Values "livenessProbe" }}
+          livenessProbe:
+      {{- toYaml .Values.livenessProbe | nindent 12}}
+      {{- end }}
+      {{- if hasKey .Values "readinessProbe" }}
+          readinessProbe:
+      {{- toYaml .Values.readinessProbe | nindent 12}}
+      {{- end }}
+          env:
+            - name: POSTGRES_DBNAME
+              value: {{ .Values.rds.dbName }}
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_username_key }}
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_password_key }}
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_endpoint_key }}
+      {{- toYaml .Values.nsAnyVars | nindent 12 }}

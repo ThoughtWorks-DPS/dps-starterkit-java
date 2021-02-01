@@ -1,0 +1,48 @@
+plugins {
+    id 'starter.std.java.application-conventions'
+    id 'starter.java.config-conventions'
+}
+
+dependencies {
+    annotationBom platform("io.twdps.starter:starter-bom:${dps_starter_boot_version}")
+    checkstyleRules platform("io.twdps.starter:checkstyle-bom:${dps_starter_boot_version}")
+
+    implementation project(':api')
+    implementation project(':controller')
+    implementation project(':persistence:model')
+    implementation project(':persistence:impl')
+    implementation project(':service:provider')
+    implementation project(':service:spi')
+    implementation 'io.twdps.starter:tracing'
+
+    implementation "org.springframework.boot:spring-boot-starter-web"
+
+    testImplementation "com.h2database:h2"
+    integrationTestImplementation "com.h2database:h2"
+    runtime "com.h2database:h2"
+}
+
+
+application {
+    // Define the main class for the application.
+    mainClass = 'io.twdps.starter.StarterApplication'
+}
+
+//jar {
+//    enabled = true
+//}
+
+bootJar {
+    manifest {
+        attributes(
+                'Application-Version': "${project.version}",
+                'Start-Class': 'io.twdps.starter.StarterApplication',
+//                "Application-Git-Commit": "${gitRevision}",
+//                "Application-Git-Branch-Name": "${gitBranchName}",
+                'Application-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date())
+        )
+    }
+    //archiveFileName = "starter-java.jar"
+//    classifier = 'fatJar'
+}
+

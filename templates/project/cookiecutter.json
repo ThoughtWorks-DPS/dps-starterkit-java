@@ -1,0 +1,12 @@
+{
+  "PROJECT_NAME" : "dps-multi-module-starterkit-java",
+  "PACKAGE_NAME": "{{cookiecutter.PROJECT_NAME|lower|replace(' ', '-')|replace('_', '-')}}",
+  "PROJECT_DESCRIPTION": "Java API Starter from Template",
+  "PROJECT_OWNER": "starter-java@example.com",
+  "DOCKER_REGISTRY" : "docker.pkg.github.com/thoughtworks-dps/{{cookiecutter.PACKAGE_NAME}}",
+  "_copy_without_render": [
+    "secrethub.env",
+    "helm/templates/*",
+    "tpl/*"
+  ]
+}

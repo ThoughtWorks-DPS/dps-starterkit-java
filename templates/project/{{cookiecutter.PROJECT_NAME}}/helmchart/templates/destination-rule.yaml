@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  host: "{{ .Chart.Name }}.{{ .Values.namespace }}.svc.cluster.local"
+  subsets:
+    - name: blue
+      labels:
+        deployment: "blue"
+    - name: green
+      labels:
+        deployment: "green"

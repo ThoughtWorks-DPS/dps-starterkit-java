@@ -1,0 +1,40 @@
+apiVersion: backstage.io/v1alpha1
+kind: Template
+metadata:
+  name: poc-va-starter-java
+  title: DPS Starter Java API
+  description:
+    Spring Boot Application skeleton for creating Java API following API Style Guide
+  tags:
+    - recommended
+    - java
+    - spring
+spec:
+  templater: cookiecutter
+  type: api
+  schema:
+    required:
+      - PROJECT_NAME
+      - PROJECT_DESCRIPTION
+      - PROJECT_OWNER
+    properties:
+      PROJECT_NAME:
+        title: Project Name
+        type: string
+        description: Name of the project (ex. poc-va-starter-java)
+      PROJECT_DESCRIPTION:
+        title: Project Description
+        type: string
+        description: Description for the project
+      PROJECT_OWNER:
+        title: Project Owner
+        type: string
+        description: Email of the project owner (ex. starter-java@example.com)
+      ENABLE_CODE_CLIMATE:
+        title: Enable Code Climate Setup
+        type: boolean
+        description: Enables setup of Code Climate
+      ENABLE_CIRCLECI:
+        title: Enable CircleCI Setup
+        type: boolean
+        description:  Enables setup of CircleCI pipeline
