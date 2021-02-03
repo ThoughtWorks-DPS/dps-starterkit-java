@@ -7,14 +7,49 @@
  * in the user manual at https://docs.gradle.org/6.7/userguide/multi_project_builds.html
  */
 
+
 pluginManagement {
     repositories {
         mavenLocal()
         gradlePluginPortal()
         mavenCentral()
         jcenter()
+        maven { url "http://palantir.bintray.com/releases" }
+        maven { url  "https://dl.bintray.com/adesso/junit-insights" }
+        maven {
+            name = "starterBootPkgs"
+            url = uri("https://maven.pkg.github.com/ThoughtWorks-DPS/dps-starter-boot")
+            credentials {
+                String result = "unknown"
+                result = System.getenv("STARTERBOOTPKGS_USERNAME")
+                username = !result ? "STARTERBOOTPKGS_USERNAME_FIXME" : result;
+                result = System.getenv("STARTERBOOTPKGS_TOKEN")
+                password = !result ? "STARTERBOOTPKGS_TOKEN_FIXME" : result;
+            }
+        }
     }
 }
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        maven {
+            name = "starterBootPkgs"
+            url = uri("https://maven.pkg.github.com/ThoughtWorks-DPS/dps-starter-boot")
+            credentials {
+                String result = "unknown"
+                result = System.getenv("STARTERBOOTPKGS_USERNAME")
+                username = !result ? "STARTERBOOTPKGS_USERNAME_FIXME" : result;
+                result = System.getenv("STARTERBOOTPKGS_TOKEN")
+                password = !result ? "STARTERBOOTPKGS_TOKEN_FIXME" : result;
+            }
+        }
+    }
+}
+
 
 rootProject.name = 'dps-multi-module-starterkit-java'
 include ':api'

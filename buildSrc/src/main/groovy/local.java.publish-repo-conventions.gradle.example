@@ -9,10 +9,12 @@ plugins {
 publishing {
     repositories {
         maven {
+            name = "githubPackages"
             // change to point to your repo, e.g. http://my.org/repo
             def releasesRepoUrl = "${mavenRepository}"
             def snapshotsRepoUrl = "${mavenSnapshotRepository}"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials(PasswordCredentials)
         }
     }
 }
