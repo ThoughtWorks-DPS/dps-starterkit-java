@@ -160,7 +160,8 @@ workflows:
 
   build_test_publish:
     jobs:
-      - build
+      - build:
+          context: twdps-di
       - publish:
           context: twdps-di
           requires:
