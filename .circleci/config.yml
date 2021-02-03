@@ -30,16 +30,20 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: ./gradlew dependencies
+      - secrethub/exec:
+          step-name: Gradle dependencies
+          command: |
+            ./gradlew dependencies
 
       - save_cache:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run:
-          name: Run tests
-          command: ./gradlew test
+      - secrethub/exec:
+          step-name: Run tests
+          command: |
+            ./gradlew test
 
   publish:
     executor: build-agent
@@ -70,9 +74,10 @@ jobs:
           name: Tag init container
           command: docker tag twdps/dps-psql-init:latest twdps/dps-psql-init:$CIRCLE_BUILD_NUM
 
-      - run:
-          name: Build Jar
-          command: ./gradlew build -x test
+      - secrethub/exec:
+          step-name: Build jar
+          command: |
+            ./gradlew build -x test
 
       - run:
           name: Build Image
