@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Template
 metadata:
-  name: poc-va-starter-java
+  name: {{cookiecutter.PROJECT_NAME}}
   title: DPS Starter Java API
   description:
     Spring Boot Application skeleton for creating Java API following API Style Guide
@@ -21,7 +21,7 @@ spec:
       PROJECT_NAME:
         title: Project Name
         type: string
-        description: Name of the project (ex. poc-va-starter-java)
+        description: Name of the project (ex. {{cookiecutter.PROJECT_NAME}})
       PROJECT_DESCRIPTION:
         title: Project Description
         type: string

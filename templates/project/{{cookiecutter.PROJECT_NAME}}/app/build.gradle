@@ -25,24 +25,18 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'io.twdps.starter.StarterApplication'
+    mainClass = '{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.{{cookiecutter.SERVICE_NAME}}Application'
 }
-
-//jar {
-//    enabled = true
-//}
 
 bootJar {
     manifest {
         attributes(
                 'Application-Version': "${project.version}",
-                'Start-Class': 'io.twdps.starter.StarterApplication',
+                'Start-Class': '{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.{{cookiecutter.SERVICE_NAME}}Application',
 //                "Application-Git-Commit": "${gitRevision}",
 //                "Application-Git-Branch-Name": "${gitBranchName}",
                 'Application-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date())
         )
     }
-    //archiveFileName = "starter-java.jar"
-//    classifier = 'fatJar'
 }
 

@@ -39,8 +39,8 @@ spring:
 
   #TODO: integrate with secrets mgmt and integrate flyway
   datasource:
-    url: "jdbc:h2:mem:starterkitdb;DB_CLOSE_DELAY=-1"
-#    url: "jdbc:postgresql://localhost:5432/starterkitdb"
+    url: "jdbc:h2:mem:{{cookiecutter.PKG_SERVICE_NAME}}db;DB_CLOSE_DELAY=-1"
+#    url: "jdbc:postgresql://localhost:5432/{{cookiecutter.PKG_SERVICE_NAME}}db"
     username: starterkituser
     password: localT3st!
   jpa:

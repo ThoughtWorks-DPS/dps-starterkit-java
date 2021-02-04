@@ -26,20 +26,24 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "service/build.gradle" }}
+            - v1-dependencies-{{ checksum "build.gradle" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: ./gradlew dependencies
+      - secrethub/exec:
+          step-name: Gradle dependencies
+          command: |
+            ./gradlew dependencies
 
       - save_cache:
           paths:
             - ~/.gradle
-          key: v1-dependencies-{{ checksum "service/build.gradle" }}
+          key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run:
-          name: Run tests
-          command: ./gradlew test
+      - secrethub/exec:
+          step-name: Run tests
+          command: |
+            ./gradlew test
 
   publish:
     executor: build-agent
@@ -55,7 +59,7 @@ jobs:
       - secrethub/install
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "service/build.gradle" }}
+            - v1-dependencies-{{ checksum "build.gradle" }}
             - v1-dependencies-
 
       - run:
@@ -70,17 +74,18 @@ jobs:
           name: Tag init container
           command: docker tag twdps/dps-psql-init:latest twdps/dps-psql-init:$CIRCLE_BUILD_NUM
 
-      - run:
-          name: Build Jar
-          command: ./gradlew build -x test
+      - secrethub/exec:
+          step-name: Build jar
+          command: |
+            ./gradlew build -x test
 
       - run:
           name: Build Image
-          command: docker build app -t twdps/dps-multi-module-starterkit-java:latest
+          command: docker build app -t twdps/{{cookiecutter.PACKAGE_NAME}}:latest
 
       - run:
           name: Tag Main Image
-          command: docker tag twdps/dps-multi-module-starterkit-java:latest twdps/dps-multi-module-starterkit-java:$CIRCLE_BUILD_NUM
+          command: docker tag twdps/{{cookiecutter.PACKAGE_NAME}}:latest twdps/{{cookiecutter.PACKAGE_NAME}}:$CIRCLE_BUILD_NUM
 
       - run:
           name: Docker authentication
@@ -94,7 +99,7 @@ jobs:
 
       - run:
           name: Publish Docker Image
-          command: docker push twdps/dps-multi-module-starterkit-java:latest
+          command: docker push twdps/{{cookiecutter.PACKAGE_NAME}}:latest
 
   dev-deploy:
     executor: deploy-agent
@@ -142,7 +147,7 @@ jobs:
   #        name: run helm chart
   #        shell: secrethub run -- /bin/sh -eo pipefail
   #        command: |
-  #          helm upgrade dps-multi-module-starterkit-java helm \
+  #          helm upgrade {{cookiecutter.PACKAGE_NAME}} helm \
   #                        --install \
   #                        --wait \
   #                        -f helm/api-2-dev.yaml \
@@ -155,7 +160,8 @@ workflows:
 
   build_test_publish:
     jobs:
-      - build
+      - build:
+          context: twdps-di
       - publish:
           context: twdps-di
           requires:
