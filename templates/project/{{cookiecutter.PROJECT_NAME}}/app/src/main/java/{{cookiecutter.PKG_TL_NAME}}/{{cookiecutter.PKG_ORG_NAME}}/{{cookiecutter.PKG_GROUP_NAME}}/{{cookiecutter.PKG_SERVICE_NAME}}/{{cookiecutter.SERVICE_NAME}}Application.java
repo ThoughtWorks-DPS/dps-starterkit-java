@@ -13,7 +13,7 @@ public class {{cookiecutter.SERVICE_NAME}}Application {
    * @param args command line args
    */
   public static void main(String[] args) {
-    new SpringApplication(StarterApplication.class).run(args);
+    new SpringApplication({{cookiecutter.SERVICE_NAME}}Application.class).run(args);
     log.info("\n\n\n\n\n---------------{{cookiecutter.SERVICE_NAME}} API Started.----------------\n\n\n\n\n");
   }
 }

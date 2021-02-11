@@ -23,12 +23,13 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
   private {{cookiecutter.RESOURCE_NAME}}Entity entity;
 
   private final String username = "jsmith";
+  private final String pii = "123-45-6789";
   private final String firstName = "Joe";
   private final String lastName = "Smith";
 
   @BeforeEach
   public void setup() {
-    entity = new {{cookiecutter.RESOURCE_NAME}}Entity(username, firstName, lastName);
+    entity = new {{cookiecutter.RESOURCE_NAME}}Entity(username, pii, firstName, lastName);
   }
 
   /** populate the tables with some tests data.
@@ -37,9 +38,9 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
    */
   public {{cookiecutter.RESOURCE_NAME}}Entity populate() {
     {{cookiecutter.RESOURCE_NAME}}Entity result = modelEntityRepository.save(entity);
-    {{cookiecutter.RESOURCE_NAME}}Entity agentSmith = new {{cookiecutter.RESOURCE_NAME}}Entity("asmith", "Agent", lastName);
+    {{cookiecutter.RESOURCE_NAME}}Entity agentSmith = new {{cookiecutter.RESOURCE_NAME}}Entity("asmith", pii, "Agent", lastName);
     modelEntityRepository.save(agentSmith);
-    {{cookiecutter.RESOURCE_NAME}}Entity maryQuiteContrary = new {{cookiecutter.RESOURCE_NAME}}Entity("maryQuiteContrary", "Mary", "Contrary");
+    {{cookiecutter.RESOURCE_NAME}}Entity maryQuiteContrary = new {{cookiecutter.RESOURCE_NAME}}Entity("maryQuiteContrary", pii, "Mary", "Contrary");
     modelEntityRepository.save(maryQuiteContrary);
 
     return result;

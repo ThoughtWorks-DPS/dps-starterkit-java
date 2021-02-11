@@ -1,9 +1,15 @@
 package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.provider.{{cookiecutter.PKG_RESOURCE_NAME}};
 
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.RESOURCE_NAME}}EntityRepository;
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.SUB_RESOURCE_NAME}}EntityRepository;
+{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.provider.{{cookiecutter.PKG_RESOURCE_NAME}}.mapper.{{cookiecutter.RESOURCE_NAME}}EntityMapper;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.{{cookiecutter.RESOURCE_NAME}}Service;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}};
+{%- endif %}
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +23,25 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   private {{cookiecutter.RESOURCE_NAME}}EntityRepository repository;
   private {{cookiecutter.RESOURCE_NAME}}EntityMapper mapper;
 
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" -%}
+  private {{cookiecutter.SUB_RESOURCE_NAME}}EntityRepository subResourceRepository;
+  private {{cookiecutter.SUB_RESOURCE_NAME}}EntityMapper subResourceMapper;
+{%- endif %}
+
   {{cookiecutter.RESOURCE_NAME}}ServiceImpl({{cookiecutter.RESOURCE_NAME}}EntityRepository repository,
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+                     {{cookiecutter.RESOURCE_NAME}}EntityRepository subResourceRepository,
+                     {{cookiecutter.RESOURCE_NAME}}EntityMapper subResourceMapper,
+{%- endif %}
                      {{cookiecutter.RESOURCE_NAME}}EntityMapper mapper) {
     this.repository = repository;
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+    this.subResourceRepository = subResourceRepository;
+    this.subResourceMapping = subResourceMapping;
+{%- endif %}
     this.mapper = mapper;
   }
+
   /**
    * add a new {{cookiecutter.RESOURCE_NAME}} entity.
    *
@@ -88,4 +108,77 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
     repository.deleteById(id);
     return resource;
   }
+
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" -%}
+  /**
+   * add a new {{cookiecutter.SUB_RESOURCE_NAME}} entity.
+   *
+   * @param resource resource info to add (id should be null)
+   * @return new resource object with valid id
+   */
+  public {{cookiecutter.SUB_RESOURCE_NAME}} add{{cookiecutter.SUB_RESOURCE_NAME}}(String id, {{cookiecutter.SUB_RESOURCE_NAME}} subResource) {
+    {{cookiecutter.SUB_RESOURCE_NAME}}Entity entity = entityMapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Entity(subResource);
+    entity.setVersionId(id);
+    {{cookiecutter.SUB_RESOURCE_NAME}} saved = entityMapper.to{{cookiecutter.SUB_RESOURCE_NAME}}(subResourceRepository.save(entity));
+    return saved;
+  }
+
+  /**
+   * find a {{cookiecutter.SUB_RESOURCE_NAME}} resource by resource id
+   *
+   * @param id parent resource id
+   * @param subResourceId id of the {{cookiecutter.SUB_RESOURCE_NAME}}
+   * @return matching record, or null
+   */
+  @Override
+  public Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId) {
+    Optional<{{cookiecutter.RESOURCE_NAME}}> resource = mapper.toModel(subResourceRepository.findById(subResourceId));
+    return resource;
+  }
+
+  /**
+   * find all {{cookiecutter.SUB_RESOURCE_NAME}} resources related to {{cookiecutter.RESOURCE_NAME}}
+   *
+   * @param id {{cookiecutter.RESOURCE_NAME}} resource id
+   * @return list of {{cookiecutter.SUB_RESOURCE_NAME}} resources
+   */
+  @Override
+  public List<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}s(String id) {
+    List<{{cookiecutter.SUB_RESOURCE_NAME}}> resources = mapper.toModelList(subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(id));
+    return resources;
+  }
+
+
+  /**
+   * update a {{cookiecutter.SUB_RESOURCE_NAME}} resource based on id
+   *
+   * @param id {{cookiecutter.RESOURCE_NAME}} resource id
+   * @param subResourceId {{cookiecutter.SUB_RESOURCE_NAME}} resource id
+   * @param subResource {{cookiecutter.SUB_RESOURCE_NAME}} resource data
+   * @return Optional<> reference to updated {{cookiecutter.SUB_RESOURCE_NAME}} resource
+  */
+  @Override
+  public Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> update{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId, {{cookiecutter.SUB_RESOURCE_NAME}} subResource) {
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource = mapper.toModel(
+        subResourceRepository.findById(subResourceId)
+            .map((obj) -> mapper.updateMetadata(record, obj))
+            .map((obj) -> repository.save(obj)));
+
+    return resource;
+    }
+
+  /**
+   * delete a {{cookiecutter.SUB_RESOURCE_NAME}} resource based on id
+   *
+   * @param id {{cookiecutter.RESOURCE_NAME}} resource id
+   * @param subResourceId {{cookiecutter.SUB_RESOURCE_NAME}} resource id
+   * @return subResource {{cookiecutter.SUB_RESOURCE_NAME}} resource data
+   */
+  @Override
+  public Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> delete{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId) {
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> result = get{{cookiecutter.SUB_RESOURCE_NAME}}(id, subResourceId);
+    {{cookiecutter.SUB_RESOURCE_NAME}}Repository.deleteById(subResourceId);
+    return result;
+  }
+{%- endif %}
 }

@@ -1,8 +1,13 @@
 package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.controller.{{cookiecutter.PKG_RESOURCE_NAME}}.mapper;
 
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.SUB_RESOURCE_NAME}}Request;
+{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.RESOURCE_NAME}}Response;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.Add{{cookiecutter.RESOURCE_NAME}}Response;
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.SUB_RESOURCE_NAME}}Response;
+{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +24,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
   private {{cookiecutter.RESOURCE_NAME}}RequestMapper mapper;
 
   private final String username = "jsmith";
+  private final String pii = "123-45-6789";
   private final String firstName = "Joe";
   private final String lastName = "Smith";
   private final String identifier = "12345";
@@ -31,7 +37,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
 
   @Test
   public void mapperNew{{cookiecutter.RESOURCE_NAME}}Test() {
-    {{cookiecutter.RESOURCE_NAME}}Request resource = createAdd{{cookiecutter.RESOURCE_NAME}}Request();
+    {{cookiecutter.RESOURCE_NAME}}Request resource = create{{cookiecutter.RESOURCE_NAME}}Request();
 
     {{cookiecutter.RESOURCE_NAME}} response = mapper.toModel(resource);
 
@@ -45,15 +51,6 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
     {{cookiecutter.RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.RESOURCE_NAME}}Response(resource);
 
     verify{{cookiecutter.RESOURCE_NAME}}Response(response);
-  }
-
-  @Test
-  public void mapperAdd{{cookiecutter.RESOURCE_NAME}}ResponseTest() {
-    {{cookiecutter.RESOURCE_NAME}} resource = create{{cookiecutter.RESOURCE_NAME}}(identifier);
-
-    Add{{cookiecutter.RESOURCE_NAME}}Response response = mapper.toAdd{{cookiecutter.RESOURCE_NAME}}Response(resource);
-
-    verifyAdd{{cookiecutter.RESOURCE_NAME}}Response(response);
   }
 
   @Test
@@ -88,12 +85,80 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
   public void mapperEntityListTest() {
     List<{{cookiecutter.RESOURCE_NAME}}> resources = Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}(identifier), create{{cookiecutter.RESOURCE_NAME}}(identifier));
 
-    List<{{cookiecutter.RESOURCE_NAME}}Response> response = mapper.toResponseList(resources);
+    List<{{cookiecutter.RESOURCE_NAME}}Response> response = mapper.to{{cookiecutter.RESOURCE_NAME}}ResponseList(resources);
 
     assertThat(response.size()).isEqualTo(2);
     verify{{cookiecutter.RESOURCE_NAME}}Response(response.get(0));
     verify{{cookiecutter.RESOURCE_NAME}}Response(response.get(1));
   }
+
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+  @Test
+  public void mapperNew{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
+    {{cookiecutter.SUB_RESOURCE_NAME}}Request resource = create{{cookiecutter.SUB_RESOURCE_NAME}}Request();
+
+    {{cookiecutter.SUB_RESOURCE_NAME}} response = mapper.toModel(resource);
+
+    verify{{cookiecutter.SUB_RESOURCE_NAME}}(response);
+  }
+
+  @Test
+  public void mapper{{cookiecutter.SUB_RESOURCE_NAME}}ResponseTest() {
+    {{cookiecutter.SUB_RESOURCE_NAME}} resource = create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier);
+
+    {{cookiecutter.SUB_RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(resource);
+
+    verify{{cookiecutter.SUB_RESOURCE_NAME}}Response(response);
+  }
+
+  @Test
+  public void mapper{{cookiecutter.SUB_RESOURCE_NAME}}ResponseTest() {
+    {{cookiecutter.SUB_RESOURCE_NAME}} resource = create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier);
+
+    {{cookiecutter.SUB_RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(resource);
+
+    verify{{cookiecutter.SUB_RESOURCE_NAME}}Response(response);
+  }
+
+  @Test
+  public void mapperOptionalTest() {
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource = Optional.of(create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier));
+
+    {{cookiecutter.SUB_RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(resource);
+
+    assertThat(response).isNotNull();
+    verify{{cookiecutter.SUB_RESOURCE_NAME}}Response(response);
+  }
+
+  @Test
+  public void mapperOptionalNullTest() {
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource = Optional.ofNullable(null);
+
+    {{cookiecutter.SUB_RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(resource);
+
+    assertThat(response).isNull();
+  }
+
+  @Test
+  public void mapperOptionalEmptyTest() {
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource = Optional.empty();
+
+    {{cookiecutter.SUB_RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(resource);
+
+    assertThat(response).isNull();
+  }
+
+  @Test
+  public void mapperSubEntityListTest() {
+    List<{{cookiecutter.SUB_RESOURCE_NAME}}> resources = Arrays.asList(create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier), create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier));
+
+    List<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ResponseList(resources);
+
+    assertThat(response.size()).isEqualTo(2);
+    verify{{cookiecutter.SUB_RESOURCE_NAME}}Response(response.get(0));
+    verify{{cookiecutter.SUB_RESOURCE_NAME}}Response(response.get(1));
+  }
+{%- endif %}
 
   /**
    * convenience function to create resource object.
@@ -102,39 +167,55 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @return {{cookiecutter.RESOURCE_NAME}} object
    */
   private {{cookiecutter.RESOURCE_NAME}} create{{cookiecutter.RESOURCE_NAME}}(String id) {
-    return new {{cookiecutter.RESOURCE_NAME}}(id, username, firstName, lastName);
+    return new {{cookiecutter.RESOURCE_NAME}}(id, username, pii, firstName, lastName);
   }
 
   /**
    * convenience function to create resource request object.
    *
-   * @return Add{{cookiecutter.RESOURCE_NAME}}Request object
+   * @return {{cookiecutter.RESOURCE_NAME}}Request object
    */
-  private {{cookiecutter.RESOURCE_NAME}}Request createAdd{{cookiecutter.RESOURCE_NAME}}Request() {
-    return new {{cookiecutter.RESOURCE_NAME}}Request(username, firstName, lastName);
+  private {{cookiecutter.RESOURCE_NAME}}Request create{{cookiecutter.RESOURCE_NAME}}Request() {
+    return new {{cookiecutter.RESOURCE_NAME}}Request(username, pii, firstName, lastName);
   }
+
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+  /**
+   * convenience function to create resource request object.
+   *
+   * @return {{cookiecutter.RESOURCE_NAME}}Request object
+   */
+  private {{cookiecutter.SUB_RESOURCE_NAME}}Request create{{cookiecutter.SUB_RESOURCE_NAME}}Request() {
+    return new {{cookiecutter.SUB_RESOURCE_NAME}}Request(username, firstName, lastName);
+  }
+{%- endif %}
 
   /**
    * helper function to validate standard values.
    *
-   * @param response the object to validate
+   * @param resource the object to validate
    */
-  protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} response) {
-    assertThat(response.getUserName().equals(username));
-    assertThat(response.getFirstName().equals(firstName));
-    assertThat(response.getLastName().equals(lastName));
-    assertThat(response.getId()).isNotEqualTo(identifier);
+  protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource) {
+    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getPii().equals(pii));
+    assertThat(resource.getFirstName().equals(firstName));
+    assertThat(resource.getLastName().equals(lastName));
+    assertThat(resource.getId()).isNotEqualTo(identifier);
   }
 
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
   /**
    * helper function to validate standard values.
    *
-   * @param response the object to validate
+   * @param resource the object to validate
    */
-  protected void verifyAdd{{cookiecutter.RESOURCE_NAME}}Response(Add{{cookiecutter.RESOURCE_NAME}}Response response) {
-    assertThat(response.getResponse().equals(username));
-    assertThat(response.getId()).isEqualTo(identifier);
+  protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}({{cookiecutter.SUB_RESOURCE_NAME}} resource) {
+    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getFirstName().equals(firstName));
+    assertThat(resource.getLastName().equals(lastName));
+    assertThat(resource.getId()).isNotEqualTo(identifier);
   }
+{%- endif %}
 
   /**
    * helper function to validate standard values.
@@ -143,7 +224,20 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    */
   private void verify{{cookiecutter.RESOURCE_NAME}}Response({{cookiecutter.RESOURCE_NAME}}Response response) {
     assertThat(response.getUserName().equals(username));
+    assertThat(response.getPii().equals(pii));
     assertThat(response.getFullName().equals(fullName));
     assertThat(response.getId()).isEqualTo(identifier);
   }
+
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+  /**
+   * helper function to validate standard values.
+   *
+   * @param response the object to validate
+   */
+  protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}Response({{cookiecutter.SUB_RESOURCE_NAME}}Response response) {
+    assertThat(response.getResponse().equals(username));
+    assertThat(response.getId()).isEqualTo(identifier);
+  }
+{%- endif %}
 }

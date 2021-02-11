@@ -10,9 +10,17 @@ then
   exit -1
 fi
 
-for i in $src/*.gradle
-do
-  file=$(basename $i)
-  echo "[$i] [$file]"
-  cp $i $dst/${file/starter/local}.example
-done
+function copy_files {
+  local srcPath=$1
+  local dstPath=$2
+
+  for i in "${srcPath}"/*.gradle
+  do
+    file=$(basename "${i}")
+    echo "[$i] [$file]"
+    cp $i "${dstPath}"/"${file/starter/local}".example
+  done
+}
+
+copy_files "${src}" "${dst}"
+copy_files "${src}" "templates/project/${dst}"

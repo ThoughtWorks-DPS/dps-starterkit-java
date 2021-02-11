@@ -1,0 +1,13 @@
+/**
+ * Provides a set of common dependencies for typical gradle plugin unit test .
+ */
+
+sourceCompatibility = '11'
+
+
+dependencies {
+    testImplementation('org.spockframework:spock-core') {
+        exclude module: 'groovy-all'
+    }
+}
+

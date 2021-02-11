@@ -1,7 +1,7 @@
 info:
   app:
-    name: TWDPS Example API
-    description: Starter Kit Example
+    name: dps-multi-module-starterkit-java
+    description: Java API Starter from Template
 management:
   server:
     port: 8081
@@ -39,8 +39,8 @@ spring:
 
   #TODO: integrate with secrets mgmt and integrate flyway
   datasource:
-    url: "jdbc:h2:mem:starterkitdb;DB_CLOSE_DELAY=-1"
-#    url: "jdbc:postgresql://localhost:5432/starterkitdb"
+    url: "jdbc:h2:mem:exampledb;DB_CLOSE_DELAY=-1"
+#    url: "jdbc:postgresql://localhost:5432/exampledb"
     username: starterkituser
     password: localT3st!
   jpa:

@@ -1,3 +1,7 @@
+/**
+ * Setting for running checkstyle, pulls configuration from the checkstyle jar.
+ */
+
 plugins {
     id 'checkstyle'
 }
@@ -13,8 +17,8 @@ dependencies {
 
 checkstyle {
     toolVersion "${checkstyle_version}"
-//    configFile = rootProject.file('config/checkstyle/checkstyle.xml')
-    config project.resources.text.fromArchiveEntry(configurations.checkstyleRules, 'config/checkstyle/checkstyle.xml')
+//    configFile = rootProject.file('settings/checkstyle/checkstyle.xml')
+    config project.resources.text.fromArchiveEntry(configurations.checkstyleRules, 'settings/checkstyle/checkstyle.xml')
     configProperties = [
             'checkstyle.cache.file': "${buildDir}/checkstyle.cache",
     ]

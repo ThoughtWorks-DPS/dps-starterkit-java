@@ -32,6 +32,7 @@ public class {{cookiecutter.RESOURCE_NAME}}Entity {
   private String id;
 
   @NonNull private String userName;
+  @NonNull private String pii;
   @NonNull private String firstName;
   @NonNull private String lastName;
 }

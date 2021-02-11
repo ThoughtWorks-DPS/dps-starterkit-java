@@ -1,7 +1,7 @@
 info:
   app:
-    name: TWDPS Example API
-    description: Starter Kit Example
+    name: {{cookiecutter.PROJECT_NAME}}
+    description: {{cookiecutter.PROJECT_DESCRIPTION}}
 management:
   server:
     port: 8081

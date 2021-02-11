@@ -1,8 +1,13 @@
 package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.resources;
 
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.SUB_RESOURCE_NAME}}Request;
+{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.RESOURCE_NAME}}Response;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.Add{{cookiecutter.RESOURCE_NAME}}Response;
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.SUB_RESOURCE_NAME}}Response;
+{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.responses.ArrayResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@RequestMapping(value = "/v1/{{cookiecutter.SERVICE_URL}}", produces = "application/json")
+@RequestMapping(value = "/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}", produces = "application/json")
 public interface {{cookiecutter.RESOURCE_NAME}}Resource {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  ResponseEntity<Add{{cookiecutter.RESOURCE_NAME}}Response> addEntity(@RequestBody {{cookiecutter.RESOURCE_NAME}}Request request);
+  ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> addEntity(@RequestBody {{cookiecutter.RESOURCE_NAME}}Request request);
 
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
@@ -39,11 +44,12 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
   @ResponseStatus(HttpStatus.OK)
   ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> deleteEntityById(@PathVariable(value = "id") String id);
 
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
   // TODO: Need to provide the sub-resource endpoints
   @PostMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}")
   @ResponseStatus(HttpStatus.CREATED)
-  ResponseEntity<CallbackResponse> add{{cookiecutter.SUB_RESOURCE_NAME}}(@PathVariable(value = "id") String id,
-                                               @RequestBody Add{{cookiecutter.SUB_RESOURCE_NAME}}Request add{{cookiecutter.SUB_RESOURCE_NAME}}Request);
+  ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> add{{cookiecutter.SUB_RESOURCE_NAME}}(@PathVariable(value = "id") String id,
+                                               @RequestBody {{cookiecutter.SUB_RESOURCE_NAME}}Request add{{cookiecutter.SUB_RESOURCE_NAME}}Request);
 
   @GetMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}")
   @ResponseStatus(HttpStatus.OK)
@@ -63,5 +69,6 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
   @ResponseStatus(HttpStatus.OK)
   ResponseEntity<ArrayResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> delete{{cookiecutter.SUB_RESOURCE_NAME}}(@PathVariable(value = "id") String id,
                                                                  @PathVariable(value = "{{cookiecutter.SUB_RESOURCE_URL}}Id") String {{cookiecutter.SUB_RESOURCE_URL}}Id);
+{%- endif %}
 
 }

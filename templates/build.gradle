@@ -1,0 +1,20 @@
+
+plugins {
+    id 'io.twdps.starter.plugin.cookiecutter'
+}
+
+cookiecutter {
+    template = 'project'
+    templates.addAll('project', 'resource')
+}
+
+cookiecutterVerify {
+    generatedProjectName = 'dps-multi-module-starterkit-java'
+    sourcePath = '..'
+}
+
+cookiecutterBuild {
+    generatedProjectName = 'dps-multi-module-starterkit-java'
+    args = ['clean', 'build', 'test']
+}
+

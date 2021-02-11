@@ -16,19 +16,19 @@ class {{cookiecutter.SERVICE_NAME}}{{cookiecutter.RESOURCE_NAME}}ApiSimulation e
 
   val scn = scenario("API Endpoint Simulation")
     .exec(http("Create {{cookiecutter.RESOURCE_NAME}}")
-      .post("/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}")
-      .body(StringBody("""{"userName":"mary.q.contrary", "pii": "123-45-6789", "firstName": "Mary", "lastName":"Contrary"}"""))
+      .post("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}")
+      .body(StringBody("""{"userName":"mary.q.contrary", "pii": "987-65-4321", "firstName": "Mary", "lastName":"Contrary"}"""))
       .asJson
       .check(jsonPath("$.id").saveAs("userId")))
     .exec(http("Get {{cookiecutter.RESOURCE_NAME}}")
-      .get("/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/${userId}")) // 92534752-a39c-499c-aa13-528cd0143f7c
+      .get("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/${userId}")) // 92534752-a39c-499c-aa13-528cd0143f7c
     .exec(http("Create {{cookiecutter.SUB_RESOURCE_NAME}}")
-      .post("/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/${userId}/{{cookiecutter.SUB_RESOURCE_URL}}")
-      .body(StringBody("""{"userName":"mary.q.contrary", "firstName": "Mary", "lastName":"Contrary"}"""))
+      .post("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/${userId}/{{cookiecutter.SUB_RESOURCE_URL}}")
+      .body(StringBody("""{"userName":"mary.q.contrary", "pii": "987-65-4321", "firstName": "Mary", "lastName":"Contrary"}"""))
       .asJson
       .check(jsonPath("$.id").saveAs("subUserId")))
     .exec(http("Get {{cookiecutter.SUB_RESOURCE_NAME}}")
-      .get("/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/${userId}/{{cookiecutter.SUB_RESOURCE_URL}}/${subUserId}")) // 92534752-a39c-499c-aa13-528cd0143f7c
+      .get("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/${userId}/{{cookiecutter.SUB_RESOURCE_URL}}/${subUserId}")) // 92534752-a39c-499c-aa13-528cd0143f7c
 
   setUp(scn
     .inject(

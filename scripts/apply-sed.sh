@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
 
 runpath=$(dirname $0)
-script=service.sed
+script=
 file=""
+tree=""
 path="."
 preserve=""
 
 function usage {
-  echo "$0 [--sed <script>] [--file <file>] [--path <path>] [--preserve]"
-  echo "  --sed   sed script to execute (${script})"
-  echo "  --file  file to process (${file})"
-  echo "  --path  process all files in path (${path})"
-  echo "  --preserve   preserve translated files with this extension for debugging ($preserve)"
+  echo "$0 [--sed <script>] [--file <file>] [--path <path>] [--tree <tree>] [--preserve]"
+  echo "  --sed         sed script to execute (${script})"
+  echo "  --file        file to process (${file})"
+  echo "  --tree        process all files in tree recursively (${tree})"
+  echo "  --preserve    preserve translated files with this extension for debugging ($preserve)"
+  echo "  --help        display this help"
 }
 
 function process_file {
@@ -30,6 +32,7 @@ do
   case $1 in
   --sed) shift; script=$1;;
   --file) shift; file=$1;;
+  --tree) shift; tree=$1;;
   --path) shift; path=$1;;
   --preserve) shift; preserve=$1;;
   --help) usage; exit 0;;
@@ -37,8 +40,6 @@ do
   esac
   shift;
 done
-
-script=${1:-service.sed}
 
 if [ ! -e "${script}" ]
 then
@@ -68,3 +69,7 @@ then
   done
 fi
 
+if [ -d "${tree}" ]
+then
+  find "${tree}" -type f -exec sed -i "${preserve}" -f "${script}" {} \;
+fi

@@ -26,6 +26,8 @@ public class {{cookiecutter.RESOURCE_NAME}} {
   @NonNull
   private String userName;
   @NonNull
+  private String pii;
+  @NonNull
   private String firstName;
   @NonNull
   private String lastName;

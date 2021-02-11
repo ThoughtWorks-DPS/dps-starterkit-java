@@ -28,6 +28,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   @Mock private {{cookiecutter.RESOURCE_NAME}}EntityMapper mapper;
 
   private final String username = "jsmith";
+  private final String pii = "123-45-6789";
   private final String bogusName = "bogus";
   private final String firstName = "Joe";
   private final String lastName = "Smith";
@@ -56,11 +57,11 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     // use the real mapper to generate consistent objects to use in mapper stubs
     {{cookiecutter.RESOURCE_NAME}}EntityMapper real = Mappers.getMapper({{cookiecutter.RESOURCE_NAME}}EntityMapper.class);
 
-    resource = {{cookiecutter.RESOURCE_NAME}}.builder().userName(username).firstName(firstName).lastName(lastName).build();
+    resource = {{cookiecutter.RESOURCE_NAME}}.builder().userName(username).pii(pii).firstName(firstName).lastName(lastName).build();
     entity = real.toEntity(resource);
     added =
         new {{cookiecutter.RESOURCE_NAME}}Entity(
-            identifier, entity.getUserName(), entity.getFirstName(), entity.getLastName());
+            identifier, entity.getUserName(), entity.getPii(), entity.getFirstName(), entity.getLastName());
     output = real.toModel(added);
     optionalEntity = Optional.of(entity);
     optionalAdded = Optional.of(added);

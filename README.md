@@ -2,7 +2,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/<fixme>>/test_coverage)](https://codeclimate.com/repos/<fixme>>/test_coverage)
 [![CircleCI](https://circleci.com/gh/ThoughtWorks-DPS/dps-multi-modules-starterkit-java.svg?style=shield&circle-token=<fixme>)](https://app.circleci.com/pipelines/github/ThoughtWorks-DPS/dps-multi-modules-starterkit-java?branch=master)
 
-# dps-multi-modules-starterkit-java
+# dps-multi-module-starterkit-java
 
 This is the repository for the Java API Starter from Template.
 
@@ -64,6 +64,12 @@ You can see an example of it in the initial ADR record in `<root>/docs/architect
 - Run: `./gradlew spotlessApply` to attempt to auto-format and correct linting errors
 - Reports for test coverage: `/build/jacoco/test/index.html`
 - Run: `codeclimate -f html > codeClimateReport.html` to execute Code Climate scanning locally and generate a html report# Starter Structure
+
+### Release
+
+- `./gradlew release` will create a tag based on the current SNAPSHOT version
+- `secrethub run -- ./gradlew release` will add the credentials for pushing the release tag to github
+- if the creds are not in place, `git push --tags origin` will also push the release tag to github
 
 ## buildSrc plugins
 

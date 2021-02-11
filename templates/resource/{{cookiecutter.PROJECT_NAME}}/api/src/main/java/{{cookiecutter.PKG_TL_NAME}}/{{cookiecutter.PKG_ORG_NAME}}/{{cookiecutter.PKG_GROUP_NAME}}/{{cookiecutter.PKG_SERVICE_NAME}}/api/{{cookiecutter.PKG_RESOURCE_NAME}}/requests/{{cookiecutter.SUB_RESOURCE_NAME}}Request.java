@@ -1,6 +1,10 @@
-package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses;
+package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -23,7 +27,7 @@ public class {{cookiecutter.SUB_RESOURCE_NAME}}Request {
    * @param lastName lastname of {{cookiecutter.RESOURCE_NAME}} holder
    */
   @JsonCreator
-  public {{cookiecutter.RESOURCE_NAME}}Request(
+  public {{cookiecutter.SUB_RESOURCE_NAME}}Request(
       @JsonProperty("userName") String userName,
       @JsonProperty("firstName") String firstName,
       @JsonProperty("lastName") String lastName) {
