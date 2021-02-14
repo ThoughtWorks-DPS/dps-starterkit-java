@@ -6,6 +6,7 @@ plugins {
 cookiecutter {
     template = 'project'
     templates.addAll('project', 'resource')
+    taskTimeout = 40000L
 }
 
 cookiecutterVerify {

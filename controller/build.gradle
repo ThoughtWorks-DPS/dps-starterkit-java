@@ -5,8 +5,8 @@ plugins {
 }
 
 dependencies {
-    annotationBom platform("io.twdps.starter:starter-bom:${dps_starter_boot_version}")
-    checkstyleRules platform("io.twdps.starter:checkstyle-bom:${dps_starter_boot_version}")
+    annotationBom platform("io.twdps.starter:starter-bom:${starter_boot_version}")
+    checkstyleRules platform("io.twdps.starter:checkstyle-bom:${starter_boot_version}")
 
     implementation project(':api')
     implementation project(':service:provider')
