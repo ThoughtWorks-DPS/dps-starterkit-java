@@ -81,7 +81,7 @@ jobs:
 
       - run:
           name: Build Image
-          command: docker build app -t twdps/dps-multi-module-starterkit-java:latest
+          command: ./gradlew docker
 
       - run:
           name: Tag Main Image
@@ -99,7 +99,7 @@ jobs:
 
       - run:
           name: Publish Docker Image
-          command: docker push twdps/dps-multi-module-starterkit-java:latest
+          command: docker push --all-tags twdps/dps-multi-module-starterkit-java
 
   dev-deploy:
     executor: deploy-agent
