@@ -13,6 +13,7 @@
   "PKG_SERVICE_NAME": "{{cookiecutter.SERVICE_NAME|lower}}",
   "SERVICE_URL": "{{cookiecutter.SERVICE_NAME|lower}}",
   "RESOURCE_NAME": "Account",
+  "RESOURCE_VAR_NAME": "{{cookiecutter.RESOURCE_NAME|lower}}",
   "RESOURCE_TABLE_NAME": "{{cookiecutter.RESOURCE_NAME|lower}}",
   "RESOURCE_NAME_PLURAL": "{{cookiecutter.RESOURCE_NAME}}s",
   "RESOURCE_URL": "{{cookiecutter.RESOURCE_NAME_PLURAL|lower}}",

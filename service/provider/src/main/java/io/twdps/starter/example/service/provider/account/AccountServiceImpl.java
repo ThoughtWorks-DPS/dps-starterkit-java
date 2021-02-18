@@ -1,5 +1,6 @@
 package io.twdps.starter.example.service.provider.account;
 
+import io.twdps.starter.boot.exception.RequestValidationException;
 import io.twdps.starter.example.persistence.model.AccountEntityRepository;
 import io.twdps.starter.example.service.provider.account.mapper.AccountEntityMapper;
 import io.twdps.starter.example.service.spi.account.AccountService;
@@ -29,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
    * @param resource resource info to add (id should be null)
    * @return new resource object with valid id
    */
-  public Account add(Account resource) {
+  public Account add(Account resource) throws RequestValidationException {
     Account saved = mapper.toModel(repository.save(mapper.toEntity(resource)));
     return saved;
   }
@@ -72,7 +73,7 @@ public class AccountServiceImpl implements AccountService {
   }
 
   @Override
-  public Optional<Account> updateById(String id, Account record) {
+  public Optional<Account> updateById(String id, Account record) throws RequestValidationException {
     Optional<Account> resource =
         mapper.toModel(
             repository

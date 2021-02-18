@@ -1,5 +1,6 @@
 package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.provider.{{cookiecutter.PKG_RESOURCE_NAME}};
 
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.boot.exception.RequestValidationException;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.RESOURCE_NAME}}EntityRepository;
 {%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.SUB_RESOURCE_NAME}}EntityRepository;
@@ -48,7 +49,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
    * @param resource resource info to add (id should be null)
    * @return new resource object with valid id
    */
-  public {{cookiecutter.RESOURCE_NAME}} add({{cookiecutter.RESOURCE_NAME}} resource) {
+  public {{cookiecutter.RESOURCE_NAME}} add({{cookiecutter.RESOURCE_NAME}} resource) throws RequestValidationException {
     {{cookiecutter.RESOURCE_NAME}} saved = mapper.toModel(repository.save(mapper.toEntity(resource)));
     return saved;
   }
@@ -91,7 +92,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   }
 
   @Override
-  public Optional<{{cookiecutter.RESOURCE_NAME}}> updateById(String id, {{cookiecutter.RESOURCE_NAME}} record) {
+  public Optional<{{cookiecutter.RESOURCE_NAME}}> updateById(String id, {{cookiecutter.RESOURCE_NAME}} record) throws RequestValidationException {
     Optional<{{cookiecutter.RESOURCE_NAME}}> resource =
         mapper.toModel(
             repository
@@ -116,7 +117,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
    * @param resource resource info to add (id should be null)
    * @return new resource object with valid id
    */
-  public {{cookiecutter.SUB_RESOURCE_NAME}} add{{cookiecutter.SUB_RESOURCE_NAME}}(String id, {{cookiecutter.SUB_RESOURCE_NAME}} subResource) {
+  public {{cookiecutter.SUB_RESOURCE_NAME}} add{{cookiecutter.SUB_RESOURCE_NAME}}(String id, {{cookiecutter.SUB_RESOURCE_NAME}} subResource) throws RequestValidationException {
     {{cookiecutter.SUB_RESOURCE_NAME}}Entity entity = entityMapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Entity(subResource);
     entity.setVersionId(id);
     {{cookiecutter.SUB_RESOURCE_NAME}} saved = entityMapper.to{{cookiecutter.SUB_RESOURCE_NAME}}(subResourceRepository.save(entity));
@@ -158,7 +159,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
    * @return Optional<> reference to updated {{cookiecutter.SUB_RESOURCE_NAME}} resource
   */
   @Override
-  public Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> update{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId, {{cookiecutter.SUB_RESOURCE_NAME}} subResource) {
+  public Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> update{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId, {{cookiecutter.SUB_RESOURCE_NAME}} subResource) throws RequestValidationException {
     Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource = mapper.toModel(
         subResourceRepository.findById(subResourceId)
             .map((obj) -> mapper.updateMetadata(record, obj))

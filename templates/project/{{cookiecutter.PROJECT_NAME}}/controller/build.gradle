@@ -11,6 +11,7 @@ dependencies {
     implementation project(':api')
     implementation project(':service:provider')
     implementation project(':service:spi')
+    implementation "io.twdps.starter:exceptions"
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 

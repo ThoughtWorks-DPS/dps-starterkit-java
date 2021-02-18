@@ -1,5 +1,7 @@
 package io.twdps.starter.example.controller.account;
 
+import io.twdps.starter.boot.exception.RequestValidationException;
+import io.twdps.starter.boot.exception.ResourceNotFoundException;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.resources.AccountResource;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
@@ -34,7 +36,8 @@ public class AccountController implements AccountResource {
   }
 
   @Override
-  public ResponseEntity<AccountResponse> addEntity(AccountRequest addEntityRequest) {
+  public ResponseEntity<AccountResponse> addEntity(AccountRequest addEntityRequest)
+      throws RequestValidationException {
 
     log.info("username->{}", addEntityRequest.getUserName());
     Account resource = mapper.toModel(addEntityRequest);
@@ -44,15 +47,16 @@ public class AccountController implements AccountResource {
   }
 
   @Override
-  public ResponseEntity<AccountResponse> findEntityById(String id) {
+  public ResponseEntity<AccountResponse> findEntityById(String id)
+      throws ResourceNotFoundException {
+
     log.info("id->{}", id);
     Optional<Account> found = manager.findById(id);
-    if (found.isPresent()) {
-      return new ResponseEntity<>(mapper.toAccountResponse(found), HttpStatus.OK);
-    } else {
-      // TODO: construct error payload
-      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(
+        found
+            .map(r -> mapper.toAccountResponse(r))
+            .orElseThrow(() -> new ResourceNotFoundException(id)),
+        HttpStatus.OK);
   }
 
   @Override
@@ -64,26 +68,28 @@ public class AccountController implements AccountResource {
   }
 
   @Override
-  public ResponseEntity<AccountResponse> updateEntityById(String id, AccountRequest request) {
+  public ResponseEntity<AccountResponse> updateEntityById(String id, AccountRequest request)
+      throws ResourceNotFoundException, RequestValidationException {
+
     log.info("id->{}", id);
     Optional<Account> found = manager.updateById(id, mapper.toModel(request));
-    if (found.isPresent()) {
-      return new ResponseEntity<>(mapper.toAccountResponse(found), HttpStatus.OK);
-    } else {
-      // TODO: construct error payload
-      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(
+        found
+            .map(r -> mapper.toAccountResponse(r))
+            .orElseThrow(() -> new ResourceNotFoundException(id)),
+        HttpStatus.OK);
   }
 
   @Override
-  public ResponseEntity<AccountResponse> deleteEntityById(String id) {
+  public ResponseEntity<AccountResponse> deleteEntityById(String id)
+      throws ResourceNotFoundException {
+
     log.info("id->{}", id);
     Optional<Account> found = manager.deleteById(id);
-    if (found.isPresent()) {
-      return new ResponseEntity<>(mapper.toAccountResponse(found), HttpStatus.OK);
-    } else {
-      // TODO: construct error payload
-      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(
+        found
+            .map(r -> mapper.toAccountResponse(r))
+            .orElseThrow(() -> new ResourceNotFoundException(id)),
+        HttpStatus.OK);
   }
 }

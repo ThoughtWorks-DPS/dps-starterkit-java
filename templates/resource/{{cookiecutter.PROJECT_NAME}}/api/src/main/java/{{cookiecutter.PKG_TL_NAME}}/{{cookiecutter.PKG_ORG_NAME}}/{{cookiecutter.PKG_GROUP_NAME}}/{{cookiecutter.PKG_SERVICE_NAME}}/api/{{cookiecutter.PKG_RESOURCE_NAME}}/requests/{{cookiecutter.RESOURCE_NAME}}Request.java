@@ -31,10 +31,10 @@ public class {{cookiecutter.RESOURCE_NAME}}Request {
    */
   @JsonCreator
   public {{cookiecutter.RESOURCE_NAME}}Request(
-      @JsonProperty("userName") String userName,
-      @JsonProperty("pii") String pii,
-      @JsonProperty("firstName") String firstName,
-      @JsonProperty("lastName") String lastName) {
+      @NonNull @JsonProperty("userName") String userName,
+      @NonNull @JsonProperty("pii") String pii,
+      @NonNull @JsonProperty("firstName") String firstName,
+      @NonNull @JsonProperty("lastName") String lastName) {
 
     this.userName = userName;
     this.pii = pii;

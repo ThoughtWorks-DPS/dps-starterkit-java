@@ -1,6 +1,7 @@
 plugins {
     id 'starter.std.java.application-conventions'
     id 'starter.java.config-conventions'
+    id 'starter.java.build-utils-conventions'
 }
 
 dependencies {
@@ -14,8 +15,12 @@ dependencies {
     implementation project(':service:provider')
     implementation project(':service:spi')
     implementation 'io.twdps.starter:tracing'
+    implementation 'io.twdps.starter:error-handling'
+    implementation 'io.twdps.starter:exceptions'
 
     implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-security"
 
     testImplementation "com.h2database:h2"
     integrationTestImplementation "com.h2database:h2"

@@ -1,5 +1,7 @@
 package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.controller.{{cookiecutter.PKG_RESOURCE_NAME}};
 
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.boot.exception.RequestValidationException;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.boot.exception.ResourceNotFoundException;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.resources.{{cookiecutter.RESOURCE_NAME}}Resource;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.RESOURCE_NAME}}Response;
@@ -34,7 +36,8 @@ public class {{cookiecutter.RESOURCE_NAME}}Controller implements {{cookiecutter.
   }
 
   @Override
-  public ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> addEntity({{cookiecutter.RESOURCE_NAME}}Request addEntityRequest) {
+  public ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> addEntity({{cookiecutter.RESOURCE_NAME}}Request addEntityRequest)
+      throws RequestValidationException {
 
     log.info("username->{}", addEntityRequest.getUserName());
     {{cookiecutter.RESOURCE_NAME}} resource = mapper.toModel(addEntityRequest);
@@ -44,15 +47,16 @@ public class {{cookiecutter.RESOURCE_NAME}}Controller implements {{cookiecutter.
   }
 
   @Override
-  public ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> findEntityById(String id) {
+  public ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> findEntityById(String id)
+      throws ResourceNotFoundException {
+
     log.info("id->{}", id);
     Optional<{{cookiecutter.RESOURCE_NAME}}> found = manager.findById(id);
-    if (found.isPresent()) {
-      return new ResponseEntity<>(mapper.to{{cookiecutter.RESOURCE_NAME}}Response(found), HttpStatus.OK);
-    } else {
-      // TODO: construct error payload
-      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(
+        found
+            .map(r -> mapper.to{{cookiecutter.RESOURCE_NAME}}Response(r))
+            .orElseThrow(() -> new ResourceNotFoundException(id)),
+        HttpStatus.OK);
   }
 
   @Override
@@ -64,39 +68,49 @@ public class {{cookiecutter.RESOURCE_NAME}}Controller implements {{cookiecutter.
   }
 
   @Override
-  public ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> updateEntityById(String id, {{cookiecutter.RESOURCE_NAME}}Request request) {
+  public ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> updateEntityById(String id, {{cookiecutter.RESOURCE_NAME}}Request request)
+      throws ResourceNotFoundException, RequestValidationException {
+
     log.info("id->{}", id);
     Optional<{{cookiecutter.RESOURCE_NAME}}> found = manager.updateById(id, mapper.toModel(request));
-    if (found.isPresent()) {
-      return new ResponseEntity<>(mapper.to{{cookiecutter.RESOURCE_NAME}}Response(found), HttpStatus.OK);
-    } else {
-      // TODO: construct error payload
-      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(
+        found
+            .map(r -> mapper.to{{cookiecutter.RESOURCE_NAME}}Response(r))
+            .orElseThrow(() -> new ResourceNotFoundException(id)),
+        HttpStatus.OK);
   }
 
   @Override
-  public ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> deleteEntityById(String id) {
+  public ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> deleteEntityById(String id)
+      throws ResourceNotFoundException {
+
     log.info("id->{}", id);
     Optional<{{cookiecutter.RESOURCE_NAME}}> found = manager.deleteById(id);
-    if (found.isPresent()) {
-      return new ResponseEntity<>(mapper.to{{cookiecutter.RESOURCE_NAME}}Response(found), HttpStatus.OK);
-    } else {
-      // TODO: construct error payload
-      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(
+        found
+            .map(r -> mapper.to{{cookiecutter.RESOURCE_NAME}}Response(r))
+            .orElseThrow(() -> new ResourceNotFoundException(id)),
+        HttpStatus.OK);
   }
 
 
 {%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
-    Callback add{{cookiecutter.SUB_RESOURCE_NAME}}(String id, {{cookiecutter.SUB_RESOURCE_NAME}} subResource);
+  Callback add{{cookiecutter.SUB_RESOURCE_NAME}}(String id, {{cookiecutter.SUB_RESOURCE_NAME}} subResource);
+      throws ResourceNotFoundException {
 
-    List<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}s(String id);
+    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+  }
 
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId);
+  List<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}s(String id);
 
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> update{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId, {{cookiecutter.SUB_RESOURCE_NAME}} subResource);
+  Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId);
 
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> delete{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId);
+  Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> update{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId, {{cookiecutter.SUB_RESOURCE_NAME}} subResource);
+
+  Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> delete{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId)
+      throws ResourceNotFoundException {
+
+    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+  }
 {%- endif %}
 }

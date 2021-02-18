@@ -1,5 +1,6 @@
 package io.twdps.starter.example.controller.account;
 
+import io.twdps.starter.boot.exception.ResourceNotFoundException;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
 import io.twdps.starter.example.api.responses.ArrayResponse;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -78,17 +80,19 @@ public class AccountControllerTest {
   }
 
   @Test
-  public void findByAccountIdFailTest() {
+  public void findByAccountIdFailTest() throws Exception {
 
     Mockito.when(manager.findById(bogusName)).thenReturn(emptyAccount);
 
-    ResponseEntity<AccountResponse> response = controller.findEntityById("bogus");
-
-    assertThat(response.getStatusCodeValue()).isEqualTo(404);
+    assertThrows(
+        ResourceNotFoundException.class,
+        () -> {
+          ResponseEntity<AccountResponse> response = controller.findEntityById(bogusName);
+        });
   }
 
   @Test
-  public void addAccountTest() {
+  public void addAccountTest() throws Exception {
 
     createMapperStubs();
     createResponseMapperStubs();
@@ -104,9 +108,9 @@ public class AccountControllerTest {
   }
 
   @Test
-  public void findByIdTest() {
+  public void findByIdTest() throws Exception {
 
-    createOptionalMapperStubs();
+    createResponseMapperStubs();
     Mockito.when(manager.findById(identifier)).thenReturn(optionalOutput);
 
     ResponseEntity<AccountResponse> response = controller.findEntityById(identifier);
@@ -118,17 +122,19 @@ public class AccountControllerTest {
   }
 
   @Test
-  public void findByIdFailedTest() {
+  public void findByIdFailedTest() throws Exception {
 
     Mockito.when(manager.findById(bogusName)).thenReturn(emptyAccount);
 
-    ResponseEntity<AccountResponse> response = controller.findEntityById(bogusName);
-
-    assertThat(response.getStatusCodeValue()).isEqualTo(404);
+    assertThrows(
+        ResourceNotFoundException.class,
+        () -> {
+          ResponseEntity<AccountResponse> response = controller.findEntityById(bogusName);
+        });
   }
 
   @Test
-  public void findAllTest() {
+  public void findAllTest() throws Exception {
 
     createListMapperStubs();
     Mockito.when(manager.findAll()).thenReturn(outputList);
@@ -141,7 +147,7 @@ public class AccountControllerTest {
   }
 
   @Test
-  public void findAllEmptyTest() {
+  public void findAllEmptyTest() throws Exception {
 
     createEmptyListMapperStubs();
     Mockito.when(manager.findAll()).thenReturn(emptyOutputList);
@@ -153,10 +159,10 @@ public class AccountControllerTest {
   }
 
   @Test
-  public void updateTest() {
+  public void updateTest() throws Exception {
 
     createMapperStubs();
-    createOptionalMapperStubs();
+    createResponseMapperStubs();
     Mockito.when(manager.updateById(identifier, resource)).thenReturn(optionalOutput);
 
     ResponseEntity<AccountResponse> response = controller.updateEntityById(identifier, request);
@@ -168,20 +174,23 @@ public class AccountControllerTest {
   }
 
   @Test
-  public void updateFailedTest() {
+  public void updateFailedTest() throws Exception {
 
     createMapperStubs();
     Mockito.when(manager.updateById(bogusName, resource)).thenReturn(emptyAccount);
 
-    ResponseEntity<AccountResponse> response = controller.updateEntityById(bogusName, request);
-
-    assertThat(response.getStatusCodeValue()).isEqualTo(404);
+    assertThrows(
+        ResourceNotFoundException.class,
+        () -> {
+          ResponseEntity<AccountResponse> response =
+              controller.updateEntityById(bogusName, request);
+        });
   }
 
   @Test
-  public void deleteTest() {
+  public void deleteTest() throws Exception {
 
-    createOptionalMapperStubs();
+    createResponseMapperStubs();
     Mockito.when(manager.deleteById(identifier)).thenReturn(optionalOutput);
 
     ResponseEntity<AccountResponse> response = controller.deleteEntityById(identifier);
@@ -193,13 +202,15 @@ public class AccountControllerTest {
   }
 
   @Test
-  public void deleteFailedTest() {
+  public void deleteFailedTest() throws Exception {
 
     Mockito.when(manager.deleteById(bogusName)).thenReturn(emptyAccount);
 
-    ResponseEntity<AccountResponse> response = controller.deleteEntityById(bogusName);
-
-    assertThat(response.getStatusCodeValue()).isEqualTo(404);
+    assertThrows(
+        ResourceNotFoundException.class,
+        () -> {
+          ResponseEntity<AccountResponse> response = controller.deleteEntityById(bogusName);
+        });
   }
 
   private void createMapperStubs() {

@@ -28,9 +28,9 @@ public class {{cookiecutter.SUB_RESOURCE_NAME}}Request {
    */
   @JsonCreator
   public {{cookiecutter.SUB_RESOURCE_NAME}}Request(
-      @JsonProperty("userName") String userName,
-      @JsonProperty("firstName") String firstName,
-      @JsonProperty("lastName") String lastName) {
+      @NonNull @JsonProperty("userName") String userName,
+      @NonNull @JsonProperty("firstName") String firstName,
+      @NonNull @JsonProperty("lastName") String lastName) {
 
     this.userName = userName;
     this.firstName = firstName;

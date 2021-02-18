@@ -6,4 +6,5 @@ plugins {
 dependencies {
     annotationBom platform("io.twdps.starter:starter-bom:${starter_boot_version}")
     checkstyleRules platform("io.twdps.starter:checkstyle-bom:${starter_boot_version}")
+    implementation "io.twdps.starter:exceptions"
 }
