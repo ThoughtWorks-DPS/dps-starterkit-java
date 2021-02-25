@@ -77,7 +77,7 @@ class AccountErrorHandlingContextTest {
         mockMvc
             .perform(
                 get("/v1/example/accounts/foo")
-                    .header("traceparent", traceparent)
+                    .header("X-B3-TraceId", traceparent)
                     .accept(MediaType.APPLICATION_JSON))
             .andReturn()
             .getResponse();
@@ -105,7 +105,7 @@ class AccountErrorHandlingContextTest {
         mockMvc
             .perform(
                 get("/v1/example/accounts/foo")
-                    .header("traceparent", traceparent)
+                    .header("X-B3-TraceId", traceparent)
                     .accept(MediaType.APPLICATION_JSON))
             .andReturn()
             .getResponse();
@@ -135,7 +135,7 @@ class AccountErrorHandlingContextTest {
         mockMvc
             .perform(
                 post("/v1/example/accounts")
-                    .header("traceparent", traceparent)
+                    .header("X-B3-TraceId", traceparent)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestMessage))
             .andReturn()
@@ -165,7 +165,7 @@ class AccountErrorHandlingContextTest {
         mockMvc
             .perform(
                 post("/v1/example/accounts")
-                    .header("traceparent", traceparent)
+                    .header("X-B3-TraceId", traceparent)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(jsonRequest.write(request).getJson()))
             .andReturn()
@@ -193,7 +193,7 @@ class AccountErrorHandlingContextTest {
         mockMvc
             .perform(
                 post("/v1/example/accounts")
-                    .header("traceparent", traceparent)
+                    .header("X-B3-TraceId", traceparent)
                     .contentType(MediaType.APPLICATION_JSON))
             .andReturn()
             .getResponse();
