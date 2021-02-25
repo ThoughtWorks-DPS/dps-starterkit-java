@@ -1,27 +1,27 @@
-name: java-starter-kit
-owner: twdps-labs
-environment:
-namespace:
-cluster: sandbox
+name: {{ cookiecutter.PACKAGE_NAME }}
+owner: {{ cookiecutter.TEAM_NAME }}
+environment: local
+namespace: {{ cookiecutter.PKG_GROUP_NAME }}-local
+cluster: local
 version: 0.1
 replicaCount: 1
 #TUNE as required for application
 podDisruptionBudget: 20%
 
 labels:
-  app: java-starter-kit
+  app: {{ cookiecutter.PACKAGE_NAME }}
   deployment: green
 
 blueVersion: false
 
 styraLabels:
   styra.io/opa-injection: disabled
-  styra.io/system: java-starter-kit
+  styra.io/system: {{ cookiecutter.PACKAGE_NAME }}
 
 initContainerName: twdps/dps-psql-init:latest
 
 image:
-  repository: twdps/dps-multi-module-starterkit-java
+  repository: {{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PROJECT_NAME}}
   imagePullPolicy: IfNotPresent
   tag: "latest"
 
@@ -41,10 +41,10 @@ service:
 
 #The .Values.environment is computed by the deploy plugin - it returns//uses values like dev, qa, pre, prod etc
 ingress:
-  pathPrefix: "/starter"
+  pathPrefix: "/v1/{{cookiecutter.SERVICE_URL}}"
   hosts:
-    - java-starter-kit.{{ .Values.namespace }}.{{ .Values.cluster }}.twdps.io
-    - java-starter-kit.{{ .Values.namespace }}.svc.cluster.local
+    - {{ cookiecutter.PACKAGE_NAME }}.{{ .Values.namespace }}.{{ .Values.cluster }}.twdps.io
+    - {{ cookiecutter.PACKAGE_NAME }}.{{ .Values.namespace }}.svc.cluster.local
   gateways:
     - istio-system/api-gateway-{{ .Values.environment }}
     - mesh
@@ -113,4 +113,4 @@ nsAnyVars:
 nsSpecificVars:
   di-dev:
     - name: POSTGRES_DBNAME
-      value: starterkit
+      value: {{cookiecutter.SERVICE_NAME}}

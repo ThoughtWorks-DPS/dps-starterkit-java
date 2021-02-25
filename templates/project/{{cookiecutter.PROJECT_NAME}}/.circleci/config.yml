@@ -13,7 +13,7 @@ executors:
 defaults: &defaults
   working_directory: ~/repo
   environment:
-    DOCKER_REGISTRY: twdps
+    DOCKER_REGISTRY: {{cookiecutter.PKG_ORG_NAME}}
 
 
 jobs:
@@ -48,9 +48,9 @@ jobs:
   publish:
     executor: build-agent
     environment:
-      DOCKER_REGISTRY: twdps
-      DOCKER_USER: secrethub://twdps/di/svc/dockerhub/username
-      DOCKER_PASSWORD: secrethub://twdps/di/svc/dockerhub/password
+      DOCKER_REGISTRY: {{cookiecutter.PKG_ORG_NAME}}
+      DOCKER_USER: secrethub://{{cookiecutter.PKG_ORG_NAME}}/di/svc/dockerhub/username
+      DOCKER_PASSWORD: secrethub://{{cookiecutter.PKG_ORG_NAME}}/di/svc/dockerhub/password
 
     <<: *defaults
     steps:
@@ -68,11 +68,11 @@ jobs:
 
       - run:
           name: Build init container
-          command: docker build init-container -t twdps/dps-psql-init:latest
+          command: docker build init-container -t {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:latest
 
       - run:
           name: Tag init container
-          command: docker tag twdps/dps-psql-init:latest twdps/dps-psql-init:$CIRCLE_BUILD_NUM
+          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:latest {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:$CIRCLE_BUILD_NUM
 
       - secrethub/exec:
           step-name: Build jar
@@ -81,11 +81,11 @@ jobs:
 
       - run:
           name: Build Image
-          command: docker build app -t twdps/{{cookiecutter.PACKAGE_NAME}}:latest
+          command: docker build app -t {{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PACKAGE_NAME}}:latest
 
       - run:
           name: Tag Main Image
-          command: docker tag twdps/{{cookiecutter.PACKAGE_NAME}}:latest twdps/{{cookiecutter.PACKAGE_NAME}}:$CIRCLE_BUILD_NUM
+          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PACKAGE_NAME}}:latest {{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PACKAGE_NAME}}:$CIRCLE_BUILD_NUM
 
       - run:
           name: Docker authentication
@@ -95,24 +95,24 @@ jobs:
 
       - run:
           name: Push init container
-          command: docker push twdps/dps-psql-init:latest
+          command: docker push {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:latest
 
       - run:
           name: Publish Docker Image
-          command: docker push twdps/{{cookiecutter.PACKAGE_NAME}}:latest
+          command: docker push {{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PACKAGE_NAME}}:latest
 
   dev-deploy:
     executor: deploy-agent
     environment:
       AWS_DEFAULT_REGION: us-east-2
-      DOCKER_REGISTRY: twdps
-      DOCKER_USER: secrethub://twdps/di/svc/dockerhub/username
-      DOCKER_PASSWORD: secrethub://twdps/di/svc/dockerhub/password
-      POSTGRES_ENDPOINT: secrethub://twdps/di/svc/aurora/psql/endpoint
-      POSTGRES_ROOT_USER: secrethub://twdps/di/svc/aurora/psql/username
-      POSTGRESS_ROOT_PASSWORD: secrethub://twdps/di/svc/aurora/psql/password
-      POSTGRES_USER: secrethub://twdps/di/svc/aurora/psql/starter/username
-      POSTGRES_PASSWORD: secrethub://twdps/di/svc/aurora/psql/starter/password
+      DOCKER_REGISTRY: {{cookiecutter.PKG_ORG_NAME}}
+      DOCKER_USER: secrethub://{{cookiecutter.PKG_ORG_NAME}}/di/svc/dockerhub/username
+      DOCKER_PASSWORD: secrethub://{{cookiecutter.PKG_ORG_NAME}}/di/svc/dockerhub/password
+      POSTGRES_ENDPOINT: secrethub://{{cookiecutter.PKG_ORG_NAME}}/di/svc/aurora/psql/endpoint
+      POSTGRES_ROOT_USER: secrethub://{{cookiecutter.PKG_ORG_NAME}}/di/svc/aurora/psql/username
+      POSTGRESS_ROOT_PASSWORD: secrethub://{{cookiecutter.PKG_ORG_NAME}}/di/svc/aurora/psql/password
+      POSTGRES_USER: secrethub://{{cookiecutter.PKG_ORG_NAME}}/di/svc/aurora/psql/starter/username
+      POSTGRES_PASSWORD: secrethub://{{cookiecutter.PKG_ORG_NAME}}/di/svc/aurora/psql/starter/password
     <<: *defaults
     steps:
       - checkout
@@ -161,13 +161,13 @@ workflows:
   build_test_publish:
     jobs:
       - build:
-          context: twdps-di
+          context: {{cookiecutter.PKG_ORG_NAME}}-di
       - publish:
-          context: twdps-di
+          context: {{cookiecutter.PKG_ORG_NAME}}-di
           requires:
             - build
       - dev-deploy:
-          context: twdps-di
+          context: {{cookiecutter.PKG_ORG_NAME}}-di
           requires:
             - build
             - publish
