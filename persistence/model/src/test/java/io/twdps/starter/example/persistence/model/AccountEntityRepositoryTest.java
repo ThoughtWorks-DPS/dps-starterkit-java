@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -16,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class AccountEntityRepositoryTest {
 
   @Autowired private AccountEntityRepository modelEntityRepository;
@@ -32,7 +35,8 @@ public class AccountEntityRepositoryTest {
     entity = new AccountEntity(username, pii, firstName, lastName);
   }
 
-  /** populate the tables with some tests data.
+  /**
+   * populate the tables with some tests data.
    *
    * @return one of the saved entities
    */
@@ -40,7 +44,8 @@ public class AccountEntityRepositoryTest {
     AccountEntity result = modelEntityRepository.save(entity);
     AccountEntity agentSmith = new AccountEntity("asmith", pii, "Agent", lastName);
     modelEntityRepository.save(agentSmith);
-    AccountEntity maryQuiteContrary = new AccountEntity("maryQuiteContrary", pii, "Mary", "Contrary");
+    AccountEntity maryQuiteContrary =
+        new AccountEntity("maryQuiteContrary", pii, "Mary", "Contrary");
     modelEntityRepository.save(maryQuiteContrary);
 
     return result;

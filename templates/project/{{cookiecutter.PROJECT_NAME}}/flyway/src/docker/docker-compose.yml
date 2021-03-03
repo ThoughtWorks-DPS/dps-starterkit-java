@@ -1,0 +1,45 @@
+version: '3.9'
+
+networks:
+  internal:
+  external:
+
+volumes:
+  pgdata:
+
+services:
+  postgres1:
+    image: postgres
+    hostname: postgres1
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_USER: {{cookiecutter.PKG_SERVICE_NAME}}_flyway
+      POSTGRES_PASSWORD: not-the-password
+      POSTGRES_DB: {{cookiecutter.PKG_SERVICE_NAME}}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - internal
+      - external
+
+  db-init:
+    image: twdps/dps-multi-module-starterkit-java-flyway:latest
+# NOTE: These are the defaults from the flyway.conf   uncomment to override, esp for secrethub passwords
+#    environment:
+#      FLYWAY_URL: jdbc:postgresql://postgres1:5432/{{cookiecutter.PKG_SERVICE_NAME}}?user={{cookiecutter.PKG_SERVICE_NAME}}_flyway&password=not-the-password
+#      FLYWAY_PLACEHOLDERS_USERNAME: {{cookiecutter.PKG_SERVICE_NAME}}_user
+#      FLYWAY_PLACEHOLDERS_SERVICENAME: {{cookiecutter.PKG_SERVICE_NAME}}_service
+#      FLYWAY_PLACEHOLDERS_ADMINNAME: {{cookiecutter.PKG_SERVICE_NAME}}_admin
+#      FLYWAY_PLACEHOLDERS_DBNAME: {{cookiecutter.PKG_SERVICE_NAME}}
+#      FLYWAY_PLACEHOLDERS_SCHEMANAME: {{cookiecutter.PKG_SERVICE_NAME}}
+#      FLYWAY_PLACEHOLDERS_USERPASSWORD: also-not-the-user-password
+#      FLYWAY_PLACEHOLDERS_SERVICEPASSWORD: also-not-the-service-password
+#      FLYWAY_PLACEHOLDERS_ADMINPASSWORD: also-not-the-admin-password
+    depends_on:
+      - postgres1
+    networks:
+      - internal
+

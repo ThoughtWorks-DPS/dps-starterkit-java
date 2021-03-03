@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @Entity
-@Table(name = "{{cookiecutter.RESOURCE_TABLE_NAME}}")
+@Table(name = "{{cookiecutter.RESOURCE_TABLE_NAME}}", schema = "{{cookiecutter.PKG_SERVICE_NAME}}")
 @Getter
 @Setter
 @NoArgsConstructor

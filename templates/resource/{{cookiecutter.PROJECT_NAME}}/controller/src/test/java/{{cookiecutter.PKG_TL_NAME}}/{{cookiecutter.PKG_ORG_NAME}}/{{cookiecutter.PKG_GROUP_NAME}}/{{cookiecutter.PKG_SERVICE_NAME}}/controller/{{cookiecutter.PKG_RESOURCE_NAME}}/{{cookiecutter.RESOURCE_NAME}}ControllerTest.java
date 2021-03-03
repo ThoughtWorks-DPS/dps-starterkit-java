@@ -107,44 +107,6 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     assertThat(response.getBody().getId()).isEqualTo(identifier);
   }
 
-  /*
-  @Test
-  public void add{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
-    // TODO: This all needs work
-    createMapperStubs();
-    Mockito.when(manager.add(resource)).thenReturn(output);
-
-    ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response = controller.addSubEntity(request);
-
-    assertThat(response.getBody().getResponse()).isEqualTo("Hello Joe");
-    assertThat(response.getBody().getId()).isEqualTo(identifier);
-    assertThat(response.getStatusCodeValue()).isEqualTo(201);
-  }*/
-
-  /*
-  @Test
-  public void findByUserNameTest() {
-
-    createOptionalMapperStubs();
-    Mockito.when(manager.findByUserName(username)).thenReturn(optionalOutput);
-
-    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.findEntityByUsername(username);
-
-    assertThat(response.getBody().getUserName()).isEqualTo(username);
-    assertThat(response.getBody().getId()).isEqualTo(identifier);
-    assertThat(response.getStatusCodeValue()).isEqualTo(200);
-  }
-
-  @Test
-  public void findByUserNameFailedTest() {
-
-    Mockito.when(manager.findByUserName(bogusName)).thenReturn(empty{{cookiecutter.RESOURCE_NAME}});
-
-    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.findEntityByUsername(bogusName);
-
-    assertThat(response.getStatusCodeValue()).isEqualTo(404);
-  }*/
-
   @Test
   public void findByIdTest() throws Exception {
 

@@ -1,0 +1,82 @@
+version: '3.9'
+
+networks:
+  internal:
+  external:
+
+volumes:
+  pgdata:
+
+services:
+  postgres1:
+    image: postgres
+    hostname: postgres1
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_USER: example_flyway
+      POSTGRES_PASSWORD: not-the-password
+      POSTGRES_DB: example
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - internal
+# NOTE, security favors removing external access from the database container
+#      - external
+#    ports:
+#      - "5432:5432"
+
+  db-init:
+    image: twdps/dps-multi-module-starterkit-java-flyway:latest
+    # NOTE: These are the defaults from the flyway.conf   uncomment to override, esp for secrethub passwords
+    #    environment:
+    #      FLYWAY_URL: jdbc:postgresql://postgres1:5432/example?user=example_flyway&password=not-the-password
+    #      FLYWAY_PLACEHOLDERS_USERNAME: example_user
+    #      FLYWAY_PLACEHOLDERS_SERVICENAME: example_service
+    #      FLYWAY_PLACEHOLDERS_ADMINNAME: example_admin
+    #      FLYWAY_PLACEHOLDERS_DBNAME: example
+    #      FLYWAY_PLACEHOLDERS_SCHEMANAME: example
+    #      FLYWAY_PLACEHOLDERS_USERPASSWORD: also-not-the-user-password
+    #      FLYWAY_PLACEHOLDERS_SERVICEPASSWORD: also-not-the-service-password
+    #      FLYWAY_PLACEHOLDERS_ADMINPASSWORD: also-not-the-admin-password
+    depends_on:
+      - postgres1
+    networks:
+      - internal
+
+
+  starter-java:
+    image: twdps/dps-multi-module-starterkit-java:latest
+    hostname: starter
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      POSTGRES_HOST: postgres1
+      POSTGRES_DBNAME: example
+      POSTGRES_USER: example_service
+      POSTGRES_PASSWORD: also-not-the-service-password
+      JAVA_PROFILE: "-Dspring.profiles.include=compose"
+    depends_on:
+      - postgres1
+      - db-init
+    networks:
+      - internal
+      - external
+
+  Jaeger:
+    image: jaegertracing/all-in-one:1.20
+    hostname: jaeger
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
+    environment:
+      COLLECTOR_ZIPKIN_HTTP_PORT : "9411"
+    networks:
+      - internal
+      - external

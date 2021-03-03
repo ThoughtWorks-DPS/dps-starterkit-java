@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @Entity
-@Table(name = "account")
+@Table(name = "account", schema = "example")
 @Getter
 @Setter
 @NoArgsConstructor

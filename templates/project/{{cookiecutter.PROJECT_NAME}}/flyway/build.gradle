@@ -1,0 +1,60 @@
+/**
+ * Provides docker container settings
+ */
+
+plugins {
+    id 'starter.std.java.library-conventions'
+    id 'starter.java.container-conventions'
+    id 'org.flywaydb.flyway'
+    id 'starter.java.build-utils-conventions'
+}
+
+docker {
+    name "${dockerRegistry}/${rootProject.name}-flyway"
+    tag "Build", "${dockerRegistry}/${rootProject.name}-flyway:${dockerImageVersion}"
+    tag "Latest", "${dockerRegistry}/${rootProject.name}-flyway:latest"
+    copySpec.from("src/main/resources").into(".")
+}
+
+dockerRun {
+    image "${dockerRegistry}/${rootProject.name}-flyway"
+    env 'FLYWAY_DEFAULT_SCHEMA': getEnvOrDefault('DB_NAME', '{{cookiecutter.PKG_SERVICE_NAME}}'),
+            'FLYWAY_URL': "jdbc:${getEnvOrDefault('DB_SERVER', 'postgresql')}://${getEnvOrDefault('DB_HOST', 'localhost')}:5432/${getEnvOrDefault('DB_NAME', '{{cookiecutter.PKG_SERVICE_NAME}}')}?user=${getEnvOrDefault('DB_ROOT_USER', '{{cookiecutter.PKG_SERVICE_NAME}}_flyway')}&password=${getEnvOrDefault('DB_ROOT_USER_PASSWORD', 'not-the-user-password')}",
+            'FLYWAY_USER': getEnvOrDefault('DB_ROOT_USER', '{{cookiecutter.PKG_SERVICE_NAME}}_flyway'),
+            'FLYWAY_PLACEHOLDERS_USERNAME': getEnvOrDefault('DB_USER', '{{cookiecutter.PKG_SERVICE_NAME}}_user'),
+            'FLYWAY_PLACEHOLDERS_SERVICENAME': getEnvOrDefault('DB_SERVICE', '{{cookiecutter.PKG_SERVICE_NAME}}_service'),
+            'FLYWAY_PLACEHOLDERS_ADMINNAME': getEnvOrDefault('DB_ADMIN', '{{cookiecutter.PKG_SERVICE_NAME}}_admin'),
+            'FLYWAY_PLACEHOLDERS_DBNAME': getEnvOrDefault('DB_NAME', '{{cookiecutter.PKG_SERVICE_NAME}}'),
+            'FLYWAY_PLACEHOLDERS_SCHEMANAME': getEnvOrDefault('DB_SCHEMA', '{{cookiecutter.PKG_SERVICE_NAME}}'),
+            'FLYWAY_PLACEHOLDERS_USERPASSWORD': getEnvOrDefault('DB_USER_PASSWORD', 'also-not-the-user-password'),
+            'FLYWAY_PLACEHOLDERS_SERVICEPASSWORD': getEnvOrDefault('DB_SERVICE_PASSWORD', 'also-not-the-service-password'),
+            'FLYWAY_PLACEHOLDERS_ADMINPASSWORD': getEnvOrDefault('DB_ADMIN_PASSWORD', 'also-not-the-admin-password')
+}
+
+
+configurations {
+    flywayMigration
+}
+
+dependencies {
+    flywayMigration platform("io.twdps.starter:starter-bom:${starter_boot_version}")
+    flywayMigration "org.postgresql:postgresql"
+}
+
+flyway {
+    url = 'jdbc:postgresql://{{cookiecutter.PKG_SERVICE_NAME}}_flyway:not-the-password@localhost:5432/{{cookiecutter.PKG_SERVICE_NAME}}'
+    user = '{{cookiecutter.PKG_SERVICE_NAME}}_flyway'
+    password = 'not-the-password'
+    locations = ["filesystem:${project.buildDir}/docker/database/migrations"]
+    placeholders = [
+            'username': '{{cookiecutter.PKG_SERVICE_NAME}}_user',
+            'servicename': '{{cookiecutter.PKG_SERVICE_NAME}}_service',
+            'adminname': '{{cookiecutter.PKG_SERVICE_NAME}}_admin',
+            'dbname': '{{cookiecutter.PKG_SERVICE_NAME}}',
+            'schemaname': '{{cookiecutter.PKG_SERVICE_NAME}}',
+            'userpassword': 'also-not-the-user-password',
+            'servicepassword': 'also-not-the-service-password',
+            'adminpassword': 'also-not-the-admin-password'
+    ]
+    configurations = [ 'flywayMigration' ]
+}

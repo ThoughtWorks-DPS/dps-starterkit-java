@@ -57,7 +57,8 @@ class AccountErrorHandlingContextTest {
   private final String firstName = "Joe";
   private final String lastName = "Smith";
   private final String identifier = "12345";
-  private final String traceparent = "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01";
+  private final String traceHeaderName = "X-B3-TraceId";
+  private final String traceInfo = "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01";
   private final String baseUrl = "https://starter.twdps.io";
   private final String notFoundType = String.format("%s/not-found", baseUrl);
   private final String requestValidationType = String.format("%s/request-validation", baseUrl);
@@ -77,7 +78,7 @@ class AccountErrorHandlingContextTest {
         mockMvc
             .perform(
                 get("/v1/example/accounts/foo")
-                    .header("X-B3-TraceId", traceparent)
+                    .header(traceHeaderName, traceInfo)
                     .accept(MediaType.APPLICATION_JSON))
             .andReturn()
             .getResponse();
@@ -92,7 +93,7 @@ class AccountErrorHandlingContextTest {
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     assertThat(error.getType().toString()).isEqualTo(notFoundType);
     assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceparent));
+        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
     assertThat(error.getDetail()).isEqualTo("Resource 'foo' not found");
   }
 
@@ -105,7 +106,7 @@ class AccountErrorHandlingContextTest {
         mockMvc
             .perform(
                 get("/v1/example/accounts/foo")
-                    .header("X-B3-TraceId", traceparent)
+                    .header(traceHeaderName, traceInfo)
                     .accept(MediaType.APPLICATION_JSON))
             .andReturn()
             .getResponse();
@@ -120,7 +121,7 @@ class AccountErrorHandlingContextTest {
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     assertThat(error.getType().toString()).isEqualTo(notFoundType);
     assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceparent));
+        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
     assertThat(error.getDetail()).isEqualTo("Resource 'foo' not found");
   }
 
@@ -135,7 +136,7 @@ class AccountErrorHandlingContextTest {
         mockMvc
             .perform(
                 post("/v1/example/accounts")
-                    .header("X-B3-TraceId", traceparent)
+                    .header(traceHeaderName, traceInfo)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestMessage))
             .andReturn()
@@ -151,7 +152,7 @@ class AccountErrorHandlingContextTest {
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     assertThat(error.getType().toString()).isEqualTo(requestValidationType);
     assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceparent));
+        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
     assertThat(error.getDetail()).contains("userName is marked non-null but is null");
   }
 
@@ -165,7 +166,7 @@ class AccountErrorHandlingContextTest {
         mockMvc
             .perform(
                 post("/v1/example/accounts")
-                    .header("X-B3-TraceId", traceparent)
+                    .header(traceHeaderName, traceInfo)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(jsonRequest.write(request).getJson()))
             .andReturn()
@@ -181,7 +182,7 @@ class AccountErrorHandlingContextTest {
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     assertThat(error.getType().toString()).isEqualTo(requestValidationType);
     assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceparent));
+        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
     assertThat(error.getDetail()).isEqualTo("Resource 'message' invalid request");
   }
 
@@ -193,7 +194,7 @@ class AccountErrorHandlingContextTest {
         mockMvc
             .perform(
                 post("/v1/example/accounts")
-                    .header("X-B3-TraceId", traceparent)
+                    .header(traceHeaderName, traceInfo)
                     .contentType(MediaType.APPLICATION_JSON))
             .andReturn()
             .getResponse();
@@ -208,7 +209,7 @@ class AccountErrorHandlingContextTest {
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     assertThat(error.getType().toString()).isEqualTo(requestValidationType);
     assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceparent));
+        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
     assertThat(error.getDetail()).contains("Required request body is missing");
   }
 }
