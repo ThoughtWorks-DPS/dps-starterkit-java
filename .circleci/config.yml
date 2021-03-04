@@ -84,6 +84,10 @@ jobs:
           command: ./gradlew docker
 
       - run:
+          name: Tag Flyway Image
+          command: docker tag twdps/dps-multi-module-starterkit-java-flyway:latest twdps/dps-multi-module-starterkit-java-flyway:$CIRCLE_BUILD_NUM
+
+      - run:
           name: Tag Main Image
           command: docker tag twdps/dps-multi-module-starterkit-java:latest twdps/dps-multi-module-starterkit-java:$CIRCLE_BUILD_NUM
 
@@ -98,7 +102,11 @@ jobs:
           command: docker push twdps/dps-psql-init:latest
 
       - run:
-          name: Publish Docker Image
+          name: Publish Flyway Image
+          command: docker push twdps/dps-multi-module-starterkit-java-flyway
+
+      - run:
+          name: Publish Main Image
           command: docker push twdps/dps-multi-module-starterkit-java
 
   dev-deploy:

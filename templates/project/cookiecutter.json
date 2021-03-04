@@ -4,7 +4,7 @@
   "PACKAGE_NAME": "{{cookiecutter.PROJECT_NAME|lower|replace(' ', '-')|replace('_', '-')}}",
   "PROJECT_DESCRIPTION": "Java API Starter from Template",
   "PROJECT_OWNER": "starter-java@example.com",
-  "DOCKER_REGISTRY" : "docker.pkg.github.com/thoughtworks-dps/{{cookiecutter.PACKAGE_NAME}}",
+  "DOCKER_REGISTRY" : "{{cookiecutter.PKG_ORG_NAME}}",
   "PKG_TL_NAME": "io",
   "PKG_ORG_NAME": "twdps",
   "PKG_GROUP_NAME": "starter",

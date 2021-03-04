@@ -57,11 +57,21 @@ public class AccountServiceImplTest {
     // use the real mapper to generate consistent objects to use in mapper stubs
     AccountEntityMapper real = Mappers.getMapper(AccountEntityMapper.class);
 
-    resource = Account.builder().userName(username).pii(pii).firstName(firstName).lastName(lastName).build();
+    resource =
+        Account.builder()
+            .userName(username)
+            .pii(pii)
+            .firstName(firstName)
+            .lastName(lastName)
+            .build();
     entity = real.toEntity(resource);
     added =
         new AccountEntity(
-            identifier, entity.getUserName(), entity.getPii(), entity.getFirstName(), entity.getLastName());
+            identifier,
+            entity.getUserName(),
+            entity.getPii(),
+            entity.getFirstName(),
+            entity.getLastName());
     output = real.toModel(added);
     optionalEntity = Optional.of(entity);
     optionalAdded = Optional.of(added);
