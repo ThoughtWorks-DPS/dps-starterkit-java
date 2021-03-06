@@ -8,6 +8,7 @@ import io.twdps.starter.boot.exception.ResourceNotFoundException;
 import io.twdps.starter.example.SecurityAllowConfig;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.resources.AccountResource;
+import io.twdps.starter.example.config.OpenApiConfiguration;
 import io.twdps.starter.example.controller.account.mapper.AccountRequestMapper;
 import io.twdps.starter.example.service.spi.account.AccountService;
 import io.twdps.starter.example.service.spi.account.model.Account;
@@ -37,7 +38,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureJsonTesters
 @WebMvcTest(AccountResource.class)
 @ContextConfiguration(
-    classes = {SecurityAllowConfig.class, ErrorHandlerAdvice.class, ErrorHandlerConfig.class})
+    classes = {
+      SecurityAllowConfig.class,
+      ErrorHandlerAdvice.class,
+      OpenApiConfiguration.class,
+      ErrorHandlerConfig.class
+    })
 class AccountErrorHandlingContextTest {
   @Autowired private MockMvc mockMvc;
 

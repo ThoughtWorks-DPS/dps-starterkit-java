@@ -77,3 +77,7 @@ opentracing:
   zipkin:
     enabled: true
     http-sender.baseUrl: http://zipkin.istio-system.svc.cluster.local:9411
+
+springdoc:
+  swagger-ui:
+    operations-sorter: method
