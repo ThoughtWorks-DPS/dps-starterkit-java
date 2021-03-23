@@ -2,10 +2,15 @@ package io.twdps.starter.example.controller.account.mapper;
 
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
+import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.service.spi.account.model.Account;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -84,6 +89,21 @@ public class AccountRequestMapperTest {
     assertThat(response.size()).isEqualTo(2);
     verifyAccountResponse(response.get(0));
     verifyAccountResponse(response.get(1));
+  }
+
+  @Test
+  public void mapperEntityPageTest() {
+    Pageable pageable = PageRequest.of(0, 1);
+    Page<Account> resources = new PageImpl<>(Arrays.asList(createAccount(identifier)),
+        pageable, 100);
+    PagedResponse<AccountResponse> response = mapper.toAccountResponsePage(resources);
+
+    assertThat(response.getItems().size()).isEqualTo(1);
+    assertThat(response.getTotalItems()).isEqualTo(100);
+    assertThat(response.getPageNumber()).isEqualTo(0);
+    assertThat(response.getPageSize()).isEqualTo(1);
+    assertThat(response.getTotalPages()).isEqualTo(100);
+    verifyAccountResponse(response.getItems().get(0));
   }
 
   /**

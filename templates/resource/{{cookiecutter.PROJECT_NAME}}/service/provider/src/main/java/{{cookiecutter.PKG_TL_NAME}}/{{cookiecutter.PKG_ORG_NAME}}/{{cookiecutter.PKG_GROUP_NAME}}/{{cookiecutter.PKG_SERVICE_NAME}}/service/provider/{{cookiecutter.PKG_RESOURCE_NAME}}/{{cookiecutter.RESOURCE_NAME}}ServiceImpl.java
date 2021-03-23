@@ -12,6 +12,8 @@ import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}};
 {%- endif %}
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,10 +62,10 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
    * @param lastName criteria for match
    * @return list of matching {{cookiecutter.RESOURCE_NAME}} records
    */
-  public List<{{cookiecutter.RESOURCE_NAME}}> findByLastName(String lastName) {
+  public Page<{{cookiecutter.RESOURCE_NAME}}> findByLastName(String lastName, Pageable pageable) {
     log.info("looking up by lastname of:{}", lastName);
-    List<{{cookiecutter.RESOURCE_NAME}}> responseList = mapper.toModelList(repository.findByLastName(lastName));
-    log.info("Response list size:{}", responseList.size());
+    Page<{{cookiecutter.RESOURCE_NAME}}> responseList = mapper.toModelPage(repository.findByLastName(lastName, pageable));
+    log.info("Response list size:{}", responseList.getContent().size());
     return responseList;
   }
 
@@ -86,8 +88,8 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   }
 
   @Override
-  public List<{{cookiecutter.RESOURCE_NAME}}> findAll() {
-    List<{{cookiecutter.RESOURCE_NAME}}> resource = mapper.toModelList(repository.findAll());
+  public Page<{{cookiecutter.RESOURCE_NAME}}> findAll(Pageable pageable) {
+    Page<{{cookiecutter.RESOURCE_NAME}}> resource = mapper.toModelPage(repository.findAll(pageable));
     return resource;
   }
 
@@ -144,8 +146,8 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
    * @return list of {{cookiecutter.SUB_RESOURCE_NAME}} resources
    */
   @Override
-  public List<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}s(String id) {
-    List<{{cookiecutter.SUB_RESOURCE_NAME}}> resources = mapper.toModelList(subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(id));
+  public Page<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}s(String id, Pageable pageable) {
+    Page<{{cookiecutter.SUB_RESOURCE_NAME}}> resources = mapper.toModelPage(subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(id, pageable));
     return resources;
   }
 

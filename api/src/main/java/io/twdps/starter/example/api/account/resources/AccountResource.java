@@ -2,7 +2,6 @@ package io.twdps.starter.example.api.account.resources;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,7 +12,9 @@ import io.twdps.starter.boot.exception.RequestValidationException;
 import io.twdps.starter.boot.exception.ResourceNotFoundException;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
-import io.twdps.starter.example.api.responses.ArrayResponse;
+import io.twdps.starter.example.api.account.responses.PagedAccountResponse;
+import io.twdps.starter.example.api.responses.PagedResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,12 +35,12 @@ import javax.validation.constraints.NotNull;
 @SecurityRequirement(name = "oauth2")
 public interface AccountResource {
 
-  @Operation(summary = "Create a new account")
+  @Operation(summary = "Create a new Account")
   @ApiResponses(
       value = {
         @ApiResponse(
             responseCode = "201",
-            description = "Created a new account",
+            description = "Created a new Account",
             content = {
               @Content(
                   mediaType = "application/json",
@@ -48,6 +49,20 @@ public interface AccountResource {
         @ApiResponse(
             responseCode = "400",
             description = "Invalid data provided",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Not authorized",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
             content =
                 @Content(
                     mediaType = "application/json",
@@ -65,12 +80,12 @@ public interface AccountResource {
           AccountRequest request)
       throws RequestValidationException;
 
-  @Operation(summary = "Find an account based on accountId")
+  @Operation(summary = "Find a specific Account based on entity identifier")
   @ApiResponses(
       value = {
         @ApiResponse(
             responseCode = "200",
-            description = "Found the account",
+            description = "Found the Account",
             content = {
               @Content(
                   mediaType = "application/json",
@@ -84,8 +99,22 @@ public interface AccountResource {
                     mediaType = "application/json",
                     schema = @Schema(implementation = Problem.class))),
         @ApiResponse(
-            responseCode = "404",
+            responseCode = "401",
             description = "Not authorized",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Not found",
             content =
                 @Content(
                     mediaType = "application/json",
@@ -103,31 +132,53 @@ public interface AccountResource {
           String id)
       throws ResourceNotFoundException;
 
-  @Operation(summary = "Get all accounts")
+  @Operation(summary = "Get all Accounts")
   @ApiResponses(
       value = {
         @ApiResponse(
             responseCode = "200",
-            description = "All existing accounts",
+            description = "All existing Accounts",
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema =
-                      @Schema(
-                          implementation = ArrayResponse.class,
-                          subTypes = {AccountResponse.class}))
-            })
+                  schema = @Schema(implementation = PagedAccountResponse.class))
+            }),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Not authorized",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Not found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class)))
       })
   @GetMapping()
   @ResponseStatus(HttpStatus.OK)
-  ResponseEntity<ArrayResponse<AccountResponse>> findEntities();
+  ResponseEntity<PagedResponse<AccountResponse>> findEntities(
+      @Parameter(
+              description = "Paging specification for retrieving a subset of the full list.",
+              required = false)
+          Pageable pageable);
 
-  @Operation(summary = "Update an existing account")
+  @Operation(summary = "Update an existing Account")
   @ApiResponses(
       value = {
         @ApiResponse(
             responseCode = "200",
-            description = "Updated account info",
+            description = "Updated Account info",
             content = {
               @Content(
                   mediaType = "application/json",
@@ -135,7 +186,21 @@ public interface AccountResource {
             }),
         @ApiResponse(
             responseCode = "400",
-            description = "Invalid id supplied",
+            description = "Invalid entity",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Not authorized",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
             content =
                 @Content(
                     mediaType = "application/json",
@@ -167,12 +232,12 @@ public interface AccountResource {
           AccountRequest request)
       throws ResourceNotFoundException, RequestValidationException;
 
-  @Operation(summary = "Delete an existing account")
+  @Operation(summary = "Delete an existing Account")
   @ApiResponses(
       value = {
         @ApiResponse(
             responseCode = "200",
-            description = "Deleted account info",
+            description = "Deleted Account info",
             content = {
               @Content(
                   mediaType = "application/json",
@@ -181,6 +246,20 @@ public interface AccountResource {
         @ApiResponse(
             responseCode = "400",
             description = "Invalid id supplied",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Not authorized",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
             content =
                 @Content(
                     mediaType = "application/json",

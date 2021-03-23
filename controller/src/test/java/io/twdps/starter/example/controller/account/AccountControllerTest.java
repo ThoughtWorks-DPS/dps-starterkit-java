@@ -4,6 +4,7 @@ import io.twdps.starter.boot.exception.ResourceNotFoundException;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
 import io.twdps.starter.example.api.responses.ArrayResponse;
+import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.controller.account.mapper.AccountRequestMapper;
 import io.twdps.starter.example.service.spi.account.AccountService;
 import io.twdps.starter.example.service.spi.account.model.Account;
@@ -15,6 +16,9 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
@@ -53,6 +57,11 @@ public class AccountControllerTest {
   private List<Account> outputList;
   private List<AccountResponse> emptyResponseList = Arrays.asList();
   private List<Account> emptyOutputList = Arrays.asList();
+  private PagedResponse<AccountResponse> responsePage;
+  private PagedResponse<AccountResponse> emptyResponsePage;
+  private Page<Account> outputPage;
+  private Page<Account> emptyOutputPage;
+  private Pageable pageable = Pageable.unpaged();
 
   /** setup data for each test. */
   @BeforeEach
@@ -77,6 +86,10 @@ public class AccountControllerTest {
     optionalOutput = Optional.of(output);
     responseList = Arrays.asList(response, response);
     outputList = Arrays.asList(output, output);
+    responsePage = new PagedResponse<>(responseList, 10, (long) 100, 1, 10);
+    emptyResponsePage = new PagedResponse<>(emptyResponseList, 0, (long) 0, 0, 0);
+    outputPage = new PageImpl<>(outputList);
+    emptyOutputPage = new PageImpl<>(emptyOutputList);
   }
 
   @Test
@@ -137,12 +150,12 @@ public class AccountControllerTest {
   public void findAllTest() throws Exception {
 
     createListMapperStubs();
-    Mockito.when(manager.findAll()).thenReturn(outputList);
+    Mockito.when(manager.findAll(pageable)).thenReturn(outputPage);
 
-    ResponseEntity<ArrayResponse<AccountResponse>> response = controller.findEntities();
+    ResponseEntity<PagedResponse<AccountResponse>> response = controller.findEntities(pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getData().size()).isEqualTo(2);
+    assertThat(response.getBody().getItems().size()).isEqualTo(2);
     // Todo: check contents of the list objects
   }
 
@@ -150,12 +163,12 @@ public class AccountControllerTest {
   public void findAllEmptyTest() throws Exception {
 
     createEmptyListMapperStubs();
-    Mockito.when(manager.findAll()).thenReturn(emptyOutputList);
+    Mockito.when(manager.findAll(pageable)).thenReturn(emptyOutputPage);
 
-    ResponseEntity<ArrayResponse<AccountResponse>> response = controller.findEntities();
+    ResponseEntity<PagedResponse<AccountResponse>> response = controller.findEntities(pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getData().size()).isEqualTo(0);
+    assertThat(response.getBody().getItems().size()).isEqualTo(0);
   }
 
   @Test
@@ -226,10 +239,35 @@ public class AccountControllerTest {
   }
 
   private void createListMapperStubs() {
-    Mockito.when(mapper.toAccountResponseList(outputList)).thenReturn(responseList);
+    Mockito.when(mapper.toAccountResponsePage(outputPage)).thenReturn(responsePage);
   }
 
   private void createEmptyListMapperStubs() {
-    Mockito.when(mapper.toAccountResponseList(emptyOutputList)).thenReturn(emptyResponseList);
+    Mockito.when(mapper.toAccountResponsePage(emptyOutputPage)).thenReturn(emptyResponsePage);
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param resource the object to validate
+   */
+  protected void verifyAccount(Account resource) {
+    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getPii().equals(pii));
+    assertThat(resource.getFirstName().equals(firstName));
+    assertThat(resource.getLastName().equals(lastName));
+    assertThat(resource.getId()).isNotEqualTo(identifier);
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param response the object to validate
+   */
+  private void verifyAccountResponse(AccountResponse response) {
+    assertThat(response.getUserName().equals(username));
+    assertThat(response.getPii().equals(pii));
+    assertThat(response.getFullName().equals(fullName));
+    assertThat(response.getId()).isEqualTo(identifier);
   }
 }

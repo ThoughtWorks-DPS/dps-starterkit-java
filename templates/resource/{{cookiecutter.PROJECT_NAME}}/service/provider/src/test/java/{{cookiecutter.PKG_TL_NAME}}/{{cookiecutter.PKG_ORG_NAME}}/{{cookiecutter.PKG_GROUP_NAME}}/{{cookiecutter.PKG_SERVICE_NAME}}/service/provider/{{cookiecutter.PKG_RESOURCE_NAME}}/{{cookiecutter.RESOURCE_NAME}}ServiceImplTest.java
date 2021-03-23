@@ -13,6 +13,9 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +50,11 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   private List<{{cookiecutter.RESOURCE_NAME}}> outputList;
   private List<{{cookiecutter.RESOURCE_NAME}}Entity> emptyEntityList = Arrays.asList();
   private List<{{cookiecutter.RESOURCE_NAME}}> emptyOutputList = Arrays.asList();
+  private Page<{{cookiecutter.RESOURCE_NAME}}Entity> entityPage;
+  private Page<{{cookiecutter.RESOURCE_NAME}}> outputPage;
+  private Page<{{cookiecutter.RESOURCE_NAME}}Entity> emptyEntityPage;
+  private Page<{{cookiecutter.RESOURCE_NAME}}> emptyOutputPage;
+  private Pageable pageable = Pageable.unpaged();
 
   /** setup data for each test. */
   @BeforeEach
@@ -57,17 +65,31 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     // use the real mapper to generate consistent objects to use in mapper stubs
     {{cookiecutter.RESOURCE_NAME}}EntityMapper real = Mappers.getMapper({{cookiecutter.RESOURCE_NAME}}EntityMapper.class);
 
-    resource = {{cookiecutter.RESOURCE_NAME}}.builder().userName(username).pii(pii).firstName(firstName).lastName(lastName).build();
+    resource =
+        {{cookiecutter.RESOURCE_NAME}}.builder()
+            .userName(username)
+            .pii(pii)
+            .firstName(firstName)
+            .lastName(lastName)
+            .build();
     entity = real.toEntity(resource);
     added =
         new {{cookiecutter.RESOURCE_NAME}}Entity(
-            identifier, entity.getUserName(), entity.getPii(), entity.getFirstName(), entity.getLastName());
+            identifier,
+            entity.getUserName(),
+            entity.getPii(),
+            entity.getFirstName(),
+            entity.getLastName());
     output = real.toModel(added);
     optionalEntity = Optional.of(entity);
     optionalAdded = Optional.of(added);
     optionalOutput = Optional.of(output);
     entityList = Arrays.asList(added, added);
     outputList = Arrays.asList(output, output);
+    entityPage = new PageImpl<>(entityList);
+    outputPage = new PageImpl<>(outputList);
+    emptyEntityPage = new PageImpl<>(emptyEntityList);
+    emptyOutputPage = new PageImpl<>(emptyOutputList);
   }
 
   private void createMapperStubs() {
@@ -84,11 +106,11 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   }
 
   private void createListMapperStubs() {
-    Mockito.when(mapper.toModelList(entityList)).thenReturn(outputList);
+    Mockito.when(mapper.toModelPage(entityPage)).thenReturn(outputPage);
   }
 
   private void createEmptyListMapperStubs() {
-    Mockito.when(mapper.toModelList(emptyEntityList)).thenReturn(emptyOutputList);
+    Mockito.when(mapper.toModelPage(emptyEntityPage)).thenReturn(emptyOutputPage);
   }
 
   @Test
@@ -141,24 +163,24 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void findByLastNameTest() {
 
     createListMapperStubs();
-    Mockito.when(repository.findByLastName(username)).thenReturn(entityList);
+    Mockito.when(repository.findByLastName(username, pageable)).thenReturn(entityPage);
 
-    List<{{cookiecutter.RESOURCE_NAME}}> response = manager.findByLastName(username);
+    Page<{{cookiecutter.RESOURCE_NAME}}> response = manager.findByLastName(username, pageable);
 
-    Assertions.assertThat(response.isEmpty()).isFalse();
-    Assertions.assertThat(response.get(0).getFirstName()).isEqualTo(added.getFirstName());
-    Assertions.assertThat(response.get(0).getId()).isEqualTo(added.getId());
+    Assertions.assertThat(response.getContent().isEmpty()).isFalse();
+    Assertions.assertThat(response.getContent().get(0).getFirstName()).isEqualTo(added.getFirstName());
+    Assertions.assertThat(response.getContent().get(0).getId()).isEqualTo(added.getId());
   }
 
   @Test
   public void findByLastNameFailedTest() {
 
     createEmptyListMapperStubs();
-    Mockito.when(repository.findByLastName(bogusName)).thenReturn(Arrays.asList());
+    Mockito.when(repository.findByLastName(bogusName, pageable)).thenReturn(emptyEntityPage);
 
-    List<{{cookiecutter.RESOURCE_NAME}}> response = manager.findByLastName(bogusName);
+    Page<{{cookiecutter.RESOURCE_NAME}}> response = manager.findByLastName(bogusName, pageable);
 
-    Assertions.assertThat(response.isEmpty()).isTrue();
+    Assertions.assertThat(response.getContent().isEmpty()).isTrue();
   }
 
   @Test
@@ -189,22 +211,22 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void findAllTest() {
 
     createListMapperStubs();
-    Mockito.when(repository.findAll()).thenReturn(entityList);
+    Mockito.when(repository.findAll(pageable)).thenReturn(entityPage);
 
-    List<{{cookiecutter.RESOURCE_NAME}}> response = manager.findAll();
+    Page<{{cookiecutter.RESOURCE_NAME}}> response = manager.findAll(pageable);
 
-    Assertions.assertThat(response.size()).isEqualTo(2);
+    Assertions.assertThat(response.getContent().size()).isEqualTo(2);
   }
 
   @Test
   public void findAllEmptyTest() {
 
     createEmptyListMapperStubs();
-    Mockito.when(repository.findAll()).thenReturn(emptyEntityList);
+    Mockito.when(repository.findAll(pageable)).thenReturn(emptyEntityPage);
 
-    List<{{cookiecutter.RESOURCE_NAME}}> response = manager.findAll();
+    Page<{{cookiecutter.RESOURCE_NAME}}> response = manager.findAll(pageable);
 
-    Assertions.assertThat(response.size()).isEqualTo(0);
+    Assertions.assertThat(response.getContent().size()).isEqualTo(0);
   }
 
   @Test

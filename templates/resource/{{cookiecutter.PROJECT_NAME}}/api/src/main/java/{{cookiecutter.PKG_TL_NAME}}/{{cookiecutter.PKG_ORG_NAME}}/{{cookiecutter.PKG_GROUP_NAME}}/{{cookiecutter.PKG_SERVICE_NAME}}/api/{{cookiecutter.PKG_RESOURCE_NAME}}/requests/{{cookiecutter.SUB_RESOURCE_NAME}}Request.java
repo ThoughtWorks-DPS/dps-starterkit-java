@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -11,16 +12,23 @@ import lombok.NonNull;
 @Builder
 @Getter
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@Schema(name = "{{cookiecutter.SUB_RESOURCE_NAME}}Request", description = "Metadata describing an {{cookiecutter.SUB_RESOURCE_NAME}} resource")
 public class {{cookiecutter.SUB_RESOURCE_NAME}}Request {
 
   @NonNull
+  @Schema(description = "username of the {{cookiecutter.SUB_RESOURCE_NAME}} holder", example = "lvanpelt")
   private final String userName;
+
   @NonNull
+  @Schema(description = "Given name of the {{cookiecutter.SUB_RESOURCE_NAME}} holder", example = "Lucille")
   private final String firstName;
+
   @NonNull
+  @Schema(description = "Family name of the {{cookiecutter.SUB_RESOURCE_NAME}} holder", example = "Van Pelt")
   private final String lastName;
 
-  /** Create object from json.
+  /**
+   * Create object from json.
    *
    * @param userName  username of {{cookiecutter.RESOURCE_NAME}} holder
    * @param firstName firstname of {{cookiecutter.RESOURCE_NAME}} holder

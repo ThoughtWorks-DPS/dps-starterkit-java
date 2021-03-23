@@ -5,6 +5,10 @@ import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -101,6 +105,27 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     assertThat(response.size()).isEqualTo(2);
     verify{{cookiecutter.RESOURCE_NAME}}(response.get(0));
     verify{{cookiecutter.RESOURCE_NAME}}(response.get(1));
+  }
+
+  @Test
+  public void mapperEntityPageTest() {
+    Pageable pageable = PageRequest.of(0, 3);
+    Page<{{cookiecutter.RESOURCE_NAME}}Entity> entities =
+        new PageImpl<>(
+            Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}Entity(), create{{cookiecutter.RESOURCE_NAME}}Entity(), create{{cookiecutter.RESOURCE_NAME}}Entity()),
+            pageable,
+            100);
+
+    Page<{{cookiecutter.RESOURCE_NAME}}> response = mapper.toModelPage(entities);
+
+    assertThat(response.getContent().size()).isEqualTo(3);
+    assertThat(response.getTotalElements()).isEqualTo(100);
+    assertThat(response.getNumber()).isEqualTo(0);
+    assertThat(response.getNumberOfElements()).isEqualTo(3);
+
+    verify{{cookiecutter.RESOURCE_NAME}}(response.toList().get(0));
+    verify{{cookiecutter.RESOURCE_NAME}}(response.toList().get(1));
+    verify{{cookiecutter.RESOURCE_NAME}}(response.toList().get(2));
   }
 
   /**

@@ -4,7 +4,6 @@ buildscript {
         classpath "io.twdps.starter:cookiecutter:${starter_boot_version}"
         classpath "se.patrikerdes:gradle-use-latest-versions-plugin:${use_latest_versions_plugin_version}"
         classpath "com.github.ben-manes:gradle-versions-plugin:${versions_plugin_version}"
-//        classpath "org.postgresql:postgresql:9.4"
     }
     // There's a conflict between versions of jgit between spotless and axion release plugin
     configurations.classpath {
@@ -33,12 +32,15 @@ plugins {
     id("com.github.johnrengelman.processes") version "${processes_plugin_version}" apply false
     id("org.springdoc.openapi-gradle-plugin") version "${openapi_gradle_plugin_version}" apply false
     id "org.flywaydb.flyway" version "${flyway_plugin_version}" apply false
-    id("starter.metrics.build-time-tracker-conventions") version "${starter_boot_version}"
-    id("starter.java.release-conventions") version "${starter_boot_version}"
+    id 'org.barfuin.gradle.jacocolog' version "${jacocolog_plugin_version}" apply false
     id('org.barfuin.gradle.taskinfo') version "${taskinfo_plugin_version}"
+    id("starter.java.release-conventions") version "${starter_boot_version}"
+    id("starter.metrics.build-time-tracker-conventions") version "${starter_boot_version}"
+    id("starter.java.versions-conventions") version "${starter_boot_version}"
+    id("starter.java.test-jacoco-aggregation-conventions") version "${starter_boot_version}"
 }
 
 ext {
     jacoco_enforce_violations = true
-    jacoco_minimum_coverage = 0.8
+    jacoco_minimum_coverage = 0.01
 }

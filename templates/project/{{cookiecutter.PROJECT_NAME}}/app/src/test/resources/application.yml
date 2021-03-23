@@ -38,7 +38,6 @@ spring:
     name: "starter-api"
 
   datasource:
-#    platform: h2
     url: jdbc:h2:mem:{{cookiecutter.PKG_SERVICE_NAME}};DB_CLOSE_DELAY=-1;MODE=PostgreSQL;INIT=CREATE SCHEMA IF NOT EXISTS {{cookiecutter.PKG_SERVICE_NAME}}\;SET SCHEMA {{cookiecutter.PKG_SERVICE_NAME}};
     username: skuser
     password: localT3st!
@@ -77,3 +76,21 @@ opentracing:
   zipkin:
     enabled: true
     http-sender.baseUrl: http://zipkin.istio-system.svc.cluster.local:9411
+
+springdoc:
+  writer-with-default-pretty-printer: true
+  show-actuator: true
+  swagger-ui:
+    operations-sorter: method
+
+starter:
+  openapi:
+    license: MIT License
+    title: {{cookiecutter.SERVICE_NAME}} service
+    description: {{cookiecutter.SERVICE_NAME}} service providing {{cookiecutter.RESOURCE_NAME}} info
+    version: v1
+    licenseUrl: https://github.com/{{cookiecutter.GITHUB_ORG_NAME}}/{{cookiecutter.PROJECT_NAME}}/blob/master/LICENSE
+    contactEmail: FIXME@{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_TL_NAME}}
+    contactUrl: https://{{cookiecutter.PKG_SERVICE_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_TL_NAME}}/
+    contactName: {{cookiecutter.SERVICE_NAME}}
+    serverUrl: http://localhost:8080

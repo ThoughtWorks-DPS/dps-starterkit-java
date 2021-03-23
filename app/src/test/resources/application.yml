@@ -76,3 +76,21 @@ opentracing:
   zipkin:
     enabled: true
     http-sender.baseUrl: http://zipkin.istio-system.svc.cluster.local:9411
+
+springdoc:
+  writer-with-default-pretty-printer: true
+  show-actuator: true
+  swagger-ui:
+    operations-sorter: method
+
+starter:
+  openapi:
+    license: MIT License
+    title: Example service
+    description: Example service providing Account info
+    version: v1
+    licenseUrl: https://github.com/thoughtworks-dps/dps-multi-module-starterkit-java/blob/master/LICENSE
+    contactEmail: FIXME@twdps.io
+    contactUrl: https://example.twdps.io/
+    contactName: Example
+    serverUrl: http://localhost:8080

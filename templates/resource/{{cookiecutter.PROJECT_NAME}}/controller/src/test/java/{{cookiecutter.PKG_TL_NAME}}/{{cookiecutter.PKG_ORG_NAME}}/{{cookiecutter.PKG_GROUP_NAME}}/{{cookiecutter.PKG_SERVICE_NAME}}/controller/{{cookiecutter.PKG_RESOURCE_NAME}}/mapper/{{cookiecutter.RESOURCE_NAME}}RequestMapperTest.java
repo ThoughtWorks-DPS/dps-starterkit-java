@@ -8,10 +8,15 @@ import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter
 {%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.SUB_RESOURCE_NAME}}Response;
 {%- endif %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.responses.PagedResponse;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -91,6 +96,22 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
     verify{{cookiecutter.RESOURCE_NAME}}Response(response.get(0));
     verify{{cookiecutter.RESOURCE_NAME}}Response(response.get(1));
   }
+
+  @Test
+  public void mapperEntityPageTest() {
+    Pageable pageable = PageRequest.of(0, 1);
+    Page<{{cookiecutter.RESOURCE_NAME}}> resources = new PageImpl<>(Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}(identifier)),
+        pageable, 100);
+    PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response> response = mapper.to{{cookiecutter.RESOURCE_NAME}}ResponsePage(resources);
+
+    assertThat(response.getItems().size()).isEqualTo(1);
+    assertThat(response.getTotalItems()).isEqualTo(100);
+    assertThat(response.getPageNumber()).isEqualTo(0);
+    assertThat(response.getPageSize()).isEqualTo(1);
+    assertThat(response.getTotalPages()).isEqualTo(100);
+    verify{{cookiecutter.RESOURCE_NAME}}Response(response.getItems().get(0));
+  }
+
 
 {%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
   @Test

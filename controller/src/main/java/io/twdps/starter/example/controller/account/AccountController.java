@@ -6,10 +6,13 @@ import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.resources.AccountResource;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
 import io.twdps.starter.example.api.responses.ArrayResponse;
+import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.controller.account.mapper.AccountRequestMapper;
 import io.twdps.starter.example.service.spi.account.AccountService;
 import io.twdps.starter.example.service.spi.account.model.Account;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,11 +63,10 @@ public class AccountController implements AccountResource {
   }
 
   @Override
-  public ResponseEntity<ArrayResponse<AccountResponse>> findEntities() {
-    List<Account> resources = manager.findAll();
+  public ResponseEntity<PagedResponse<AccountResponse>> findEntities(Pageable pageable) {
+    Page<Account> resources = manager.findAll(pageable);
 
-    return new ResponseEntity<>(
-        new ArrayResponse<>(mapper.toAccountResponseList(resources)), HttpStatus.OK);
+    return new ResponseEntity<>(mapper.toAccountResponsePage(resources), HttpStatus.OK);
   }
 
   @Override

@@ -6,6 +6,8 @@ import io.twdps.starter.example.service.provider.account.mapper.AccountEntityMap
 import io.twdps.starter.example.service.spi.account.AccountService;
 import io.twdps.starter.example.service.spi.account.model.Account;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,10 +43,10 @@ public class AccountServiceImpl implements AccountService {
    * @param lastName criteria for match
    * @return list of matching Account records
    */
-  public List<Account> findByLastName(String lastName) {
+  public Page<Account> findByLastName(String lastName, Pageable pageable) {
     log.info("looking up by lastname of:{}", lastName);
-    List<Account> responseList = mapper.toModelList(repository.findByLastName(lastName));
-    log.info("Response list size:{}", responseList.size());
+    Page<Account> responseList = mapper.toModelPage(repository.findByLastName(lastName, pageable));
+    log.info("Response list size:{}", responseList.getContent().size());
     return responseList;
   }
 
@@ -67,8 +69,8 @@ public class AccountServiceImpl implements AccountService {
   }
 
   @Override
-  public List<Account> findAll() {
-    List<Account> resource = mapper.toModelList(repository.findAll());
+  public Page<Account> findAll(Pageable pageable) {
+    Page<Account> resource = mapper.toModelPage(repository.findAll(pageable));
     return resource;
   }
 

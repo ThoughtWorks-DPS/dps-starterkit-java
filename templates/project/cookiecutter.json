@@ -1,13 +1,13 @@
 {
   "PROJECT_NAME" : "dps-multi-module-starterkit-java",
-  "GITHUB_ORG_NAME": "ThoughtWorks-DPS",
+  "GITHUB_ORG_NAME": "thoughtworks-dps",
   "PACKAGE_NAME": "{{cookiecutter.PROJECT_NAME|lower|replace(' ', '-')|replace('_', '-')}}",
   "PROJECT_DESCRIPTION": "Java API Starter from Template",
   "PROJECT_OWNER": "starter-java@example.com",
-  "DOCKER_REGISTRY" : "{{cookiecutter.PKG_ORG_NAME}}",
   "PKG_TL_NAME": "io",
   "PKG_ORG_NAME": "twdps",
   "PKG_GROUP_NAME": "starter",
+  "DOCKER_REGISTRY" : "{{cookiecutter.PKG_ORG_NAME}}",
   "BASE_PACKAGE": "{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}",
   "SERVICE_NAME": "Example",
   "PKG_SERVICE_NAME": "{{cookiecutter.SERVICE_NAME|lower}}",
@@ -31,7 +31,6 @@
     ".circleci/config.yml",
     "secrethub.env",
     "helm/templates/*",
-    "helmchart/values.yaml",
     "helmchart/templates/*",
     "tpl/*"
   ]

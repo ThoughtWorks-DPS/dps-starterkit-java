@@ -5,6 +5,10 @@ import io.twdps.starter.example.service.spi.account.model.Account;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -101,6 +105,27 @@ public class AccountEntityMapperTest {
     assertThat(response.size()).isEqualTo(2);
     verifyAccount(response.get(0));
     verifyAccount(response.get(1));
+  }
+
+  @Test
+  public void mapperEntityPageTest() {
+    Pageable pageable = PageRequest.of(0, 3);
+    Page<AccountEntity> entities =
+        new PageImpl<>(
+            Arrays.asList(createAccountEntity(), createAccountEntity(), createAccountEntity()),
+            pageable,
+            100);
+
+    Page<Account> response = mapper.toModelPage(entities);
+
+    assertThat(response.getContent().size()).isEqualTo(3);
+    assertThat(response.getTotalElements()).isEqualTo(100);
+    assertThat(response.getNumber()).isEqualTo(0);
+    assertThat(response.getNumberOfElements()).isEqualTo(3);
+
+    verifyAccount(response.toList().get(0));
+    verifyAccount(response.toList().get(1));
+    verifyAccount(response.toList().get(2));
   }
 
   /**

@@ -6,6 +6,8 @@ import com.tngtech.archunit.core.importer.ImportOption.Predefined;
 import com.tngtech.archunit.library.GeneralCodingRules;
 import org.junit.jupiter.api.Test;
 
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideOutsideOfPackage;
+
 public class GeneralCodingRulesTest {
   private final String packageName = "io.twdps.starter.example";
   private final JavaClasses classes =
@@ -30,7 +32,8 @@ public class GeneralCodingRulesTest {
 
   @Test
   public void noFieldInjection() {
-    GeneralCodingRules.NO_CLASSES_SHOULD_USE_FIELD_INJECTION.check(classes);
+    GeneralCodingRules.NO_CLASSES_SHOULD_USE_FIELD_INJECTION.check(
+        classes.that(resideOutsideOfPackage("io.twdps.starter.example.config")));
   }
 
   @Test

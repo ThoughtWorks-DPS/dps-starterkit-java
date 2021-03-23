@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -70,9 +75,20 @@ public class AccountEntityRepositoryTest {
   public void testFindByLastName() {
     populate();
 
-    List<AccountEntity> retrievedSmiths = modelEntityRepository.findByLastName(lastName);
+    Page<AccountEntity> retrievedSmiths =
+        modelEntityRepository.findByLastName(lastName, Pageable.unpaged());
 
-    assertThat(retrievedSmiths.size()).isEqualTo(2);
+    assertThat(retrievedSmiths.getContent().size()).isEqualTo(2);
+  }
+
+  @Test
+  public void testFindByLastNamePaged() {
+    populate();
+
+    Pageable pageable = PageRequest.of(0, 1);
+    Page<AccountEntity> retrievedSmiths = modelEntityRepository.findByLastName(lastName, pageable);
+
+    assertThat(retrievedSmiths.getContent().size()).isEqualTo(1);
   }
 
   @Test
@@ -83,10 +99,12 @@ public class AccountEntityRepositoryTest {
 
     AccountEntity updated = modelEntityRepository.save(saved);
 
-    List<AccountEntity> retrievedSmiths = modelEntityRepository.findByLastName(lastName);
-    assertThat(retrievedSmiths.size()).isEqualTo(0);
-    List<AccountEntity> retrievedContrarians = modelEntityRepository.findByLastName(newName);
-    assertThat(retrievedContrarians.size()).isEqualTo(1);
+    Page<AccountEntity> retrievedSmiths =
+        modelEntityRepository.findByLastName(lastName, Pageable.unpaged());
+    assertThat(retrievedSmiths.getContent().size()).isEqualTo(0);
+    Page<AccountEntity> retrievedContrarians =
+        modelEntityRepository.findByLastName(newName, Pageable.unpaged());
+    assertThat(retrievedContrarians.getContent().size()).isEqualTo(1);
   }
 
   @Test
@@ -95,15 +113,23 @@ public class AccountEntityRepositoryTest {
 
     modelEntityRepository.deleteById(saved.getId());
 
-    List<AccountEntity> retrievedSmiths = modelEntityRepository.findByLastName("Smith");
-    assertThat(retrievedSmiths.size()).isEqualTo(1);
+    Page<AccountEntity> retrievedSmiths =
+        modelEntityRepository.findByLastName("Smith", Pageable.unpaged());
+    assertThat(retrievedSmiths.getContent().size()).isEqualTo(1);
   }
 
   @Test
   public void testFindAll() {
     populate();
-    List<AccountEntity> retrieved =
-        new ArrayList<>((Collection<? extends AccountEntity>) modelEntityRepository.findAll());
-    assertThat(retrieved.size()).isEqualTo(3);
+    Page<AccountEntity> retrieved = modelEntityRepository.findAll(Pageable.unpaged());
+    assertThat(retrieved.getContent().size()).isEqualTo(3);
+  }
+
+  @Test
+  public void testFindAllPaged() {
+    populate();
+    Pageable pageable = PageRequest.of(0, 2);
+    Page<AccountEntity> retrieved = modelEntityRepository.findAll(pageable);
+    assertThat(retrieved.getContent().size()).isEqualTo(2);
   }
 }

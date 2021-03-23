@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -70,9 +75,20 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
   public void testFindByLastName() {
     populate();
 
-    List<{{cookiecutter.RESOURCE_NAME}}Entity> retrievedSmiths = modelEntityRepository.findByLastName(lastName);
+    Page<{{cookiecutter.RESOURCE_NAME}}Entity> retrievedSmiths =
+        modelEntityRepository.findByLastName(lastName, Pageable.unpaged());
 
-    assertThat(retrievedSmiths.size()).isEqualTo(2);
+    assertThat(retrievedSmiths.getContent().size()).isEqualTo(2);
+  }
+
+  @Test
+  public void testFindByLastNamePaged() {
+    populate();
+
+    Pageable pageable = PageRequest.of(0, 1);
+    Page<{{cookiecutter.RESOURCE_NAME}}Entity> retrievedSmiths = modelEntityRepository.findByLastName(lastName, pageable);
+
+    assertThat(retrievedSmiths.getContent().size()).isEqualTo(1);
   }
 
   @Test
@@ -83,10 +99,12 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
 
     {{cookiecutter.RESOURCE_NAME}}Entity updated = modelEntityRepository.save(saved);
 
-    List<{{cookiecutter.RESOURCE_NAME}}Entity> retrievedSmiths = modelEntityRepository.findByLastName(lastName);
-    assertThat(retrievedSmiths.size()).isEqualTo(0);
-    List<{{cookiecutter.RESOURCE_NAME}}Entity> retrievedContrarians = modelEntityRepository.findByLastName(newName);
-    assertThat(retrievedContrarians.size()).isEqualTo(1);
+    Page<{{cookiecutter.RESOURCE_NAME}}Entity> retrievedSmiths =
+        modelEntityRepository.findByLastName(lastName, Pageable.unpaged());
+    assertThat(retrievedSmiths.getContent().size()).isEqualTo(0);
+    Page<{{cookiecutter.RESOURCE_NAME}}Entity> retrievedContrarians =
+        modelEntityRepository.findByLastName(newName, Pageable.unpaged());
+    assertThat(retrievedContrarians.getContent().size()).isEqualTo(1);
   }
 
   @Test
@@ -95,15 +113,23 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
 
     modelEntityRepository.deleteById(saved.getId());
 
-    List<{{cookiecutter.RESOURCE_NAME}}Entity> retrievedSmiths = modelEntityRepository.findByLastName("Smith");
-    assertThat(retrievedSmiths.size()).isEqualTo(1);
+    Page<{{cookiecutter.RESOURCE_NAME}}Entity> retrievedSmiths =
+        modelEntityRepository.findByLastName("Smith", Pageable.unpaged());
+    assertThat(retrievedSmiths.getContent().size()).isEqualTo(1);
   }
 
   @Test
   public void testFindAll() {
     populate();
-    List<{{cookiecutter.RESOURCE_NAME}}Entity> retrieved =
-        new ArrayList<>((Collection<? extends {{cookiecutter.RESOURCE_NAME}}Entity>) modelEntityRepository.findAll());
-    assertThat(retrieved.size()).isEqualTo(3);
+    Page<{{cookiecutter.RESOURCE_NAME}}Entity> retrieved = modelEntityRepository.findAll(Pageable.unpaged());
+    assertThat(retrieved.getContent().size()).isEqualTo(3);
+  }
+
+  @Test
+  public void testFindAllPaged() {
+    populate();
+    Pageable pageable = PageRequest.of(0, 2);
+    Page<{{cookiecutter.RESOURCE_NAME}}Entity> retrieved = modelEntityRepository.findAll(pageable);
+    assertThat(retrieved.getContent().size()).isEqualTo(2);
   }
 }

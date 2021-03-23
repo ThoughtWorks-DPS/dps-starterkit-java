@@ -1,4 +1,4 @@
-package io.twdps.starter.example.config;
+package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
@@ -32,26 +32,26 @@ public class OpenApiConfiguration {
   @Value("${starter.openapi.license:MIT License}")
   private String license;
 
-  @Value("${starter.openapi.title:Example service}")
+  @Value("${starter.openapi.title:{{cookiecutter.SERVICE_NAME}} service}")
   private String title;
 
-  @Value("${starter.openapi.description:Example service providing Account info}")
+  @Value("${starter.openapi.description:{{cookiecutter.SERVICE_NAME}} service providing {{cookiecutter.RESOURCE_NAME}} info}")
   private String description;
 
   @Value("${starter.openapi.version:v1}")
   private String version;
 
   @Value(
-      "${starter.openapi.licenseUrl:https://github.com/thoughtworks-dps/dps-multi-module-starterkit-java/blob/master/LICENSE}")
+      "${starter.openapi.licenseUrl:https://github.com/{{cookiecutter.GITHUB_ORG_NAME}}/{{cookiecutter.PROJECT_NAME}}/blob/master/LICENSE}")
   private String licenseUrl;
 
-  @Value("${starter.openapi.contactEmail:FIXME@twdps.io}")
+  @Value("${starter.openapi.contactEmail:FIXME@{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_TL_NAME}}}")
   private String contactEmail;
 
-  @Value("${starter.openapi.contactUrl:https://example.twdps.io/}")
+  @Value("${starter.openapi.contactUrl:https://{{cookiecutter.PKG_SERVICE_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_TL_NAME}}/}")
   private String contactUrl;
 
-  @Value("${starter.openapi.contactName:Example}")
+  @Value("${starter.openapi.contactName:{{cookiecutter.SERVICE_NAME}}}")
   private String contactName;
 
   @Value("${starter.openapi.serverUrl:http://localhost:8080}")

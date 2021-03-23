@@ -13,6 +13,9 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +50,11 @@ public class AccountServiceImplTest {
   private List<Account> outputList;
   private List<AccountEntity> emptyEntityList = Arrays.asList();
   private List<Account> emptyOutputList = Arrays.asList();
+  private Page<AccountEntity> entityPage;
+  private Page<Account> outputPage;
+  private Page<AccountEntity> emptyEntityPage;
+  private Page<Account> emptyOutputPage;
+  private Pageable pageable = Pageable.unpaged();
 
   /** setup data for each test. */
   @BeforeEach
@@ -78,6 +86,10 @@ public class AccountServiceImplTest {
     optionalOutput = Optional.of(output);
     entityList = Arrays.asList(added, added);
     outputList = Arrays.asList(output, output);
+    entityPage = new PageImpl<>(entityList);
+    outputPage = new PageImpl<>(outputList);
+    emptyEntityPage = new PageImpl<>(emptyEntityList);
+    emptyOutputPage = new PageImpl<>(emptyOutputList);
   }
 
   private void createMapperStubs() {
@@ -94,11 +106,11 @@ public class AccountServiceImplTest {
   }
 
   private void createListMapperStubs() {
-    Mockito.when(mapper.toModelList(entityList)).thenReturn(outputList);
+    Mockito.when(mapper.toModelPage(entityPage)).thenReturn(outputPage);
   }
 
   private void createEmptyListMapperStubs() {
-    Mockito.when(mapper.toModelList(emptyEntityList)).thenReturn(emptyOutputList);
+    Mockito.when(mapper.toModelPage(emptyEntityPage)).thenReturn(emptyOutputPage);
   }
 
   @Test
@@ -151,24 +163,24 @@ public class AccountServiceImplTest {
   public void findByLastNameTest() {
 
     createListMapperStubs();
-    Mockito.when(repository.findByLastName(username)).thenReturn(entityList);
+    Mockito.when(repository.findByLastName(username, pageable)).thenReturn(entityPage);
 
-    List<Account> response = manager.findByLastName(username);
+    Page<Account> response = manager.findByLastName(username, pageable);
 
-    Assertions.assertThat(response.isEmpty()).isFalse();
-    Assertions.assertThat(response.get(0).getFirstName()).isEqualTo(added.getFirstName());
-    Assertions.assertThat(response.get(0).getId()).isEqualTo(added.getId());
+    Assertions.assertThat(response.getContent().isEmpty()).isFalse();
+    Assertions.assertThat(response.getContent().get(0).getFirstName()).isEqualTo(added.getFirstName());
+    Assertions.assertThat(response.getContent().get(0).getId()).isEqualTo(added.getId());
   }
 
   @Test
   public void findByLastNameFailedTest() {
 
     createEmptyListMapperStubs();
-    Mockito.when(repository.findByLastName(bogusName)).thenReturn(Arrays.asList());
+    Mockito.when(repository.findByLastName(bogusName, pageable)).thenReturn(emptyEntityPage);
 
-    List<Account> response = manager.findByLastName(bogusName);
+    Page<Account> response = manager.findByLastName(bogusName, pageable);
 
-    Assertions.assertThat(response.isEmpty()).isTrue();
+    Assertions.assertThat(response.getContent().isEmpty()).isTrue();
   }
 
   @Test
@@ -199,22 +211,22 @@ public class AccountServiceImplTest {
   public void findAllTest() {
 
     createListMapperStubs();
-    Mockito.when(repository.findAll()).thenReturn(entityList);
+    Mockito.when(repository.findAll(pageable)).thenReturn(entityPage);
 
-    List<Account> response = manager.findAll();
+    Page<Account> response = manager.findAll(pageable);
 
-    Assertions.assertThat(response.size()).isEqualTo(2);
+    Assertions.assertThat(response.getContent().size()).isEqualTo(2);
   }
 
   @Test
   public void findAllEmptyTest() {
 
     createEmptyListMapperStubs();
-    Mockito.when(repository.findAll()).thenReturn(emptyEntityList);
+    Mockito.when(repository.findAll(pageable)).thenReturn(emptyEntityPage);
 
-    List<Account> response = manager.findAll();
+    Page<Account> response = manager.findAll(pageable);
 
-    Assertions.assertThat(response.size()).isEqualTo(0);
+    Assertions.assertThat(response.getContent().size()).isEqualTo(0);
   }
 
   @Test

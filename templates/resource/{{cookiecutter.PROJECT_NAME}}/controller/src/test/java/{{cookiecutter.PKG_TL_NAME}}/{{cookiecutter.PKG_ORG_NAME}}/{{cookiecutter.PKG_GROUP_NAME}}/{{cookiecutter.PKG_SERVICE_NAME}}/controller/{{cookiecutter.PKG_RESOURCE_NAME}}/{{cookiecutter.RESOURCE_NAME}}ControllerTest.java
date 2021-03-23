@@ -4,6 +4,7 @@ import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.RESOURCE_NAME}}Response;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.responses.ArrayResponse;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.responses.PagedResponse;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.controller.{{cookiecutter.PKG_RESOURCE_NAME}}.mapper.{{cookiecutter.RESOURCE_NAME}}RequestMapper;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.{{cookiecutter.RESOURCE_NAME}}Service;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
@@ -15,6 +16,9 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
@@ -53,6 +57,11 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   private List<{{cookiecutter.RESOURCE_NAME}}> outputList;
   private List<{{cookiecutter.RESOURCE_NAME}}Response> emptyResponseList = Arrays.asList();
   private List<{{cookiecutter.RESOURCE_NAME}}> emptyOutputList = Arrays.asList();
+  private PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response> responsePage;
+  private PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response> emptyResponsePage;
+  private Page<{{cookiecutter.RESOURCE_NAME}}> outputPage;
+  private Page<{{cookiecutter.RESOURCE_NAME}}> emptyOutputPage;
+  private Pageable pageable = Pageable.unpaged();
 
   /** setup data for each test. */
   @BeforeEach
@@ -77,6 +86,10 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     optionalOutput = Optional.of(output);
     responseList = Arrays.asList(response, response);
     outputList = Arrays.asList(output, output);
+    responsePage = new PagedResponse<>(responseList, 10, (long) 100, 1, 10);
+    emptyResponsePage = new PagedResponse<>(emptyResponseList, 0, (long) 0, 0, 0);
+    outputPage = new PageImpl<>(outputList);
+    emptyOutputPage = new PageImpl<>(emptyOutputList);
   }
 
   @Test
@@ -137,12 +150,12 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   public void findAllTest() throws Exception {
 
     createListMapperStubs();
-    Mockito.when(manager.findAll()).thenReturn(outputList);
+    Mockito.when(manager.findAll(pageable)).thenReturn(outputPage);
 
-    ResponseEntity<ArrayResponse<{{cookiecutter.RESOURCE_NAME}}Response>> response = controller.findEntities();
+    ResponseEntity<PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response>> response = controller.findEntities(pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getData().size()).isEqualTo(2);
+    assertThat(response.getBody().getItems().size()).isEqualTo(2);
     // Todo: check contents of the list objects
   }
 
@@ -150,12 +163,12 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   public void findAllEmptyTest() throws Exception {
 
     createEmptyListMapperStubs();
-    Mockito.when(manager.findAll()).thenReturn(emptyOutputList);
+    Mockito.when(manager.findAll(pageable)).thenReturn(emptyOutputPage);
 
-    ResponseEntity<ArrayResponse<{{cookiecutter.RESOURCE_NAME}}Response>> response = controller.findEntities();
+    ResponseEntity<PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response>> response = controller.findEntities(pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getData().size()).isEqualTo(0);
+    assertThat(response.getBody().getItems().size()).isEqualTo(0);
   }
 
   @Test
@@ -226,16 +239,17 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   }
 
   private void createListMapperStubs() {
-    Mockito.when(mapper.to{{cookiecutter.RESOURCE_NAME}}ResponseList(outputList)).thenReturn(responseList);
+    Mockito.when(mapper.to{{cookiecutter.RESOURCE_NAME}}ResponsePage(outputPage)).thenReturn(responsePage);
   }
 
   private void createEmptyListMapperStubs() {
-    Mockito.when(mapper.to{{cookiecutter.RESOURCE_NAME}}ResponseList(emptyOutputList)).thenReturn(emptyResponseList);
+    Mockito.when(mapper.to{{cookiecutter.RESOURCE_NAME}}ResponsePage(emptyOutputPage)).thenReturn(emptyResponsePage);
   }
 
-  /** helper function to validate standard values.
+  /**
+   * helper function to validate standard values.
    *
-   * @param response the object to validate
+   * @param resource the object to validate
    */
   protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource) {
     assertThat(resource.getUserName().equals(username));
@@ -245,10 +259,11 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     assertThat(resource.getId()).isNotEqualTo(identifier);
   }
 
-{% if cookiecutter.CREATE_SUBRESOURCE == "y" %}
-  /** helper function to validate standard values.
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+  /**
+   * helper function to validate standard values.
    *
-   * @param response the object to validate
+   * @param resource the object to validate
    */
   protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}({{cookiecutter.SUB_RESOURCE_NAME}} resource) {
     assertThat(resource.getUserName().equals(username));
@@ -257,7 +272,6 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     assertThat(resource.getId()).isNotEqualTo(identifier);
   }
 {%- endif %}
-
 
   /**
    * helper function to validate standard values.
@@ -271,7 +285,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     assertThat(response.getId()).isEqualTo(identifier);
   }
 
-{% if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
   /**
    * helper function to validate standard values.
    *
@@ -282,5 +296,4 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     assertThat(response.getId()).isEqualTo(identifier);
   }
 {%- endif %}
-
 }

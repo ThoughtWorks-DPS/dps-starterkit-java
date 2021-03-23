@@ -1,22 +1,22 @@
-name: {{ cookiecutter.PACKAGE_NAME }}
-owner: {{ cookiecutter.TEAM_NAME }}
-environment: local
-namespace: {{ cookiecutter.PKG_GROUP_NAME }}-local
-cluster: local
+name: {{cookiecutter.PACKAGE_NAME}}
+owner: {{cookiecutter.SERVICE_NAME}}
+environment:
+namespace: {{cookiecutter.PKG_SERVICE_NAME}}-local
+cluster: sandbox
 version: 0.1
 replicaCount: 1
 #TUNE as required for application
 podDisruptionBudget: 20%
 
 labels:
-  app: {{ cookiecutter.PACKAGE_NAME }}
+  app: {{cookiecutter.PACKAGE_NAME}}
   deployment: green
 
 blueVersion: false
 
 styraLabels:
   styra.io/opa-injection: disabled
-  styra.io/system: {{ cookiecutter.PACKAGE_NAME }}
+  styra.io/system: {{cookiecutter.PACKAGE_NAME}}
 
 initContainerName: twdps/dps-psql-init:latest
 
@@ -43,10 +43,10 @@ service:
 ingress:
   pathPrefix: "/v1/{{cookiecutter.SERVICE_URL}}"
   hosts:
-    - {{ cookiecutter.PACKAGE_NAME }}.{{ .Values.namespace }}.{{ .Values.cluster }}.twdps.io
-    - {{ cookiecutter.PACKAGE_NAME }}.{{ .Values.namespace }}.svc.cluster.local
+    - {{cookiecutter.PACKAGE_NAME}}.{% raw %}{{ .Values.namespace }}.{{ .Values.cluster }}.twdps.io{% endraw %}
+    - {{cookiecutter.PACKAGE_NAME}}.{% raw %}{{ .Values.namespace }}.svc.cluster.local{% endraw %}
   gateways:
-    - istio-system/api-gateway-{{ .Values.environment }}
+    - istio-system/api-gateway-{% raw %}{{ .Values.environment }}{% endraw %}
     - mesh
 
 rds:
@@ -113,4 +113,4 @@ nsAnyVars:
 nsSpecificVars:
   di-dev:
     - name: POSTGRES_DBNAME
-      value: {{cookiecutter.SERVICE_NAME}}
+      value: {{cookiecutter.PKG_SERVICE_NAME}}

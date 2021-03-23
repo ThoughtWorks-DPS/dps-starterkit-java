@@ -3,7 +3,6 @@
  */
 
 plugins {
-    id 'starter.std.java.library-conventions'
     id 'starter.java.container-conventions'
     id 'org.flywaydb.flyway'
     id 'starter.java.build-utils-conventions'

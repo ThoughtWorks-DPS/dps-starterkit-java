@@ -5,6 +5,8 @@ import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +26,10 @@ public interface {{cookiecutter.RESOURCE_NAME}}EntityMapper {
 
   default Optional<{{cookiecutter.RESOURCE_NAME}}> toModel(Optional<{{cookiecutter.RESOURCE_NAME}}Entity> src) {
     return Optional.ofNullable(toModel(src.orElse(null)));
+  }
+
+  default Page<{{cookiecutter.RESOURCE_NAME}}> toModelPage(Page<{{cookiecutter.RESOURCE_NAME}}Entity> src) {
+    return src.map(this::toModel);
   }
 
   List<{{cookiecutter.RESOURCE_NAME}}> toModelList(Iterable<{{cookiecutter.RESOURCE_NAME}}Entity> src);
