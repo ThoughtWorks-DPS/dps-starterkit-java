@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    annotationBom platform("io.twdps.starter:starter-bom:${starter_boot_version}")
-    checkstyleRules platform("io.twdps.starter:checkstyle-bom:${starter_boot_version}")
-    implementation "io.twdps.starter:exceptions"
+    annotationBom platform("{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:starter-bom:${starter_boot_version}")
+    checkstyleRules platform("{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:checkstyle-bom:${starter_boot_version}")
+    implementation "{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:exceptions"
 }

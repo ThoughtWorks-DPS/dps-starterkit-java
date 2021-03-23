@@ -7,6 +7,6 @@ cookiecutter {
 }
 
 cookiecutterVerify {
-    generatedProjectName = 'dps-multi-modules-starterkit-java'
+    generatedProjectName = 'dps-multi-module-starterkit-java'
 }
 

@@ -36,7 +36,7 @@ configurations {
 }
 
 dependencies {
-    flywayMigration platform("io.twdps.starter:starter-bom:${starter_boot_version}")
+    flywayMigration platform("{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:starter-bom:${starter_boot_version}")
     flywayMigration "org.postgresql:postgresql"
 }
 

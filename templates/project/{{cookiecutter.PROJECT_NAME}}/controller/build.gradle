@@ -5,13 +5,13 @@ plugins {
 }
 
 dependencies {
-    annotationBom platform("io.twdps.starter:starter-bom:${starter_boot_version}")
-    checkstyleRules platform("io.twdps.starter:checkstyle-bom:${starter_boot_version}")
+    annotationBom platform("{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:starter-bom:${starter_boot_version}")
+    checkstyleRules platform("{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:checkstyle-bom:${starter_boot_version}")
 
     implementation project(':api')
     implementation project(':service:provider')
     implementation project(':service:spi')
-    implementation "io.twdps.starter:exceptions"
+    implementation "{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:exceptions"
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 

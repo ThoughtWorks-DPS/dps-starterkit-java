@@ -1,4 +1,4 @@
-package io.twdps.starter.example;
+package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}};
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
