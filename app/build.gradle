@@ -17,13 +17,14 @@ dependencies {
     implementation 'io.twdps.starter:tracing'
     implementation 'io.twdps.starter:error-handling'
     implementation 'io.twdps.starter:exceptions'
-    implementation 'io.twdps.starter:istio-security-config'
     implementation 'io.twdps.starter:open-api'
 
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation 'com.bisnode.opa:opa-filter-spring-boot-starter'
 
+    testImplementation 'io.twdps.starter:istio-security-config'
     testImplementation "com.h2database:h2"
     integrationTestImplementation "com.h2database:h2"
     //runtime "com.h2database:h2"

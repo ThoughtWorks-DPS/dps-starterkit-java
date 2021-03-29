@@ -17,13 +17,14 @@ dependencies {
     implementation '{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:tracing'
     implementation '{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:error-handling'
     implementation '{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:exceptions'
-    implementation '{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:istio-security-config'
     implementation '{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:open-api'
 
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation 'com.bisnode.opa:opa-filter-spring-boot-starter'
 
+    testImplementation '{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:istio-security-config'
     testImplementation "com.h2database:h2"
     integrationTestImplementation "com.h2database:h2"
     //runtime "com.h2database:h2"

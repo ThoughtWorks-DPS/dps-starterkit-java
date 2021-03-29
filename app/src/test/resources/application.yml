@@ -85,6 +85,9 @@ springdoc:
 
 starter:
   openapi:
+    authUrl: https://iam.twdps.io/whoami
+    default-oauth-security-scheme: true
+    default-jwt-bearer-security-scheme: true
     license: MIT License
     title: Example service
     description: Example service providing Account info
@@ -94,3 +97,7 @@ starter:
     contactUrl: https://example.twdps.io/
     contactName: Example
     serverUrl: http://localhost:8080
+
+opa:
+  filter:
+    enabled: false

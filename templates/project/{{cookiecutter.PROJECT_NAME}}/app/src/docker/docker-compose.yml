@@ -8,6 +8,21 @@ volumes:
   pgdata:
 
 services:
+  opa:
+    image: openpolicyagent/opa
+    expose:
+      - "8181"
+    ports:
+      - "8181:8181"
+    command:
+      - run
+      - --server
+      - --log-level
+      - debug
+    networks:
+      - internal
+      - external
+
   postgres1:
     image: postgres
     hostname: postgres1

@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 
 @RequestMapping(value = "/v1/example/accounts", produces = "application/json")
 @Tag(name = "Account API", description = "Starter Kit template API, essentially CRUD access")
-@SecurityRequirement(name = "oauth2")
+@SecurityRequirement(name = "bearer-jwt")
 public interface AccountResource {
 
   @Operation(summary = "Create a new Account")

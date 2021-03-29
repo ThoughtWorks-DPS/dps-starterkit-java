@@ -39,7 +39,7 @@ import javax.validation.constraints.NotNull;
 
 @RequestMapping(value = "/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}", produces = "application/json")
 @Tag(name = "{{cookiecutter.RESOURCE_NAME}} API", description = "Starter Kit template API, essentially CRUD access")
-@SecurityRequirement(name = "oauth2")
+@SecurityRequirement(name = "bearer-jwt")
 public interface {{cookiecutter.RESOURCE_NAME}}Resource {
 
   @Operation(summary = "Create a new {{cookiecutter.RESOURCE_NAME}}")
