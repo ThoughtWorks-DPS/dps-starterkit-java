@@ -1,5 +1,6 @@
 package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.resources;
 
+import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,6 +41,7 @@ import javax.validation.constraints.NotNull;
 @RequestMapping(value = "/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}", produces = "application/json")
 @Tag(name = "{{cookiecutter.RESOURCE_NAME}} API", description = "Starter Kit template API, essentially CRUD access")
 @SecurityRequirement(name = "bearer-jwt")
+@Timed
 public interface {{cookiecutter.RESOURCE_NAME}}Resource {
 
   @Operation(summary = "Create a new {{cookiecutter.RESOURCE_NAME}}")
@@ -77,6 +79,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
       })
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.create")
   ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> addEntity(
       @Parameter(
               description = "metadata for new {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",
@@ -129,6 +132,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
       })
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.findById")
   ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> findEntityById(
       @Parameter(
               description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",
@@ -174,6 +178,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
       })
   @GetMapping()
   @ResponseStatus(HttpStatus.OK)
+  @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.findAll")
   ResponseEntity<PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response>> findEntities(
       @Parameter(
               description = "Paging specification for retrieving a subset of the full list.",
@@ -222,6 +227,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
       })
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.update")
   ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> updateEntityById(
       @Parameter(
               description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot be null or empty",
@@ -281,6 +287,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
       })
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.delete")
   ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> deleteEntityById(
       @Parameter(
               description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",
@@ -327,6 +334,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
       })
   @PostMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}")
   @ResponseStatus(HttpStatus.CREATED)
+  @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.{{cookiecutter.SUB_RESOURCE_URL}}.create")
   ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> add{{cookiecutter.SUB_RESOURCE_NAME}}(
       @Parameter(
               description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",
@@ -386,6 +394,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
       })
   @GetMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}/{ {{cookiecutter.SUB_RESOURCE_URL}}Id}")
   @ResponseStatus(HttpStatus.OK)
+  @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.{{cookiecutter.SUB_RESOURCE_URL}}.findById")
   ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> get{{cookiecutter.SUB_RESOURCE_NAME}}(
       @Parameter(
               description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",
@@ -439,18 +448,19 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
       })
   @GetMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}")
   @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<Page<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> get{{cookiecutter.SUB_RESOURCE_NAME}}s(
-        @Parameter(
-                description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",
-                example = "uuid",
-                required = true)
-            @NotNull
-            @PathVariable(value = "id")
-            String id,
-        @Parameter(
-                description = "Paging specification for retrieving a subset of the full list.",
-                required = false)
-            Pageable pageable);
+  @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.{{cookiecutter.SUB_RESOURCE_URL}}.findAll")
+  ResponseEntity<Page<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> get{{cookiecutter.SUB_RESOURCE_NAME}}s(
+      @Parameter(
+              description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",
+              example = "uuid",
+              required = true)
+          @NotNull
+          @PathVariable(value = "id")
+          String id,
+      @Parameter(
+              description = "Paging specification for retrieving a subset of the full list.",
+              required = false)
+          Pageable pageable);
 
   @Operation(summary = "Update an existing {{cookiecutter.SUB_RESOURCE_NAME}}")
   @ApiResponses(
@@ -494,6 +504,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
       })
   @PutMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}/{ {{cookiecutter.SUB_RESOURCE_URL}}Id}")
   @ResponseStatus(HttpStatus.OK)
+  @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.{{cookiecutter.SUB_RESOURCE_URL}}.update")
   ResponseEntity<Page<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> update{{cookiecutter.SUB_RESOURCE_NAME}}(
       @Parameter(
               description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",
@@ -560,6 +571,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
       })
   @DeleteMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}/{ {{cookiecutter.SUB_RESOURCE_URL}}Id}")
   @ResponseStatus(HttpStatus.OK)
+  @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.{{cookiecutter.SUB_RESOURCE_URL}}.delete")
   ResponseEntity<Page<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> delete{{cookiecutter.SUB_RESOURCE_NAME}}(
       @Parameter(
               description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",

@@ -7,8 +7,11 @@ import lombok.NonNull;
 import java.util.List;
 
 // this class is necessary for easier documentation in springdoc
-// current versions cannot directly determine the type of the list in PagedResponse<AccountResponse>
-@Schema(name = "PagedAccountResponse", description = "Bundled list of resources with paging metadata")
+// current versions cannot directly determine the type of the list in
+// PagedResponse<AccountResponse>
+@Schema(
+    name = "PagedAccountResponse",
+    description = "Bundled list of resources with paging metadata")
 public class PagedAccountResponse extends PagedResponse<AccountResponse> {
 
   public PagedAccountResponse(

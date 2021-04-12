@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 class {{cookiecutter.SERVICE_NAME}}{{cookiecutter.RESOURCE_NAME}}ApiSimulation extends Simulation {
 
   val httpProtocol = http
-    .warmUp("http://localhost:8080/health")
+    .warmUp("http://localhost:8081/actuator/health")
     .baseUrl("http://localhost:8080") // Here is the root for all relative URLs
     .acceptHeader("application/json") // Here are the common headers
 

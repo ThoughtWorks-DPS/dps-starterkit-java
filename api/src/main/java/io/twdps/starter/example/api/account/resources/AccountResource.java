@@ -1,5 +1,6 @@
 package io.twdps.starter.example.api.account.resources;
 
+import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,6 +34,7 @@ import javax.validation.constraints.NotNull;
 @RequestMapping(value = "/v1/example/accounts", produces = "application/json")
 @Tag(name = "Account API", description = "Starter Kit template API, essentially CRUD access")
 @SecurityRequirement(name = "bearer-jwt")
+@Timed
 public interface AccountResource {
 
   @Operation(summary = "Create a new Account")
@@ -70,6 +72,7 @@ public interface AccountResource {
       })
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @Timed(value = "example.accounts.create")
   ResponseEntity<AccountResponse> addEntity(
       @Parameter(
               description = "metadata for new Account resource. Cannot null or empty.",
@@ -122,6 +125,7 @@ public interface AccountResource {
       })
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @Timed(value = "example.accounts.findById")
   ResponseEntity<AccountResponse> findEntityById(
       @Parameter(
               description = "unique identifier for Account resource. Cannot null or empty.",
@@ -167,6 +171,7 @@ public interface AccountResource {
       })
   @GetMapping()
   @ResponseStatus(HttpStatus.OK)
+  @Timed(value = "example.accounts.findAll")
   ResponseEntity<PagedResponse<AccountResponse>> findEntities(
       @Parameter(
               description = "Paging specification for retrieving a subset of the full list.",
@@ -215,6 +220,7 @@ public interface AccountResource {
       })
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @Timed(value = "example.accounts.update")
   ResponseEntity<AccountResponse> updateEntityById(
       @Parameter(
               description = "unique identifier for Account resource. Cannot be null or empty",
@@ -274,6 +280,7 @@ public interface AccountResource {
       })
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @Timed(value = "example.accounts.delete")
   ResponseEntity<AccountResponse> deleteEntityById(
       @Parameter(
               description = "unique identifier for Account resource. Cannot null or empty.",

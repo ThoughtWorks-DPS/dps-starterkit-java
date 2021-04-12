@@ -2,7 +2,7 @@
 
 runpath=$(dirname $0)
 template="resource"
-url="gh:ThoughtWorks-DPS/dps-multi-module-starterkit-java.git"
+url="gh:thoughtworks-dps/dps-multi-module-starterkit-java.git"
 path="."
 tag="release-0.1.11"
 

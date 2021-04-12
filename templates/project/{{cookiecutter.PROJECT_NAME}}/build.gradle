@@ -42,5 +42,5 @@ plugins {
 
 ext {
     jacoco_enforce_violations = true
-    jacoco_minimum_coverage = 0.5
+    jacoco_minimum_coverage = 0.8
 }

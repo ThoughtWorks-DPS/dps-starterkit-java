@@ -29,11 +29,21 @@ This is the repository for the Java API Starter from Template.
 - Run: `./gradlew test`
 
 ### Running performance tests
-- With the server running (either via `./gradlew bootRun` or `./gradlew run` for Docker), run: `./gradlew gatlingRun`
+- With the server running (either via `./gradlew bootRun` or `./gradlew run` for Docker), run: `./gradlew :app:gatlingRun`
 - At the end of test execution, html file should be created.
 Open up to see test results.
 - Add new simulations in `app/src/gatling/scala`
 - Add configuration in `app/src/gatling/resources/gatling.conf`
+
+### Watching Kafka queues
+- With the docker-compose running (`./gradlew :app:dockerComposeUp`)
+- Run the gatling load test to generate traffic (`./gradlew :app:gatlingRun`)
+- Run the command-line consumer within a shell inside the kafka container
+
+```bash
+docker exec -it -u root docker_kafka_1 /bin/bash -c \
+  '$KAFKA_HOME/bin/kafka-console-consumer.sh --from-beginning --bootstrap-server kafka:9092 --topic=example-entity-lifecycle'
+```
 
 ### Setting up SecretHub credentials
 SecretHub is used both locally, in CircleCI, and our deployments.

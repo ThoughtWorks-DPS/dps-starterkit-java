@@ -7,8 +7,11 @@ import lombok.NonNull;
 import java.util.List;
 
 // this class is necessary for easier documentation in springdoc
-// current versions cannot directly determine the type of the list in PagedResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response>
-@Schema(name = "Paged{{cookiecutter.SUB_RESOURCE_NAME}}Response", description = "Bundled list of resources with paging metadata")
+// current versions cannot directly determine the type of the list in
+// PagedResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response>
+@Schema(
+    name = "Paged{{cookiecutter.SUB_RESOURCE_NAME}}Response",
+    description = "Bundled list of resources with paging metadata")
 public class Paged{{cookiecutter.SUB_RESOURCE_NAME}}Response extends PagedResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response> {
 
   public Paged{{cookiecutter.SUB_RESOURCE_NAME}}Response(

@@ -2,10 +2,10 @@ package io.twdps.starter.example.controller.account;
 
 import io.twdps.starter.boot.exception.RequestValidationException;
 import io.twdps.starter.boot.exception.ResourceNotFoundException;
+import io.twdps.starter.boot.notifier.EntityLifecycleNotifier;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.resources.AccountResource;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
-import io.twdps.starter.example.api.responses.ArrayResponse;
 import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.controller.account.mapper.AccountRequestMapper;
 import io.twdps.starter.example.service.spi.account.AccountService;
@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.net.URI;
 import java.util.Optional;
 
 @Slf4j
@@ -26,6 +26,9 @@ public class AccountController implements AccountResource {
 
   private final AccountService manager;
   private final AccountRequestMapper mapper;
+  private final EntityLifecycleNotifier notifier;
+  // TODO: Need to find a better way to determine version of entity
+  private final String entityVersion = "0.0.1";
 
   /**
    * constructor.
@@ -33,9 +36,11 @@ public class AccountController implements AccountResource {
    * @param manager instance of account manager
    * @param mapper instance of account request mappper
    */
-  public AccountController(AccountService manager, AccountRequestMapper mapper) {
+  public AccountController(
+      AccountService manager, AccountRequestMapper mapper, EntityLifecycleNotifier notifier) {
     this.manager = manager;
     this.mapper = mapper;
+    this.notifier = notifier;
   }
 
   @Override
@@ -46,6 +51,7 @@ public class AccountController implements AccountResource {
     Account resource = mapper.toModel(addEntityRequest);
     Account saved = manager.add(resource);
     AccountResponse response = mapper.toAccountResponse(saved);
+    notifier.created(saved, entityVersion, URI.create("user:anonymous"));
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
@@ -75,6 +81,9 @@ public class AccountController implements AccountResource {
 
     log.info("id->{}", id);
     Optional<Account> found = manager.updateById(id, mapper.toModel(request));
+    if (found.isPresent()) {
+      notifier.updated(found.get(), entityVersion, URI.create("user:anonymous"));
+    }
     return new ResponseEntity<>(
         found
             .map(r -> mapper.toAccountResponse(r))
@@ -88,6 +97,9 @@ public class AccountController implements AccountResource {
 
     log.info("id->{}", id);
     Optional<Account> found = manager.deleteById(id);
+    if (found.isPresent()) {
+      notifier.deleted(found.get(), entityVersion, URI.create("user:anonymous"));
+    }
     return new ResponseEntity<>(
         found
             .map(r -> mapper.toAccountResponse(r))

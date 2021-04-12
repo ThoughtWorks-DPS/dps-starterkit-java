@@ -168,7 +168,8 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     Page<{{cookiecutter.RESOURCE_NAME}}> response = manager.findByLastName(username, pageable);
 
     Assertions.assertThat(response.getContent().isEmpty()).isFalse();
-    Assertions.assertThat(response.getContent().get(0).getFirstName()).isEqualTo(added.getFirstName());
+    Assertions.assertThat(response.getContent().get(0).getFirstName())
+        .isEqualTo(added.getFirstName());
     Assertions.assertThat(response.getContent().get(0).getId()).isEqualTo(added.getId());
   }
 

@@ -1,9 +1,11 @@
 package io.twdps.starter.example.controller.account;
 
 import io.twdps.starter.boot.exception.ResourceNotFoundException;
+import io.twdps.starter.boot.notifier.EntityLifecycleNotifier;
+import io.twdps.starter.boot.notifier.MemoizedTimestampProvider;
+import io.twdps.starter.boot.notifier.NoopEntityLifecycleNotifier;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
-import io.twdps.starter.example.api.responses.ArrayResponse;
 import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.controller.account.mapper.AccountRequestMapper;
 import io.twdps.starter.example.service.spi.account.AccountService;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +39,8 @@ public class AccountControllerTest {
 
   @Mock private AccountService manager;
   @Mock private AccountRequestMapper mapper;
+  private EntityLifecycleNotifier notifier =
+      new NoopEntityLifecycleNotifier(new MemoizedTimestampProvider(ZonedDateTime.now()));
 
   private final String username = "jsmith";
   private final String pii = "123-45-6789";
@@ -67,7 +72,7 @@ public class AccountControllerTest {
   @BeforeEach
   public void setup() {
 
-    controller = new AccountController(manager, mapper);
+    controller = new AccountController(manager, mapper, notifier);
 
     // use the real mapper to generate consistent objects to use in mapper stubs
     AccountRequestMapper real = Mappers.getMapper(AccountRequestMapper.class);

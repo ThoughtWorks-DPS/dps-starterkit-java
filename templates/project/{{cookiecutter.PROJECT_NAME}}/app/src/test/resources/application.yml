@@ -2,13 +2,32 @@ info:
   app:
     name: {{cookiecutter.PROJECT_NAME}}
     description: {{cookiecutter.PROJECT_DESCRIPTION}}
+
 management:
-  server:
-    port: 8081
+  # TODO: Figure out the proper security for these, and perhaps don't expose everything
+  endpoints.web.exposure.include: "*"
   endpoint:
     health:
+      show-details: always
       probes:
         enabled: true
+  metrics:
+    enabled: true
+    distribution:
+      percentiles.http.server.requests: 0.5, 0.90, 0.95, 0.99, 0.999
+      percentiles-histogram.http.server.requests: true
+      sla.http.server.requests: 10ms, 50ms
+      slo.http.server.requests: 10ms, 50ms
+    tags:
+      group: starter
+      service: example
+      region: "${POD_REGION:local}"
+      stack: "${CLUSTER:dev}"
+      ns: "${NAMESPACE:example}"
+      pod: "${POD_ID:docker}"
+    web.server.request.autotime.enabled: true
+  server.port: 8081
+
 # Setting up K8 health probes - with health probs set to true you can use
 # the paths in your config like the snippet below
 
@@ -71,6 +90,26 @@ spring:
   http:
     encoding:
       force: true
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    topic:
+      name: example-entity-lifecycle
+    replication:
+      factor: 1
+    partition:
+      number: 2
+    consumer:
+      auto-offset-reset: earliest
+      group-id: starter
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties.spring.json.value.default.type: io.twdps.starter.boot.notifier.EntityLifecycleNotification
+      level:
+        concurrency: 5
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties.spring.json.value.default.type: io.twdps.starter.boot.notifier.EntityLifecycleNotification
 
 opentracing:
   zipkin:
@@ -93,11 +132,17 @@ starter:
     description: {{cookiecutter.SERVICE_NAME}} service providing {{cookiecutter.RESOURCE_NAME}} info
     version: v1
     licenseUrl: https://github.com/{{cookiecutter.GITHUB_ORG_NAME}}/{{cookiecutter.PROJECT_NAME}}/blob/master/LICENSE
-    contactEmail: FIXME@{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_TL_NAME}}
+    contactEmail: {{cookiecutter.PROJECT_OWNER}}
     contactUrl: https://{{cookiecutter.PKG_SERVICE_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_TL_NAME}}/
     contactName: {{cookiecutter.SERVICE_NAME}}
     serverUrl: http://localhost:8080
+  boot:
+    kafka-lifecycle-notifier:
+      queue-name: example-entity-lifecycle
 
 opa:
   filter:
-    enabled: false
+    enabled: true
+    document-path: authz
+    instance: http://opa:8181
+    endpoints-whitelist: /actuator/**,/swagger-ui/**,/v3/api-docs/**

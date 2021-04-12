@@ -1,0 +1,22 @@
+/**
+ * Provides docker container settings
+ */
+
+plugins {
+    id 'starter.java.container-conventions'
+    id 'starter.java.build-utils-conventions'
+}
+
+docker {
+    name "${dockerRegistry}/${rootProject.name}-opa-init"
+    tag "Build", "${dockerRegistry}/${rootProject.name}-opa-init:${dockerImageVersion}"
+    tag "Latest", "${dockerRegistry}/${rootProject.name}-opa-init:latest"
+    copySpec.from("src/main/resources").into(".")
+}
+
+dockerRun {
+    image "${dockerRegistry}/${rootProject.name}-opa-init"
+    env 'FOO': getEnvOrDefault('FOO', 'foo')
+}
+
+

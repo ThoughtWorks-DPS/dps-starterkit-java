@@ -11,6 +11,13 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: none
+  kafka:
+    bootstrap-servers: "kafka:9092"
+
+opentracing:
+  zipkin:
+    enabled: true
+    http-sender.baseUrl: http://jaeger:9411
 
 logging:
   level:
@@ -20,3 +27,6 @@ logging:
     org.hibernate.SQL: INFO # DEBUG
     org.type.descriptor.sql.BasicBinder: INFO # TRACE
     org.hibernate.type.descriptor.sql.BasicBinder: INFO # TRACE
+    org.springframework.security.web.csrf.CsrfFilter: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web.cors: DEBUG

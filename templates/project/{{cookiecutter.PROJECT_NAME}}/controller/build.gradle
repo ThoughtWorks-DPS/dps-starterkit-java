@@ -12,6 +12,7 @@ dependencies {
     implementation project(':service:provider')
     implementation project(':service:spi')
     implementation "{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:exceptions"
+    implementation "{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:entity-lifecycle-notifier"
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
