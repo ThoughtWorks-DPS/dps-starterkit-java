@@ -27,7 +27,7 @@ cookiecutter --no-input --output-dir out/"$randDir" template
 if ! checkDirDiffs "$randDir";
   then
     echo "There are some differences between the template and the source starter code, either exclude the files or add them to their respective directories."
-    echo -e "Exclude files here: " $PWD/scripts/verify-generated-proj.sh
+    echo -e "Exclude files here: " "${PWD}"/scripts/verify-generated-proj.sh
     exit 1
 fi
 

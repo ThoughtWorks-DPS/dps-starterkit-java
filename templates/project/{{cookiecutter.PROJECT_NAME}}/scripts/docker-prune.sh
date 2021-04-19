@@ -14,7 +14,7 @@ dockerBinary=$(which docker)
 
 function remove_danglers {
   DANGLING_IMAGES=$($dockerBinary images -f "dangling=true" -q)
-  if [[ -n "$DANGLING_IMAGES" ]]; then ($dockerBinary rmi ${DANGLING_IMAGES}); fi
+  if [[ -n "$DANGLING_IMAGES" ]]; then ($dockerBinary rmi "${DANGLING_IMAGES}"); fi
 }
 
 
@@ -26,7 +26,7 @@ do
   --volume) $dockerBinary volume prune -f;;
   --dangle) remove_danglers;;
   --help) usage; exit 0;;
-  *) usage; exit -1;;
+  *) usage; exit 1;;
   esac
   shift
 done

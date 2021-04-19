@@ -8,6 +8,7 @@ brew "istioctl"
 brew "minikube"
 brew "docker"
 brew "codeclimate/formulae/codeclimate"
+brew "shellcheck"
 
 tap "adoptopenjdk/openjdk" || true
 cask "adoptopenjdk11"

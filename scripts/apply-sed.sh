@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-runpath=$(dirname $0)
+runpath=$(dirname "$0")
 script=
 file=""
 tree=""
@@ -37,7 +37,7 @@ do
   --path) shift; path=$1;;
   --preserve) shift; preserve=$1;;
   --help) usage; exit 0;;
-  *) usage; exit -1;;
+  *) usage; exit 1;;
   esac
   shift;
 done
@@ -49,14 +49,14 @@ then
   if [ ! -e "${script}" ]
   then
     echo "no path to ${script}, exiting..."
-    exit -1
+    exit 1
   fi
 fi
 
 if [ -e "${file}" ]
 then
   process_file "${script}" "${file}"
-  exit
+  exit 0
 fi
 
 if [ -d "${path}" ]

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-runpath=$(dirname $0)
 template="resource"
 url="gh:{{cookiecutter.GITHUB_ORG_NAME}}/dps-multi-module-starterkit-java.git"
 path="."
@@ -20,7 +19,7 @@ function apply_template {
   local template=$3
   local target=$4
 
-  cookiecutter ${url} --directory templates/${template} --checkout ${tag} -o ${target}
+  cookiecutter "${url}" --directory templates/"${template}" --checkout "${tag}" -o "${target}"
 }
 
 while [ $# -gt 0 ]
@@ -31,9 +30,9 @@ do
   --path) shift; path=$1;;
   --tag) shift; tag=$1;;
   --help) usage; exit 0;;
-  *) usage; exit -1;;
+  *) usage; exit 1;;
   esac
   shift;
 done
 
-apply_template ${url} ${tag} ${template} ${target}
+apply_template "${url}" "${tag}" "${template}" "${target}"
