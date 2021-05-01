@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class {{cookiecutter.RESOURCE_NAME}}Entity {
 
   @Id
@@ -35,4 +37,7 @@ public class {{cookiecutter.RESOURCE_NAME}}Entity {
   @NonNull private String pii;
   @NonNull private String firstName;
   @NonNull private String lastName;
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+  private String {{cookiecutter.PKG_PARENT_RESOURCE_NAME}}Id;
+{%- endif %}
 }

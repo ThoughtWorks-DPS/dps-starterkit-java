@@ -4,12 +4,21 @@ import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.e
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.exception.ResourceNotFoundException;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.EntityLifecycleNotifier;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.SUB_RESOURCE_NAME}}Request;
+{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.resources.{{cookiecutter.RESOURCE_NAME}}Resource;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.RESOURCE_NAME}}Response;
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.SUB_RESOURCE_NAME}}Response;
+{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.responses.PagedResponse;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.controller.{{cookiecutter.PKG_RESOURCE_NAME}}.mapper.{{cookiecutter.RESOURCE_NAME}}RequestMapper;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.{{cookiecutter.RESOURCE_NAME}}Service;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}};
+{%- endif %}
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -108,23 +117,84 @@ public class {{cookiecutter.RESOURCE_NAME}}Controller implements {{cookiecutter.
   }
 
 
-{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
-  Callback add{{cookiecutter.SUB_RESOURCE_NAME}}(String id, {{cookiecutter.SUB_RESOURCE_NAME}} subResource);
-      throws ResourceNotFoundException {
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
 
-    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+  @Override
+  // CSOFF: LineLength
+  public ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> add{{cookiecutter.SUB_RESOURCE_NAME}}(String id, {{cookiecutter.SUB_RESOURCE_NAME}}Request addEntityRequest)
+      // CSON: LineLength
+      throws RequestValidationException {
+
+    log.info("username->{}", addEntityRequest.getUserName());
+    {{cookiecutter.SUB_RESOURCE_NAME}} resource = mapper.toModel(addEntityRequest);
+    {{cookiecutter.SUB_RESOURCE_NAME}} saved = manager.addSubAccount(id, resource);
+    {{cookiecutter.SUB_RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(saved);
+    notifier.created(saved, entityVersion, URI.create("user:anonymous"));
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
-  Page<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}s(String id, Pageable pageable);
-
-  Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId);
-
-  Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> update{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId, {{cookiecutter.SUB_RESOURCE_NAME}} subResource);
-
-  Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> delete{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId)
+  @Override
+  // CSOFF: LineLength
+  public ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> get{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId)
+      // CSON: LineLength
       throws ResourceNotFoundException {
 
-    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    log.info("id->{}", id);
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> found = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(id, subResourceId);
+    return new ResponseEntity<>(
+        found
+            .map(r -> mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(r))
+            .orElseThrow(() -> new ResourceNotFoundException(id)),
+        HttpStatus.OK);
   }
+
+
+  @Override
+  // CSOFF: LineLength
+  public ResponseEntity<PagedResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> get{{cookiecutter.SUB_RESOURCE_NAME}}s(String id, Pageable pageable) {
+    // CSON: LineLength
+    Page<{{cookiecutter.SUB_RESOURCE_NAME}}> resources = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(id, pageable);
+
+    return new ResponseEntity<>(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ResponsePage(resources), HttpStatus.OK);
+  }
+
+
+  @Override
+  // CSOFF: LineLength
+  public ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> update{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId, {{cookiecutter.SUB_RESOURCE_NAME}}Request request)
+      // CSON: LineLength
+      throws ResourceNotFoundException, RequestValidationException {
+
+    log.info("id->{}", id);
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> found =
+        manager.update{{cookiecutter.SUB_RESOURCE_NAME}}(id, subResourceId, mapper.toModel(request));
+    if (found.isPresent()) {
+      notifier.updated(found.get(), entityVersion, URI.create("user:anonymous"));
+    }
+    return new ResponseEntity<>(
+        found
+            .map(r -> mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(r))
+            .orElseThrow(() -> new ResourceNotFoundException(id)),
+        HttpStatus.OK);
+  }
+
+  @Override
+  // CSOFF: LineLength
+  public ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> delete{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId)
+      // CSON: LineLength
+      throws ResourceNotFoundException {
+
+    log.info("id->{}", id);
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> found = manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(id, subResourceId);
+    if (found.isPresent()) {
+      notifier.deleted(found.get(), entityVersion, URI.create("user:anonymous"));
+    }
+    return new ResponseEntity<>(
+        found
+            .map(r -> mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(r))
+            .orElseThrow(() -> new ResourceNotFoundException(id)),
+        HttpStatus.OK);
+  }
+
 {%- endif %}
 }

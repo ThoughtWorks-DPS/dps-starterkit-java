@@ -22,13 +22,15 @@ class {{cookiecutter.SERVICE_NAME}}{{cookiecutter.RESOURCE_NAME}}ApiSimulation e
       .check(jsonPath("$.id").saveAs("userId")))
     .exec(http("Get {{cookiecutter.RESOURCE_NAME}}")
       .get("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/${userId}")) // 92534752-a39c-499c-aa13-528cd0143f7c
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
     .exec(http("Create {{cookiecutter.SUB_RESOURCE_NAME}}")
       .post("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/${userId}/{{cookiecutter.SUB_RESOURCE_URL}}")
-      .body(StringBody("""{"userName":"mary.q.contrary", "pii": "987-65-4321", "firstName": "Mary", "lastName":"Contrary"}"""))
+      .body(StringBody("""{"userName":"jack.sprat", "firstName": "Jack", "lastName":"Sprat"}"""))
       .asJson
       .check(jsonPath("$.id").saveAs("subUserId")))
     .exec(http("Get {{cookiecutter.SUB_RESOURCE_NAME}}")
       .get("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/${userId}/{{cookiecutter.SUB_RESOURCE_URL}}/${subUserId}")) // 92534752-a39c-499c-aa13-528cd0143f7c
+{%- endif %}
 
   setUp(scn
     .inject(

@@ -25,6 +25,9 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
   private final String firstName = "Joe";
   private final String lastName = "Smith";
   private final String identifier = "12345";
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+  private final String parentIdentifier = "abcde";
+{%- endif %}
 
   @BeforeEach
   public void setup() {
@@ -37,7 +40,9 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
 
     {{cookiecutter.RESOURCE_NAME}}Entity response = mapper.toEntity(resource);
 
-    verify{{cookiecutter.RESOURCE_NAME}}Entity(response, false);
+    verify{{cookiecutter.RESOURCE_NAME}}Entity(response, false
+    {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}, false{%- endif -%}
+    );
   }
 
   @Test
@@ -46,7 +51,9 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
 
     {{cookiecutter.RESOURCE_NAME}}Entity response = mapper.toEntity(resource);
 
-    verify{{cookiecutter.RESOURCE_NAME}}Entity(response);
+    verify{{cookiecutter.RESOURCE_NAME}}Entity(response
+    {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}, true, false{%- endif -%}
+    );
   }
 
   @Test
@@ -75,7 +82,9 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     Optional<{{cookiecutter.RESOURCE_NAME}}Entity> response = mapper.toEntity(resource);
 
     assertThat(response.isPresent());
-    verify{{cookiecutter.RESOURCE_NAME}}Entity(response.get(), false);
+    verify{{cookiecutter.RESOURCE_NAME}}Entity(response.get(), false
+    {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}, false{%- endif -%}
+    );
   }
 
   @Test
@@ -98,7 +107,9 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
 
   @Test
   public void mapperEntityListTest() {
-    List<{{cookiecutter.RESOURCE_NAME}}Entity> entities = Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}Entity(), create{{cookiecutter.RESOURCE_NAME}}Entity());
+    List<{{cookiecutter.RESOURCE_NAME}}Entity> entities = Arrays.asList(
+        create{{cookiecutter.RESOURCE_NAME}}Entity(),
+        create{{cookiecutter.RESOURCE_NAME}}Entity());
 
     List<{{cookiecutter.RESOURCE_NAME}}> response = mapper.toModelList(entities);
 
@@ -112,7 +123,10 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     Pageable pageable = PageRequest.of(0, 3);
     Page<{{cookiecutter.RESOURCE_NAME}}Entity> entities =
         new PageImpl<>(
-            Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}Entity(), create{{cookiecutter.RESOURCE_NAME}}Entity(), create{{cookiecutter.RESOURCE_NAME}}Entity()),
+            Arrays.asList(
+                create{{cookiecutter.RESOURCE_NAME}}Entity(),
+                create{{cookiecutter.RESOURCE_NAME}}Entity(),
+                create{{cookiecutter.RESOURCE_NAME}}Entity()),
             pageable,
             100);
 
@@ -144,7 +158,9 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
    * @return {{cookiecutter.RESOURCE_NAME}}Entity object
    */
   private {{cookiecutter.RESOURCE_NAME}}Entity create{{cookiecutter.RESOURCE_NAME}}Entity() {
-    return new {{cookiecutter.RESOURCE_NAME}}Entity(identifier, username, pii, firstName, lastName);
+    return new {{cookiecutter.RESOURCE_NAME}}Entity(identifier, username, pii, firstName, lastName
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}, parentIdentifier{%- endif -%}
+    );
   }
 
   /**
@@ -153,10 +169,10 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
    * @param response the object to validate
    */
   protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} response) {
-    assertThat(response.getUserName().equals(username));
-    assertThat(response.getPii().equals(pii));
-    assertThat(response.getFirstName().equals(firstName));
-    assertThat(response.getLastName().equals(lastName));
+    assertThat(response.getUserName()).isEqualTo(username);
+    assertThat(response.getPii()).isEqualTo(pii);
+    assertThat(response.getFirstName()).isEqualTo(firstName);
+    assertThat(response.getLastName()).isEqualTo(lastName);
     assertThat(response.getId()).isEqualTo(identifier);
   }
 
@@ -166,7 +182,9 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
    * @param response the object to validate
    */
   private void verify{{cookiecutter.RESOURCE_NAME}}Entity({{cookiecutter.RESOURCE_NAME}}Entity response) {
-    verify{{cookiecutter.RESOURCE_NAME}}Entity(response, true);
+    verify{{cookiecutter.RESOURCE_NAME}}Entity(response, true
+    {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}, true{%- endif -%}
+    );
   }
 
   /**
@@ -174,11 +192,22 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
    *
    * @param response the object to validate
    */
-  private void verify{{cookiecutter.RESOURCE_NAME}}Entity({{cookiecutter.RESOURCE_NAME}}Entity response, boolean hasId) {
-    assertThat(response.getUserName().equals(username));
-    assertThat(response.getPii().equals(pii));
-    assertThat(response.getFirstName().equals(firstName));
-    assertThat(response.getLastName().equals(lastName));
+  // CSOFF: LineLength
+  private void verify{{cookiecutter.RESOURCE_NAME}}Entity({{cookiecutter.RESOURCE_NAME}}Entity response, boolean hasId
+    {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}, boolean hasParentId{%- endif -%}
+    ) {
+    // CSON: LineLength
+    assertThat(response.getUserName()).isEqualTo(username);
+    assertThat(response.getPii()).isEqualTo(pii);
+    assertThat(response.getFirstName()).isEqualTo(firstName);
+    assertThat(response.getLastName()).isEqualTo(lastName);
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+    if (hasParentId) {
+      assertThat(response.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isEqualTo(parentIdentifier);
+    } else {
+      assertThat(response.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isNotEqualTo(parentIdentifier);
+    }
+{%- endif %}
     if (hasId) {
       assertThat(response.getId()).isEqualTo(identifier);
     } else {

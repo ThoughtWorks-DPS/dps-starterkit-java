@@ -12,16 +12,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.exception.RequestValidationException;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.exception.ResourceNotFoundException;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
-{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.SUB_RESOURCE_NAME}}Request;
 {%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.RESOURCE_NAME}}Response;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.Paged{{cookiecutter.RESOURCE_NAME}}Response;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.responses.PagedResponse;
-{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.SUB_RESOURCE_NAME}}Response;
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.Paged{{cookiecutter.SUB_RESOURCE_NAME}}Response;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.SUB_RESOURCE_NAME}}Response;
 {%- endif %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.responses.PagedResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -298,7 +298,8 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
           String id)
       throws ResourceNotFoundException;
 
-{%- if cookiecutter.CREATE_SUBRESOURCE == "y" %}
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+
   @Operation(summary = "Find a specific {{cookiecutter.SUB_RESOURCE_NAME}} based on entity identifier")
   @ApiResponses(
       value = {
@@ -316,7 +317,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
             content =
                 @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = Problem.class)))
+                    schema = @Schema(implementation = Problem.class))),
         @ApiResponse(
             responseCode = "401",
             description = "Not authorized",
@@ -410,7 +411,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
           @NotNull
           @PathVariable(value = "{{cookiecutter.SUB_RESOURCE_URL}}Id")
           String {{cookiecutter.SUB_RESOURCE_URL}}Id)
-              throws ResourceNotFoundException;
+      throws ResourceNotFoundException;
 
   @Operation(summary = "Get all {{cookiecutter.SUB_RESOURCE_NAME}}s related to a specific {{cookiecutter.RESOURCE_NAME}}")
   @ApiResponses(
@@ -449,7 +450,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
   @GetMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}")
   @ResponseStatus(HttpStatus.OK)
   @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.{{cookiecutter.SUB_RESOURCE_URL}}.findAll")
-  ResponseEntity<Page<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> get{{cookiecutter.SUB_RESOURCE_NAME}}s(
+  ResponseEntity<PagedResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> get{{cookiecutter.SUB_RESOURCE_NAME}}s(
       @Parameter(
               description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",
               example = "uuid",
@@ -471,7 +472,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = {{cookiecutter.RESOURCE_NAME}}Response.class))
+                  schema = @Schema(implementation = {{cookiecutter.SUB_RESOURCE_NAME}}Response.class))
             }),
         @ApiResponse(
             responseCode = "400",
@@ -484,16 +485,16 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
             responseCode = "401",
             description = "Not authorized",
             content =
-                  @Content(
-                      mediaType = "application/json",
-                      schema = @Schema(implementation = Problem.class))),
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
         @ApiResponse(
             responseCode = "403",
             description = "Forbidden",
             content =
-                  @Content(
-                      mediaType = "application/json",
-                      schema = @Schema(implementation = Problem.class))),
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Problem.class))),
         @ApiResponse(
             responseCode = "404",
             description = "{{cookiecutter.RESOURCE_NAME}} not found",
@@ -505,7 +506,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
   @PutMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}/{ {{cookiecutter.SUB_RESOURCE_URL}}Id}")
   @ResponseStatus(HttpStatus.OK)
   @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.{{cookiecutter.SUB_RESOURCE_URL}}.update")
-  ResponseEntity<Page<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> update{{cookiecutter.SUB_RESOURCE_NAME}}(
+  ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> update{{cookiecutter.SUB_RESOURCE_NAME}}(
       @Parameter(
               description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",
               example = "uuid",
@@ -572,7 +573,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
   @DeleteMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}/{ {{cookiecutter.SUB_RESOURCE_URL}}Id}")
   @ResponseStatus(HttpStatus.OK)
   @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.{{cookiecutter.SUB_RESOURCE_URL}}.delete")
-  ResponseEntity<Page<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> delete{{cookiecutter.SUB_RESOURCE_NAME}}(
+  ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> delete{{cookiecutter.SUB_RESOURCE_NAME}}(
       @Parameter(
               description = "unique identifier for {{cookiecutter.RESOURCE_NAME}} resource. Cannot null or empty.",
               example = "uuid",

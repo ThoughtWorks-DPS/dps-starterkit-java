@@ -80,9 +80,7 @@ spring:
       org.hibernate.envers.store_data_at_delete: true
       hibernate:
         generate_statistics: false
-        jdbc:
-          lob:
-            non_contextual_creation=true:
+        jdbc.lob.non_contextual_creation: true
   resources:
     add-mappings: false
   mvc:
@@ -92,24 +90,36 @@ spring:
       force: true
   kafka:
     bootstrap-servers: "localhost:9092"
-    topic:
-      name: example-entity-lifecycle
-    replication:
-      factor: 1
-    partition:
-      number: 2
+    topic.name: default-kafka-topic
+    replication.factor: 1
+    partition.number: 1
     consumer:
       auto-offset-reset: earliest
+      #client-id: "${pod.name}_${pod.namespace}_${pod.id}"
       group-id: starter
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties.spring.json.value.default.type: io.twdps.starter.boot.notifier.EntityLifecycleNotification
-      level:
-        concurrency: 5
+      key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
+      value-deserializer: io.twdps.starter.boot.kafka.CustomJsonDeserializer
+      level.concurrency: 1
+      properties:
+        spring.json.trusted.packages: io.twdps.starter.*
+        spring.json.value.default.type: io.twdps.starter.boot.notifier.EntityLifecycleNotification
     producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties.spring.json.value.default.type: io.twdps.starter.boot.notifier.EntityLifecycleNotification
+      # This means the leader will wait for the full set of in-sync replicas to acknowledge
+      # the record. This guarantees that the record will not be lost as long as at least one
+      # in-sync replica remains alive. This is the strongest available guarantee.
+      # This is equivalent to the acks=-1 setting. For an eventing architecture this should be
+      # our default setting - no need for extremely high speed compromises here.
+      acks: all
+      batch-size: 1048576
+      buffer-memory: 2097152
+      #client-id: "${pod.name}_${pod.namespace}_${pod.id}"
+      compression-type: lz4
+      retries: 3
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: io.twdps.starter.boot.kafka.CustomJsonSerializer
+      properties:
+        max.in.flight.requests.per.connection: 2
+        spring.json.value.default.type: io.twdps.starter.boot.notifier.EntityLifecycleNotification
 
 opentracing:
   zipkin:
@@ -138,7 +148,14 @@ starter:
     serverUrl: http://localhost:8080
   boot:
     kafka-lifecycle-notifier:
-      queue-name: example-entity-lifecycle
+      enabled: true
+      producer:
+        topic.name: example-entity-lifecycle
+        replication.factor: 1
+        partition.number: 1
+      consumer:
+        topic.name: example-entity-lifecycle
+        level.concurrency: 1
 
 opa:
   filter:

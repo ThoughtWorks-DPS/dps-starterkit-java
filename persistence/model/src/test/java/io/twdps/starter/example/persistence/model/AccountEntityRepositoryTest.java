@@ -86,7 +86,8 @@ public class AccountEntityRepositoryTest {
     populate();
 
     Pageable pageable = PageRequest.of(0, 1);
-    Page<AccountEntity> retrievedSmiths = modelEntityRepository.findByLastName(lastName, pageable);
+    Page<AccountEntity> retrievedSmiths =
+        modelEntityRepository.findByLastName(lastName, pageable);
 
     assertThat(retrievedSmiths.getContent().size()).isEqualTo(1);
   }

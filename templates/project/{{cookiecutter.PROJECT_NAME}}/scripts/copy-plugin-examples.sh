@@ -7,7 +7,7 @@ dst=./buildSrc/src/main/groovy
 if [ ! -d "${dst}" ]
 then
   echo "No [$dst] path exists"
-  exit -1
+  exit 1
 fi
 
 function copy_files {
@@ -17,8 +17,8 @@ function copy_files {
   for i in "${srcPath}"/*.gradle
   do
     file=$(basename "${i}")
-    echo "[$i] [$file]"
-    cp $i "${dstPath}"/"${file/starter/local}".example
+    echo "[${i}] [${file}]"
+    cp "${i}" "${dstPath}"/"${file/starter/local}".example
   done
 }
 

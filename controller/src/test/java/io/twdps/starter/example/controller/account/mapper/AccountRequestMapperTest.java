@@ -1,9 +1,12 @@
 package io.twdps.starter.example.controller.account.mapper;
 
 import io.twdps.starter.example.api.account.requests.AccountRequest;
+import io.twdps.starter.example.api.account.requests.SubAccountRequest;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
+import io.twdps.starter.example.api.account.responses.SubAccountResponse;
 import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.service.spi.account.model.Account;
+import io.twdps.starter.example.service.spi.account.model.SubAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -75,16 +78,20 @@ public class AccountRequestMapperTest {
   public void mapperOptionalEmptyTest() {
     Optional<Account> resource = Optional.empty();
 
-    AccountResponse response = mapper.toAccountResponse(resource);
+    AccountResponse response =
+        mapper.toAccountResponse(resource);
 
     assertThat(response).isNull();
   }
 
   @Test
   public void mapperEntityListTest() {
-    List<Account> resources = Arrays.asList(createAccount(identifier), createAccount(identifier));
+    List<Account> resources = Arrays.asList(
+        createAccount(identifier),
+        createAccount(identifier));
 
-    List<AccountResponse> response = mapper.toAccountResponseList(resources);
+    List<AccountResponse> response =
+        mapper.toAccountResponseList(resources);
 
     assertThat(response.size()).isEqualTo(2);
     verifyAccountResponse(response.get(0));
@@ -94,9 +101,10 @@ public class AccountRequestMapperTest {
   @Test
   public void mapperEntityPageTest() {
     Pageable pageable = PageRequest.of(0, 1);
-    Page<Account> resources = new PageImpl<>(Arrays.asList(createAccount(identifier)),
-        pageable, 100);
-    PagedResponse<AccountResponse> response = mapper.toAccountResponsePage(resources);
+    Page<Account> resources =
+        new PageImpl<>(Arrays.asList(createAccount(identifier)), pageable, 100);
+    PagedResponse<AccountResponse> response =
+        mapper.toAccountResponsePage(resources);
 
     assertThat(response.getItems().size()).isEqualTo(1);
     assertThat(response.getTotalItems()).isEqualTo(100);
@@ -104,6 +112,67 @@ public class AccountRequestMapperTest {
     assertThat(response.getPageSize()).isEqualTo(1);
     assertThat(response.getTotalPages()).isEqualTo(100);
     verifyAccountResponse(response.getItems().get(0));
+  }
+
+  @Test
+  public void mapperNewSubAccountTest() {
+    SubAccountRequest resource = createSubAccountRequest();
+
+    SubAccount response = mapper.toModel(resource);
+
+    verifySubAccount(response);
+  }
+
+  @Test
+  public void mapperSubAccountResponseTest() {
+    SubAccount resource = createSubAccount(identifier);
+
+    SubAccountResponse response = mapper.toSubAccountResponse(resource);
+
+    verifySubAccountResponse(response);
+  }
+
+  @Test
+  public void mapperOptionalSubAccountTest() {
+    Optional<SubAccount> resource =
+        Optional.of(createSubAccount(identifier));
+
+    SubAccountResponse response = mapper.toSubAccountResponse(resource);
+
+    assertThat(response).isNotNull();
+    verifySubAccountResponse(response);
+  }
+
+  @Test
+  public void mapperOptionalSubAccountNullTest() {
+    Optional<SubAccount> resource = Optional.ofNullable(null);
+
+    SubAccountResponse response = mapper.toSubAccountResponse(resource);
+
+    assertThat(response).isNull();
+  }
+
+  @Test
+  public void mapperOptionalSubAccountEmptyTest() {
+    Optional<SubAccount> resource = Optional.empty();
+
+    SubAccountResponse response = mapper.toSubAccountResponse(resource);
+
+    assertThat(response).isNull();
+  }
+
+  @Test
+  public void mapperSubEntityListTest() {
+    List<SubAccount> resources = Arrays.asList(
+        createSubAccount(identifier),
+        createSubAccount(identifier));
+
+    List<SubAccountResponse> response =
+        mapper.toSubAccountResponseList(resources);
+
+    assertThat(response.size()).isEqualTo(2);
+    verifySubAccountResponse(response.get(0));
+    verifySubAccountResponse(response.get(1));
   }
 
   /**
@@ -117,12 +186,31 @@ public class AccountRequestMapperTest {
   }
 
   /**
+   * convenience function to create subresource object.
+   *
+   * @param id whether to create with identifier (null if not)
+   * @return SubAccount object
+   */
+  private SubAccount createSubAccount(String id) {
+    return new SubAccount(id, username, firstName, lastName);
+  }
+
+  /**
    * convenience function to create resource request object.
    *
    * @return AccountRequest object
    */
   private AccountRequest createAccountRequest() {
     return new AccountRequest(username, pii, firstName, lastName);
+  }
+
+  /**
+   * convenience function to create subresource request object.
+   *
+   * @return SubAccountRequest object
+   */
+  private SubAccountRequest createSubAccountRequest() {
+    return new SubAccountRequest(username, firstName, lastName);
   }
 
   /**
@@ -141,12 +229,33 @@ public class AccountRequestMapperTest {
   /**
    * helper function to validate standard values.
    *
+   * @param resource the object to validate
+   */
+  protected void verifySubAccount(SubAccount resource) {
+    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getFirstName().equals(firstName));
+    assertThat(resource.getLastName().equals(lastName));
+    assertThat(resource.getId()).isNotEqualTo(identifier);
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
    * @param response the object to validate
    */
   private void verifyAccountResponse(AccountResponse response) {
     assertThat(response.getUserName().equals(username));
     assertThat(response.getPii().equals(pii));
     assertThat(response.getFullName().equals(fullName));
+    assertThat(response.getId()).isEqualTo(identifier);
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param response the object to validate
+   */
+  protected void verifySubAccountResponse(SubAccountResponse response) {
     assertThat(response.getId()).isEqualTo(identifier);
   }
 }

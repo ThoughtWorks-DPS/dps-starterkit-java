@@ -1,7 +1,3 @@
-package authz
-
-default allow = false
-
 allow {
   input.method == "GET"
   startswith(input.path, "/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}")

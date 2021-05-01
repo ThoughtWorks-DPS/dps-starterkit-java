@@ -98,7 +98,9 @@ public class AccountEntityMapperTest {
 
   @Test
   public void mapperEntityListTest() {
-    List<AccountEntity> entities = Arrays.asList(createAccountEntity(), createAccountEntity());
+    List<AccountEntity> entities = Arrays.asList(
+        createAccountEntity(),
+        createAccountEntity());
 
     List<Account> response = mapper.toModelList(entities);
 
@@ -112,7 +114,10 @@ public class AccountEntityMapperTest {
     Pageable pageable = PageRequest.of(0, 3);
     Page<AccountEntity> entities =
         new PageImpl<>(
-            Arrays.asList(createAccountEntity(), createAccountEntity(), createAccountEntity()),
+            Arrays.asList(
+                createAccountEntity(),
+                createAccountEntity(),
+                createAccountEntity()),
             pageable,
             100);
 
@@ -153,10 +158,10 @@ public class AccountEntityMapperTest {
    * @param response the object to validate
    */
   protected void verifyAccount(Account response) {
-    assertThat(response.getUserName().equals(username));
-    assertThat(response.getPii().equals(pii));
-    assertThat(response.getFirstName().equals(firstName));
-    assertThat(response.getLastName().equals(lastName));
+    assertThat(response.getUserName()).isEqualTo(username);
+    assertThat(response.getPii()).isEqualTo(pii);
+    assertThat(response.getFirstName()).isEqualTo(firstName);
+    assertThat(response.getLastName()).isEqualTo(lastName);
     assertThat(response.getId()).isEqualTo(identifier);
   }
 
@@ -174,11 +179,13 @@ public class AccountEntityMapperTest {
    *
    * @param response the object to validate
    */
+  // CSOFF: LineLength
   private void verifyAccountEntity(AccountEntity response, boolean hasId) {
-    assertThat(response.getUserName().equals(username));
-    assertThat(response.getPii().equals(pii));
-    assertThat(response.getFirstName().equals(firstName));
-    assertThat(response.getLastName().equals(lastName));
+    // CSON: LineLength
+    assertThat(response.getUserName()).isEqualTo(username);
+    assertThat(response.getPii()).isEqualTo(pii);
+    assertThat(response.getFirstName()).isEqualTo(firstName);
+    assertThat(response.getLastName()).isEqualTo(lastName);
     if (hasId) {
       assertThat(response.getId()).isEqualTo(identifier);
     } else {

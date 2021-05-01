@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class AccountEntity {
 
   @Id

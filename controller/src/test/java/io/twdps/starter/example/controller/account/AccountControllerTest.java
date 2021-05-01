@@ -5,11 +5,14 @@ import io.twdps.starter.boot.notifier.EntityLifecycleNotifier;
 import io.twdps.starter.boot.notifier.MemoizedTimestampProvider;
 import io.twdps.starter.boot.notifier.NoopEntityLifecycleNotifier;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
+import io.twdps.starter.example.api.account.requests.SubAccountRequest;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
+import io.twdps.starter.example.api.account.responses.SubAccountResponse;
 import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.controller.account.mapper.AccountRequestMapper;
 import io.twdps.starter.example.service.spi.account.AccountService;
 import io.twdps.starter.example.service.spi.account.model.Account;
+import io.twdps.starter.example.service.spi.account.model.SubAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +52,7 @@ public class AccountControllerTest {
   private final String lastName = "Smith";
   private final String identifier = "12345";
   private final String fullName = "Joe Smith";
+  private final String subIdentifier = "abcde";
 
   private Account resource;
   private Account output;
@@ -67,6 +71,23 @@ public class AccountControllerTest {
   private Page<Account> outputPage;
   private Page<Account> emptyOutputPage;
   private Pageable pageable = Pageable.unpaged();
+
+  private SubAccount subResource;
+  private SubAccount subOutput;
+  private SubAccountRequest subRequest;
+  private SubAccountResponse subResponse;
+  private Optional<SubAccount> emptySubAccount = Optional.empty();
+  private Optional<SubAccountResponse> emptySubResponse = Optional.empty();
+  private Optional<SubAccountResponse> optionalSubResponse;
+  private Optional<SubAccount> optionalSubOutput;
+  private List<SubAccountResponse> subResponseList;
+  private List<SubAccount> subOutputList;
+  private List<SubAccountResponse> emptySubResponseList = Arrays.asList();
+  private List<SubAccount> emptySubOutputList = Arrays.asList();
+  private PagedResponse<SubAccountResponse> subResponsePage;
+  private PagedResponse<SubAccountResponse> emptySubResponsePage;
+  private Page<SubAccount> subOutputPage;
+  private Page<SubAccount> emptySubOutputPage;
 
   /** setup data for each test. */
   @BeforeEach
@@ -95,6 +116,65 @@ public class AccountControllerTest {
     emptyResponsePage = new PagedResponse<>(emptyResponseList, 0, (long) 0, 0, 0);
     outputPage = new PageImpl<>(outputList);
     emptyOutputPage = new PageImpl<>(emptyOutputList);
+
+    subRequest = new SubAccountRequest(username, firstName, lastName);
+    subResource = real.toModel(subRequest);
+    subOutput =
+        new SubAccount(
+            subIdentifier,
+            subResource.getUserName(),
+            subResource.getFirstName(),
+            subResource.getLastName());
+    subResponse = real.toSubAccountResponse(subOutput);
+    optionalSubResponse = Optional.of(subResponse);
+    optionalSubOutput = Optional.of(subOutput);
+    subResponseList = Arrays.asList(subResponse, subResponse);
+    subOutputList = Arrays.asList(subOutput, subOutput);
+    subResponsePage = new PagedResponse<>(subResponseList, 10, (long) 100, 1, 10);
+    emptySubResponsePage = new PagedResponse<>(emptySubResponseList, 0, (long) 0, 0, 0);
+    subOutputPage = new PageImpl<>(subOutputList);
+    emptySubOutputPage = new PageImpl<>(emptySubOutputList);
+  }
+
+  private void createMapperStubs() {
+    Mockito.when(mapper.toModel(request)).thenReturn(resource);
+  }
+
+  private void createResponseMapperStubs() {
+    Mockito.when(mapper.toAccountResponse(output)).thenReturn(response);
+  }
+
+  private void createOptionalMapperStubs() {
+    Mockito.when(mapper.toAccountResponse(optionalOutput)).thenReturn(response);
+  }
+
+  private void createListMapperStubs() {
+    Mockito.when(mapper.toAccountResponsePage(outputPage)).thenReturn(responsePage);
+  }
+
+  private void createEmptyListMapperStubs() {
+    Mockito.when(mapper.toAccountResponsePage(emptyOutputPage)).thenReturn(emptyResponsePage);
+  }
+
+  private void createSubAccountMapperStubs() {
+    Mockito.when(mapper.toModel(subRequest)).thenReturn(subResource);
+  }
+
+  private void createSubAccountResponseMapperStubs() {
+    Mockito.when(mapper.toSubAccountResponse(subOutput)).thenReturn(subResponse);
+  }
+
+  private void createOptionalSubAccountMapperStubs() {
+    Mockito.when(mapper.toSubAccountResponse(optionalSubOutput)).thenReturn(subResponse);
+  }
+
+  private void createSubAccountListMapperStubs() {
+    Mockito.when(mapper.toSubAccountResponsePage(subOutputPage)).thenReturn(subResponsePage);
+  }
+
+  private void createEmptySubAccountListMapperStubs() {
+    Mockito.when(mapper.toSubAccountResponsePage(emptySubOutputPage))
+        .thenReturn(emptySubResponsePage);
   }
 
   @Test
@@ -116,7 +196,8 @@ public class AccountControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.add(resource)).thenReturn(output);
 
-    ResponseEntity<AccountResponse> response = controller.addEntity(request);
+    ResponseEntity<AccountResponse> response =
+        controller.addEntity(request);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(201);
     assertThat(response.getBody()).isNotNull();
@@ -131,7 +212,8 @@ public class AccountControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.findById(identifier)).thenReturn(optionalOutput);
 
-    ResponseEntity<AccountResponse> response = controller.findEntityById(identifier);
+    ResponseEntity<AccountResponse> response =
+        controller.findEntityById(identifier);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getPii()).isEqualTo(pii);
@@ -147,7 +229,8 @@ public class AccountControllerTest {
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<AccountResponse> response = controller.findEntityById(bogusName);
+          ResponseEntity<AccountResponse> response =
+              controller.findEntityById(bogusName);
         });
   }
 
@@ -157,7 +240,8 @@ public class AccountControllerTest {
     createListMapperStubs();
     Mockito.when(manager.findAll(pageable)).thenReturn(outputPage);
 
-    ResponseEntity<PagedResponse<AccountResponse>> response = controller.findEntities(pageable);
+    ResponseEntity<PagedResponse<AccountResponse>> response =
+        controller.findEntities(pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getItems().size()).isEqualTo(2);
@@ -170,7 +254,8 @@ public class AccountControllerTest {
     createEmptyListMapperStubs();
     Mockito.when(manager.findAll(pageable)).thenReturn(emptyOutputPage);
 
-    ResponseEntity<PagedResponse<AccountResponse>> response = controller.findEntities(pageable);
+    ResponseEntity<PagedResponse<AccountResponse>> response =
+        controller.findEntities(pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getItems().size()).isEqualTo(0);
@@ -183,7 +268,8 @@ public class AccountControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.updateById(identifier, resource)).thenReturn(optionalOutput);
 
-    ResponseEntity<AccountResponse> response = controller.updateEntityById(identifier, request);
+    ResponseEntity<AccountResponse> response =
+        controller.updateEntityById(identifier, request);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getPii()).isEqualTo(pii);
@@ -211,7 +297,8 @@ public class AccountControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.deleteById(identifier)).thenReturn(optionalOutput);
 
-    ResponseEntity<AccountResponse> response = controller.deleteEntityById(identifier);
+    ResponseEntity<AccountResponse> response =
+        controller.deleteEntityById(identifier);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getPii()).isEqualTo(pii);
@@ -227,28 +314,154 @@ public class AccountControllerTest {
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<AccountResponse> response = controller.deleteEntityById(bogusName);
+          ResponseEntity<AccountResponse> response =
+              controller.deleteEntityById(bogusName);
         });
   }
 
-  private void createMapperStubs() {
-    Mockito.when(mapper.toModel(request)).thenReturn(resource);
+  @Test
+  public void findBySubAccountIdFailTest() throws Exception {
+
+    Mockito.when(manager.getSubAccount(identifier, bogusName))
+        .thenReturn(emptySubAccount);
+
+    assertThrows(
+        ResourceNotFoundException.class,
+        () -> {
+          ResponseEntity<SubAccountResponse> response =
+              controller.getSubAccount(identifier, bogusName);
+        });
   }
 
-  private void createResponseMapperStubs() {
-    Mockito.when(mapper.toAccountResponse(output)).thenReturn(response);
+  @Test
+  public void addSubAccountTest() throws Exception {
+
+    createSubAccountMapperStubs();
+    createSubAccountResponseMapperStubs();
+    Mockito.when(manager.addSubAccount(identifier, subResource))
+        .thenReturn(subOutput);
+
+    ResponseEntity<SubAccountResponse> response =
+        controller.addSubAccount(identifier, subRequest);
+
+    assertThat(response.getStatusCodeValue()).isEqualTo(201);
+    assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().getId()).isEqualTo(subIdentifier);
   }
 
-  private void createOptionalMapperStubs() {
-    Mockito.when(mapper.toAccountResponse(optionalOutput)).thenReturn(response);
+  @Test
+  public void findSubAccountByIdTest() throws Exception {
+
+    createSubAccountResponseMapperStubs();
+    Mockito.when(manager.getSubAccount(identifier, subIdentifier))
+        .thenReturn(optionalSubOutput);
+
+    ResponseEntity<SubAccountResponse> response =
+        controller.getSubAccount(identifier, subIdentifier);
+
+    assertThat(response.getStatusCodeValue()).isEqualTo(200);
+    assertThat(response.getBody().getId()).isEqualTo(subIdentifier);
   }
 
-  private void createListMapperStubs() {
-    Mockito.when(mapper.toAccountResponsePage(outputPage)).thenReturn(responsePage);
+  @Test
+  public void findSubAccountByIdFailedTest() throws Exception {
+
+    Mockito.when(manager.getSubAccount(identifier, bogusName))
+        .thenReturn(emptySubAccount);
+
+    assertThrows(
+        ResourceNotFoundException.class,
+        () -> {
+          ResponseEntity<SubAccountResponse> response =
+              controller.getSubAccount(identifier, bogusName);
+        });
   }
 
-  private void createEmptyListMapperStubs() {
-    Mockito.when(mapper.toAccountResponsePage(emptyOutputPage)).thenReturn(emptyResponsePage);
+  @Test
+  public void findAllSubAccountTest() throws Exception {
+
+    createSubAccountListMapperStubs();
+    Mockito.when(manager.getSubAccounts(identifier, pageable))
+        .thenReturn(subOutputPage);
+
+    ResponseEntity<PagedResponse<SubAccountResponse>> response =
+        controller.getSubAccounts(identifier, pageable);
+
+    assertThat(response.getStatusCodeValue()).isEqualTo(200);
+    assertThat(response.getBody().getItems().size()).isEqualTo(2);
+    // Todo: check contents of the list objects
+  }
+
+  @Test
+  public void findAllSubAccountEmptyTest() throws Exception {
+
+    createEmptySubAccountListMapperStubs();
+    Mockito.when(manager.getSubAccounts(identifier, pageable))
+        .thenReturn(emptySubOutputPage);
+
+    ResponseEntity<PagedResponse<SubAccountResponse>> response =
+        controller.getSubAccounts(identifier, pageable);
+
+    assertThat(response.getStatusCodeValue()).isEqualTo(200);
+    assertThat(response.getBody().getItems().size()).isEqualTo(0);
+  }
+
+  @Test
+  public void updateSubAccountTest() throws Exception {
+
+    createSubAccountMapperStubs();
+    createSubAccountResponseMapperStubs();
+    Mockito.when(manager.updateSubAccount(identifier, subIdentifier, subResource))
+        .thenReturn(optionalSubOutput);
+
+    ResponseEntity<SubAccountResponse> response =
+        controller.updateSubAccount(identifier, subIdentifier, subRequest);
+
+    assertThat(response.getStatusCodeValue()).isEqualTo(200);
+    assertThat(response.getBody().getId()).isEqualTo(subIdentifier);
+  }
+
+  @Test
+  public void updateSubAccountFailedTest() throws Exception {
+
+    createSubAccountMapperStubs();
+    Mockito.when(manager.updateSubAccount(identifier, bogusName, subResource))
+        .thenReturn(emptySubAccount);
+
+    assertThrows(
+        ResourceNotFoundException.class,
+        () -> {
+          ResponseEntity<SubAccountResponse> response =
+              controller.updateSubAccount(identifier, bogusName, subRequest);
+        });
+  }
+
+  @Test
+  public void deleteSubAccountTest() throws Exception {
+
+    createSubAccountResponseMapperStubs();
+    Mockito.when(manager.deleteSubAccount(identifier, subIdentifier))
+        .thenReturn(optionalSubOutput);
+
+    ResponseEntity<SubAccountResponse> response =
+        controller.deleteSubAccount(identifier, subIdentifier);
+
+    assertThat(response.getStatusCodeValue()).isEqualTo(200);
+    assertThat(response.getBody().getId()).isEqualTo(subIdentifier);
+  }
+
+  @Test
+  public void deleteSubAccountFailedTest() throws Exception {
+
+    Mockito.when(manager.deleteSubAccount(identifier, bogusName))
+        .thenReturn(emptySubAccount);
+
+    assertThrows(
+        ResourceNotFoundException.class,
+        () -> {
+          ResponseEntity<SubAccountResponse> response =
+              controller.deleteSubAccount(identifier, bogusName);
+        });
   }
 
   /**
@@ -267,12 +480,33 @@ public class AccountControllerTest {
   /**
    * helper function to validate standard values.
    *
+   * @param resource the object to validate
+   */
+  protected void verifySubAccount(SubAccount resource) {
+    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getFirstName().equals(firstName));
+    assertThat(resource.getLastName().equals(lastName));
+    assertThat(resource.getId()).isNotEqualTo(identifier);
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
    * @param response the object to validate
    */
   private void verifyAccountResponse(AccountResponse response) {
     assertThat(response.getUserName().equals(username));
     assertThat(response.getPii().equals(pii));
     assertThat(response.getFullName().equals(fullName));
+    assertThat(response.getId()).isEqualTo(identifier);
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param response the object to validate
+   */
+  protected void verifySubAccountResponse(SubAccountResponse response) {
     assertThat(response.getId()).isEqualTo(identifier);
   }
 }

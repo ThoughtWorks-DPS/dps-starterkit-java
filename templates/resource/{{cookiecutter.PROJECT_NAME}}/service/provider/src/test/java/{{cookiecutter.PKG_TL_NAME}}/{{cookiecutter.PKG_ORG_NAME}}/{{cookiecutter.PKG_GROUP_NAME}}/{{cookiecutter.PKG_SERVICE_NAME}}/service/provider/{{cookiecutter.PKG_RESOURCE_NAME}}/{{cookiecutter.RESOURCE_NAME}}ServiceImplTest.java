@@ -2,8 +2,15 @@ package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutte
 
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.RESOURCE_NAME}}Entity;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.RESOURCE_NAME}}EntityRepository;
+{% if cookiecutter.CREATE_SUB_RESOURCE == "y" -%}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.SUB_RESOURCE_NAME}}Entity;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.SUB_RESOURCE_NAME}}EntityRepository;
+{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.provider.{{cookiecutter.PKG_RESOURCE_NAME}}.mapper.{{cookiecutter.RESOURCE_NAME}}EntityMapper;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}};
+{%- endif %}
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +36,9 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
 
   @Mock private {{cookiecutter.RESOURCE_NAME}}EntityRepository repository;
   @Mock private {{cookiecutter.RESOURCE_NAME}}EntityMapper mapper;
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+  @Mock private {{cookiecutter.SUB_RESOURCE_NAME}}EntityRepository subResourceRepository;
+{%- endif %}
 
   private final String username = "jsmith";
   private final String pii = "123-45-6789";
@@ -36,6 +46,10 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   private final String firstName = "Joe";
   private final String lastName = "Smith";
   private final String identifier = "12345";
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+  private final String subIdentifier = "abcde";
+  private final String parentIdentifier = "12345";
+{%- endif %}
 
   private {{cookiecutter.RESOURCE_NAME}} resource;
   private {{cookiecutter.RESOURCE_NAME}} output;
@@ -56,11 +70,34 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   private Page<{{cookiecutter.RESOURCE_NAME}}> emptyOutputPage;
   private Pageable pageable = Pageable.unpaged();
 
+  {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+
+  private {{cookiecutter.SUB_RESOURCE_NAME}} subResource;
+  private {{cookiecutter.SUB_RESOURCE_NAME}} subOutput;
+  private {{cookiecutter.SUB_RESOURCE_NAME}}Entity subEntity;
+  private {{cookiecutter.SUB_RESOURCE_NAME}}Entity subAdded;
+  private Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> empty{{cookiecutter.SUB_RESOURCE_NAME}} = Optional.empty();
+  private Optional<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> emptySubEntity = Optional.empty();
+  private Optional<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> optionalSubEntity;
+  private Optional<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> optionalSubAdded;
+  private Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> optionalSubOutput;
+  private List<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> subEntityList;
+  private List<{{cookiecutter.SUB_RESOURCE_NAME}}> subOutputList;
+  private List<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> emptySubEntityList = Arrays.asList();
+  private List<{{cookiecutter.SUB_RESOURCE_NAME}}> emptySubOutputList = Arrays.asList();
+  private Page<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> subEntityPage;
+  private Page<{{cookiecutter.SUB_RESOURCE_NAME}}> subOutputPage;
+  private Page<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> emptySubEntityPage;
+  private Page<{{cookiecutter.SUB_RESOURCE_NAME}}> emptySubOutputPage;
+{%- endif %}
+
   /** setup data for each test. */
   @BeforeEach
   public void setup() {
 
-    manager = new {{cookiecutter.RESOURCE_NAME}}ServiceImpl(repository, mapper);
+    manager = new {{cookiecutter.RESOURCE_NAME}}ServiceImpl(repository, mapper
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}, subResourceRepository{%- endif -%}
+    );
 
     // use the real mapper to generate consistent objects to use in mapper stubs
     {{cookiecutter.RESOURCE_NAME}}EntityMapper real = Mappers.getMapper({{cookiecutter.RESOURCE_NAME}}EntityMapper.class);
@@ -79,7 +116,11 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
             entity.getUserName(),
             entity.getPii(),
             entity.getFirstName(),
-            entity.getLastName());
+            entity.getLastName()
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+            entity.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
+{%- endif -%}
+    );
     output = real.toModel(added);
     optionalEntity = Optional.of(entity);
     optionalAdded = Optional.of(added);
@@ -90,6 +131,35 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     outputPage = new PageImpl<>(outputList);
     emptyEntityPage = new PageImpl<>(emptyEntityList);
     emptyOutputPage = new PageImpl<>(emptyOutputList);
+
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+
+    subResource =
+        {{cookiecutter.SUB_RESOURCE_NAME}}.builder()
+            .userName(username)
+            .firstName(firstName)
+            .lastName(lastName)
+            .build();
+    subEntity = real.to{{cookiecutter.SUB_RESOURCE_NAME}}Entity(subResource);
+    subAdded =
+        new {{cookiecutter.SUB_RESOURCE_NAME}}Entity(
+            subIdentifier,
+            subEntity.getUserName(),
+            subEntity.getPii(),
+            subEntity.getFirstName(),
+            subEntity.getLastName(),
+            parentIdentifier);
+    subOutput = real.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(subAdded);
+    optionalSubEntity = Optional.of(subEntity);
+    optionalSubAdded = Optional.of(subAdded);
+    optionalSubOutput = Optional.of(subOutput);
+    subEntityList = Arrays.asList(subAdded, subAdded);
+    subOutputList = Arrays.asList(subOutput, subOutput);
+    subEntityPage = new PageImpl<>(subEntityList);
+    subOutputPage = new PageImpl<>(subOutputList);
+    emptySubEntityPage = new PageImpl<>(emptySubEntityList);
+    emptySubOutputPage = new PageImpl<>(emptySubOutputList);
+{%- endif %}
   }
 
   private void createMapperStubs() {
@@ -112,6 +182,30 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   private void createEmptyListMapperStubs() {
     Mockito.when(mapper.toModelPage(emptyEntityPage)).thenReturn(emptyOutputPage);
   }
+
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+
+  private void create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs() {
+    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Entity(subResource)).thenReturn(subEntity);
+    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(subAdded)).thenReturn(subOutput);
+  }
+
+  private void createOptional{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs() {
+    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(optionalSubAdded)).thenReturn(optionalSubOutput);
+  }
+
+  private void createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs() {
+    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(emptySubEntity)).thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
+  }
+
+  private void create{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs() {
+    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ModelPage(subEntityPage)).thenReturn(subOutputPage);
+  }
+
+  private void createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs() {
+    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ModelPage(emptySubEntityPage)).thenReturn(emptySubOutputPage);
+  }
+{%- endif %}
 
   @Test
   public void findBy{{cookiecutter.RESOURCE_NAME}}IdFailTest() {
@@ -279,4 +373,139 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
 
     Assertions.assertThat(response.isEmpty()).isTrue();
   }
+
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+
+  @Test
+  public void findBy{{cookiecutter.SUB_RESOURCE_NAME}}IdFailTest() {
+
+    createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
+    Mockito.when(subResourceRepository.findById(Mockito.any())).thenReturn(emptySubEntity);
+
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> result =
+        manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, "bogus");
+    Assertions.assertThat(!result.isPresent()).isTrue();
+  }
+
+  @Test
+  public void add{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
+
+    create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
+    Mockito.when(subResourceRepository.save(subEntity)).thenReturn(subAdded);
+
+    {{cookiecutter.SUB_RESOURCE_NAME}} response =
+        manager.add{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subResource);
+
+    Assertions.assertThat(response.getFirstName()).isEqualTo(subResource.getFirstName());
+    Assertions.assertThat(response.getId()).isEqualTo(subAdded.getId());
+    Assertions.assertThat(response.getId()).isEqualTo(subIdentifier);
+  }
+
+  @Test
+  public void find{{cookiecutter.SUB_RESOURCE_NAME}}ByIdTest() {
+
+    createOptional{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
+    Mockito.when(subResourceRepository.findById(subIdentifier)).thenReturn(optionalSubAdded);
+
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
+        manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier);
+
+    Assertions.assertThat(response.isPresent()).isTrue();
+    Assertions.assertThat(response.get().getFirstName()).isEqualTo(subAdded.getFirstName());
+    Assertions.assertThat(response.get().getId()).isEqualTo(subAdded.getId());
+  }
+
+  @Test
+  public void find{{cookiecutter.SUB_RESOURCE_NAME}}ByIdFailedTest() {
+
+    createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
+    Mockito.when(subResourceRepository.findById(bogusName)).thenReturn(emptySubEntity);
+
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
+        manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName);
+
+    Assertions.assertThat(response.isEmpty()).isTrue();
+  }
+
+  @Test
+  public void findAll{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
+
+    create{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs();
+    Mockito.when(subResourceRepository.findAllBy{{cookiecutter.PARENT_RESOURCE_NAME}}Id(identifier, pageable))
+        .thenReturn(subEntityPage);
+
+    Page<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
+        manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable);
+
+    Assertions.assertThat(response.getContent().size()).isEqualTo(2);
+  }
+
+  @Test
+  public void findAll{{cookiecutter.SUB_RESOURCE_NAME}}EmptyTest() {
+
+    createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs();
+    Mockito.when(subResourceRepository.findAllBy{{cookiecutter.PARENT_RESOURCE_NAME}}Id(identifier, pageable))
+        .thenReturn(emptySubEntityPage);
+
+    Page<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
+        manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable);
+
+    Assertions.assertThat(response.getContent().size()).isEqualTo(0);
+  }
+
+  @Test
+  public void update{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
+
+    createOptional{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
+    Mockito.when(mapper.update{{cookiecutter.SUB_RESOURCE_NAME}}Metadata(subResource, subAdded))
+        .thenReturn(subAdded);
+    Mockito.when(subResourceRepository.findById(subIdentifier)).thenReturn(optionalSubAdded);
+    Mockito.when(subResourceRepository.save(subAdded)).thenReturn(subAdded);
+
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
+        manager.update{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier, subResource);
+
+    Assertions.assertThat(response.isPresent()).isTrue();
+    Assertions.assertThat(response.get().getFirstName()).isEqualTo(subResource.getFirstName());
+    Assertions.assertThat(response.get().getId()).isEqualTo(subIdentifier);
+  }
+
+  @Test
+  public void update{{cookiecutter.SUB_RESOURCE_NAME}}FailedTest() {
+
+    createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
+    Mockito.when(subResourceRepository.findById(subIdentifier)).thenReturn(emptySubEntity);
+
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
+        manager.update{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier, subResource);
+
+    Assertions.assertThat(response.isEmpty()).isTrue();
+  }
+
+  @Test
+  public void delete{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
+
+    createOptional{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
+    Mockito.when(subResourceRepository.findById(subIdentifier)).thenReturn(optionalSubAdded);
+
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
+        manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier);
+
+    Assertions.assertThat(response.isPresent()).isTrue();
+    Assertions.assertThat(response.get().getFirstName()).isEqualTo(subAdded.getFirstName());
+    Assertions.assertThat(response.get().getId()).isEqualTo(subAdded.getId());
+  }
+
+  @Test
+  public void delete{{cookiecutter.SUB_RESOURCE_NAME}}FailedTest() {
+
+    createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
+    Mockito.when(subResourceRepository.findById(bogusName)).thenReturn(emptySubEntity);
+
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
+        manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName);
+
+    Assertions.assertThat(response.isEmpty()).isTrue();
+  }
+{%- endif %}
 }
