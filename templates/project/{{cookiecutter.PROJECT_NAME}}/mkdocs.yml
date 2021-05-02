@@ -1,0 +1,13 @@
+site_name: '{{cookiecutter.PROJECT_NAME}}'
+site_description: '{{cookiecutter.PROJECT_DESCRIPTION}}'
+
+nav:
+  - 'Overview': index.md
+  - 'Quick Start': quickstart.md
+  - 'Tutorial': tutorial.md
+  - 'Reference': reference.md
+  - 'Architecture Decisions':
+      - '0001 - Record Decisions': architecture-decisions/0001-record-architecture-decisions.md
+
+#plugins:
+#  - techdocs-core

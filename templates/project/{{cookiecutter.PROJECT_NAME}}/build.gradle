@@ -38,6 +38,7 @@ plugins {
     id("org.asciidoctor.jvm.pdf") version "${asciidoctor_plugin_version}" apply false
     id("org.asciidoctor.jvm.gems") version "${asciidoctor_plugin_version}" apply false
     id("org.asciidoctor.jvm.convert") version "${asciidoctor_plugin_version}" apply false
+    id("starter.java.property-conventions") version "${starter_boot_version}"
     id("starter.java.release-conventions") version "${starter_boot_version}"
     id("starter.metrics.build-time-tracker-conventions") version "${starter_boot_version}"
     id("starter.java.versions-conventions") version "${starter_boot_version}"
