@@ -2,7 +2,6 @@ package io.twdps.starter.example.service.provider.subaccount;
 
 import io.twdps.starter.example.persistence.model.SubAccountEntity;
 import io.twdps.starter.example.persistence.model.SubAccountEntityRepository;
-
 import io.twdps.starter.example.service.provider.subaccount.mapper.SubAccountEntityMapper;
 import io.twdps.starter.example.service.spi.subaccount.model.SubAccount;
 import lombok.extern.slf4j.Slf4j;
