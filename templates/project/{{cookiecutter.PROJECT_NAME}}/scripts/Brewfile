@@ -9,6 +9,7 @@ brew "minikube"
 brew "docker"
 brew "codeclimate/formulae/codeclimate"
 brew "shellcheck"
+brew "mkdocs"
 
 tap "adoptopenjdk/openjdk" || true
 cask "adoptopenjdk11"

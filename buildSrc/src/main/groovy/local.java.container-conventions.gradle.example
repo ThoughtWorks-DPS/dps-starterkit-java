@@ -3,12 +3,16 @@
  */
 
 plugins {
+    id 'base'
     id 'com.palantir.docker'
     id 'com.palantir.docker-run'
+    id 'com.palantir.docker-compose'
 }
+// Requires
+// id 'starter.java.build-utils-property-conventions'
 
 ext {
-    dockerRegistry =  project.hasProperty("dockerRegistry") ? "${project.dockerRegistry}" : "${group}"
+    dockerRegistry = project.hasProperty("dockerRegistry") ? "${project.dockerRegistry}" : "${group}"
     dockerImageVersion = project.hasProperty("buildNumber") ? "${project.version}-${project.buildNumber}" : project.version
 }
 
@@ -18,25 +22,62 @@ docker {
     tag "Build", "${dockerRegistry}/${rootProject.name}:${dockerImageVersion}"
     tag "Latest", "${dockerRegistry}/${rootProject.name}:latest"
     noCache true
-    files "build/libs/${bootJar.archiveFileName.get()}", 'bin'
-    buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
+    dockerfile file('src/docker/Dockerfile')
 }
 
 dockerRun {
     name project.name
     image "${dockerRegistry}/${rootProject.name}"
     ports '8080:8080'
-    env 'SECRETHUB_HELLO': (System.getenv('SECRETHUB_HELLO') == null
-            ? 'override-me'
-            : System.getenv('SECRETHUB_HELLO'))
+    env 'SECRETHUB_HELLO': getEnvOrDefault('SECRETHUB_HELLO', 'override-me')
 }
 
-task dockerPrune(type: Exec) {
-    dependsOn('dockerStop', 'dockerRemoveContainer')
-    dockerRemoveContainer.mustRunAfter('dockerStop')
-    commandLine './scripts/docker-prune.sh'
+dockerCompose {
+    dockerComposeFile 'src/docker/docker-compose.yml'
 }
 
-task dockerStart(type: GradleBuild) {
-    tasks = ["dockerPrune","clean", "dockerClean", "docker", "dockerRun"]
+def dockerStart = tasks.register('dockerStart', DefaultTask) {
+    dependsOn "dockerPrune", "docker", "dockerRun"
+}
+
+def dockerPrune = tasks.register('dockerPrune', DefaultTask) {
+    mustRunAfter 'dockerStop', 'dockerRemoveContainer'
+    dependsOn 'dockerPruneContainer', 'dockerPruneImage'
+}
+
+def dockerPruneContainer = tasks.register('dockerPruneContainer', Exec) {
+    executable "docker"
+    args "container", "prune", "-f"
+}
+
+def dockerPruneImage = tasks.register('dockerPruneImage', Exec) {
+    executable "docker"
+    args "image", "prune", "-f"
+}
+
+def dockerPruneVolume = tasks.register('dockerPruneVolume', Exec) {
+    executable "docker"
+    args "volume", "prune", "-f"
+}
+
+def dcPrune = tasks.register('dcPrune', DefaultTask) {
+    mustRunAfter('dockerComposeDown')
+    dependsOn 'dockerPruneContainer', 'dockerPruneImage'
+}
+
+def dcPruneVolume = tasks.register('dcPruneVolume', DefaultTask) {
+    mustRunAfter('dockerComposeDown')
+    dependsOn 'dockerPruneVolume'
+}
+
+tasks.named("dockerRemoveContainer").configure {
+    mustRunAfter('dockerStop')
+}
+
+tasks.named("dockerComposeUp").configure {
+    dependsOn tasks.named("docker")
+}
+
+tasks.named("dockerRun").configure {
+    dependsOn tasks.named("docker")
 }

@@ -16,7 +16,12 @@ dst=
 clear=n
 
 function usage {
-  echo "$0 [--path <path>] [--dst <dest path> ] [--repo <reponame>] [--gh-org <github Org name>] [--tl <toplevel>] [--org <organization>] [--orig-repo <reponame>] [--orig-gh-org <github Org name>] [--orig-tl <original toplevel>] [--orig-org <original org>] [--nuke-git] [--clear] [--test]"
+  echo "$0 [--path <path>] [--dst <dest path> ] \\"
+  echo "    [--repo <reponame>] [--gh-org <github Org name>] \\"
+  echo "    [--tl <toplevel>] [--org <organization>] \\"
+  echo "    [--orig-repo <reponame>] [--orig-gh-org <github Org name>] \\"
+  echo "    [--orig-tl <original toplevel>] [--orig-org <original org>] \\"
+  echo "    [--nuke-git] [--clear] [--test]"
   echo "  --path        path to process ($path)"
   echo "  --dst         copy to destination (no in-place mods) ($dst)"
   echo "  --repo        repository name ($repoName)"
@@ -46,6 +51,7 @@ do
   case $1 in
   --path) shift; path=$1;;
   --dst) shift; dst=$1;;
+  --repo) shift; repoName=$1;;
   --test) dst=$(mktemp -d /tmp/rebrand.XXXXXX);;
   --gh-org) shift; githubOrg=$1;;
   --orig-gh-org) shift; githubOrgOrig=$1;;
@@ -58,7 +64,7 @@ do
   --nuke-git) nukeGit="y";;
   --clear) clear="y";;
   --help) usage; exit 0;;
-  *) usage; exit 1;;
+  *) echo "Unknown argument(s): $*"; usage; exit 1;;
   esac
   shift;
 done
@@ -69,11 +75,14 @@ then
   then
     mkdir -p "${dst}" || exit 1
   else
-    [[ "${clear}" == "y" ]] && rm -rf "${dst:?}"/{*,.*}
+    [[ "${clear}" == "y" ]] && rm -rf "${dst:?}"/{*,.*} 2> /dev/null
   fi
   cp -r "${path}" "${dst}"
   path="${dst}"
 fi
+
+[ -e "${path}"/.git ] && [ "${nukeGit}" = "y" ] && rm -rf "${path}"/.git
+[ -e "${path}"/.git ] && [ "${nukeGit}" = "n" ] && echo "Local .git repository still exists, consider deleting..."
 
 githubOrgOrigLower=$(echo "${githubOrgOrig}" | tr '[:upper:]' '[:lower:]')
 sedFile=$(mktemp /tmp/sed.XXXXXX) || exit 1
@@ -107,10 +116,7 @@ binDir=$(dirname "$0")
   --orig-group "${groupOrig}" \
   --orig-service "" \
   --orig-resource ""
-"${binDir}"/apply-sed.sh --tree "${path}" --sed "${sedFile}"
-
-[ -e "${path}"/.git ] && [ "${nukeGit}" = "y" ] && rm -rf "${path}"/.git
-[ -e "${path}"/.git ] && [ "${nukeGit}" = "n" ] && echo "Local .git repository still exists, consider deleting..."
+"${binDir}"/apply-sed.sh --sed "${sedFile}" --tree "${path}"
 
 cd "${pwd}"  || fail "unable to change directory to [${pwd}]"
 rm "${sedFile}"

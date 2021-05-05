@@ -1,5 +1,5 @@
 plugins {
     id 'starter.java.build-utils-git-conventions'
-    id 'starter.java.doc-markdown-conventions'
+    id 'starter.java.build-utils-fileset-conventions'
 }
 
