@@ -42,7 +42,7 @@ Open up to see test results.
 
 ```bash
 docker exec -it -u root docker_kafka_1 /bin/bash -c \
-  '$KAFKA_HOME/bin/kafka-console-consumer.sh --from-beginning --bootstrap-server kafka:9092 --topic=example-entity-lifecycle'
+  '$KAFKA_HOME/bin/kafka-console-consumer.sh --from-beginning --bootstrap-server kafka:9092 --topic={{cookiecutter.SERVICE_URL}}-entity-lifecycle'
 ```
 
 ### Setting up SecretHub credentials

@@ -150,11 +150,11 @@ starter:
     kafka-lifecycle-notifier:
       enabled: true
       producer:
-        topic.name: example-entity-lifecycle
+        topic.name: {{cookiecutter.SERVICE_URL}}-entity-lifecycle
         replication.factor: 1
         partition.number: 1
       consumer:
-        topic.name: example-entity-lifecycle
+        topic.name: {{cookiecutter.SERVICE_URL}}-entity-lifecycle
         level.concurrency: 1
 
 opa:
