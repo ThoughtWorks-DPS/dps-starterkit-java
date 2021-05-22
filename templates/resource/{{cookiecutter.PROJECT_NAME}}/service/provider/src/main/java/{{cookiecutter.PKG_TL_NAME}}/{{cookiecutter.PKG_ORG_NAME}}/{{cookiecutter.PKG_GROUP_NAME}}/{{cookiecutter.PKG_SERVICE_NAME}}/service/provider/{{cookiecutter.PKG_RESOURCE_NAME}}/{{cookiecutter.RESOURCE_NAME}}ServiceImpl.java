@@ -50,6 +50,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
    * @param resource resource info to add (id should be null)
    * @return new resource object with valid id
    */
+  @Override
   public {{cookiecutter.RESOURCE_NAME}} add({{cookiecutter.RESOURCE_NAME}} resource)
       throws RequestValidationException {
     {{cookiecutter.RESOURCE_NAME}} saved = mapper.toModel(repository.save(mapper.toEntity(resource)));
@@ -62,6 +63,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
    * @param lastName criteria for match
    * @return list of matching {{cookiecutter.RESOURCE_NAME}} records
    */
+  @Override
   public Page<{{cookiecutter.RESOURCE_NAME}}> findByLastName(String lastName, Pageable pageable) {
     log.info("looking up by lastname of:{}", lastName);
     Page<{{cookiecutter.RESOURCE_NAME}}> responseList =
@@ -76,6 +78,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
    * @param userName username criteria to match
    * @return matching record, or null
    */
+  @Override
   public Optional<{{cookiecutter.RESOURCE_NAME}}> findByUserName(String userName) {
     log.info("looking up by username:{}", userName);
     Optional<{{cookiecutter.RESOURCE_NAME}}> resource = mapper.toModel(repository.findByUserName(userName));
@@ -125,6 +128,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
    * @param subResource resource info to add (id should be null)
    * @return new resource object with valid id
    */
+  @Override
   // CSOFF: LineLength
   public {{cookiecutter.SUB_RESOURCE_NAME}} add{{cookiecutter.SUB_RESOURCE_NAME}}(String id, {{cookiecutter.SUB_RESOURCE_NAME}} subResource)
       // CSON: LineLength

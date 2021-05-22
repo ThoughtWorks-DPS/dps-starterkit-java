@@ -64,3 +64,5 @@ out/
 ### patch cruft
 *.orig
 *.rej
+
+*DS_Store

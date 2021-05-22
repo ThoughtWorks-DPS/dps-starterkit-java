@@ -57,7 +57,7 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
 
   private final String message = "message";
   private final String detail = "detail";
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String bogusName = "bogus";
   private final String firstName = "Joe";
@@ -72,8 +72,8 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
   // This object will be magically initialized by the initFields method below.
 
   @Autowired private JacksonTester<{{cookiecutter.RESOURCE_NAME}}Request> jsonRequest;
-  private {{cookiecutter.RESOURCE_NAME}}Request request = new {{cookiecutter.RESOURCE_NAME}}Request(username, pii, firstName, lastName);
-  private {{cookiecutter.RESOURCE_NAME}} model = new {{cookiecutter.RESOURCE_NAME}}(username, pii, firstName, lastName);
+  private {{cookiecutter.RESOURCE_NAME}}Request request = new {{cookiecutter.RESOURCE_NAME}}Request(userName, pii, firstName, lastName);
+  private {{cookiecutter.RESOURCE_NAME}} model = new {{cookiecutter.RESOURCE_NAME}}(userName, pii, firstName, lastName);
 
   @Test
   void whenResourceNotRetrieved_thenReturns404() throws Exception {

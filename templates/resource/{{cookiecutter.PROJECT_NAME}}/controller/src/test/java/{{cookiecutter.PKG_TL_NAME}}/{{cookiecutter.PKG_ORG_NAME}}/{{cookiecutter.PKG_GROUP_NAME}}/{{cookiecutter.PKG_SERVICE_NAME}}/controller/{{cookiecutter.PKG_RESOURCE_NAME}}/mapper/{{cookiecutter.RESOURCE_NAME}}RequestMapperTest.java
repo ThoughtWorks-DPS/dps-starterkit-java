@@ -31,7 +31,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
 
   private {{cookiecutter.RESOURCE_NAME}}RequestMapper mapper;
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String firstName = "Joe";
   private final String lastName = "Smith";
@@ -191,7 +191,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @return {{cookiecutter.RESOURCE_NAME}} object
    */
   private {{cookiecutter.RESOURCE_NAME}} create{{cookiecutter.RESOURCE_NAME}}(String id) {
-    return new {{cookiecutter.RESOURCE_NAME}}(id, username, pii, firstName, lastName);
+    return new {{cookiecutter.RESOURCE_NAME}}(id, userName, pii, firstName, lastName);
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
@@ -203,7 +203,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @return {{cookiecutter.SUB_RESOURCE_NAME}} object
    */
   private {{cookiecutter.SUB_RESOURCE_NAME}} create{{cookiecutter.SUB_RESOURCE_NAME}}(String id) {
-    return new {{cookiecutter.SUB_RESOURCE_NAME}}(id, username, firstName, lastName);
+    return new {{cookiecutter.SUB_RESOURCE_NAME}}(id, userName, firstName, lastName);
   }
 {%- endif %}
 
@@ -213,7 +213,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @return {{cookiecutter.RESOURCE_NAME}}Request object
    */
   private {{cookiecutter.RESOURCE_NAME}}Request create{{cookiecutter.RESOURCE_NAME}}Request() {
-    return new {{cookiecutter.RESOURCE_NAME}}Request(username, pii, firstName, lastName);
+    return new {{cookiecutter.RESOURCE_NAME}}Request(userName, pii, firstName, lastName);
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
@@ -224,7 +224,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @return {{cookiecutter.SUB_RESOURCE_NAME}}Request object
    */
   private {{cookiecutter.SUB_RESOURCE_NAME}}Request create{{cookiecutter.SUB_RESOURCE_NAME}}Request() {
-    return new {{cookiecutter.SUB_RESOURCE_NAME}}Request(username, firstName, lastName);
+    return new {{cookiecutter.SUB_RESOURCE_NAME}}Request(userName, firstName, lastName);
   }
 {%- endif %}
 
@@ -234,7 +234,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @param resource the object to validate
    */
   protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getUserName().equals(userName));
     assertThat(resource.getPii().equals(pii));
     assertThat(resource.getFirstName().equals(firstName));
     assertThat(resource.getLastName().equals(lastName));
@@ -249,7 +249,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @param resource the object to validate
    */
   protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}({{cookiecutter.SUB_RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getUserName().equals(userName));
     assertThat(resource.getFirstName().equals(firstName));
     assertThat(resource.getLastName().equals(lastName));
     assertThat(resource.getId()).isNotEqualTo(identifier);
@@ -262,7 +262,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @param response the object to validate
    */
   private void verify{{cookiecutter.RESOURCE_NAME}}Response({{cookiecutter.RESOURCE_NAME}}Response response) {
-    assertThat(response.getUserName().equals(username));
+    assertThat(response.getUserName().equals(userName));
     assertThat(response.getPii().equals(pii));
     assertThat(response.getFullName().equals(fullName));
     assertThat(response.getId()).isEqualTo(identifier);

@@ -19,7 +19,7 @@ import java.util.Optional;
 @Mapper(componentModel = "spring")
 public interface {{cookiecutter.RESOURCE_NAME}}EntityMapper {
 {% if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
-  @Mapping(target = "{{cookiecutter.PKG_PARENT_RESOURCE_NAME}}Id", ignore = true)
+  @Mapping(target = "{{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id", ignore = true)
 {%- endif %}
   {{cookiecutter.RESOURCE_NAME}}Entity toEntity({{cookiecutter.RESOURCE_NAME}} src);
 
@@ -43,14 +43,14 @@ public interface {{cookiecutter.RESOURCE_NAME}}EntityMapper {
 
   @Mapping(target = "id", ignore = true)
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
-  @Mapping(target = "{{cookiecutter.PKG_PARENT_RESOURCE_NAME}}Id", ignore = true)
+  @Mapping(target = "{{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id", ignore = true)
 {%- endif %}
   {{cookiecutter.RESOURCE_NAME}}Entity updateMetadata({{cookiecutter.RESOURCE_NAME}} src, @MappingTarget {{cookiecutter.RESOURCE_NAME}}Entity dst);
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
 
   @Mapping(target = "pii", constant = "FIXME")
-  @Mapping(target = "{{cookiecutter.PKG_PARENT_RESOURCE_NAME}}Id", ignore = true)
+  @Mapping(target = "{{cookiecutter.RESOURCE_VAR_NAME}}Id", ignore = true)
   {{cookiecutter.SUB_RESOURCE_NAME}}Entity to{{cookiecutter.SUB_RESOURCE_NAME}}Entity({{cookiecutter.SUB_RESOURCE_NAME}} src);
 
   default Optional<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> to{{cookiecutter.SUB_RESOURCE_NAME}}Entity(Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> src) {
@@ -73,7 +73,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}EntityMapper {
 
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "pii", ignore = true)
-  @Mapping(target = "{{cookiecutter.PKG_PARENT_RESOURCE_NAME}}Id", ignore = true)
+  @Mapping(target = "{{cookiecutter.RESOURCE_VAR_NAME}}Id", ignore = true)
   {{cookiecutter.SUB_RESOURCE_NAME}}Entity update{{cookiecutter.SUB_RESOURCE_NAME}}Metadata({{cookiecutter.SUB_RESOURCE_NAME}} src, @MappingTarget {{cookiecutter.SUB_RESOURCE_NAME}}Entity dst);
 {%- endif %}
 }

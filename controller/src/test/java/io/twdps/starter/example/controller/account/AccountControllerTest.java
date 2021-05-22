@@ -45,7 +45,7 @@ public class AccountControllerTest {
   private EntityLifecycleNotifier notifier =
       new NoopEntityLifecycleNotifier(new MemoizedTimestampProvider(ZonedDateTime.now()));
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String bogusName = "bogus";
   private final String firstName = "Joe";
@@ -98,7 +98,7 @@ public class AccountControllerTest {
     // use the real mapper to generate consistent objects to use in mapper stubs
     AccountRequestMapper real = Mappers.getMapper(AccountRequestMapper.class);
 
-    request = new AccountRequest(username, pii, firstName, lastName);
+    request = new AccountRequest(userName, pii, firstName, lastName);
     resource = real.toModel(request);
     output =
         new Account(
@@ -117,7 +117,7 @@ public class AccountControllerTest {
     outputPage = new PageImpl<>(outputList);
     emptyOutputPage = new PageImpl<>(emptyOutputList);
 
-    subRequest = new SubAccountRequest(username, firstName, lastName);
+    subRequest = new SubAccountRequest(userName, firstName, lastName);
     subResource = real.toModel(subRequest);
     subOutput =
         new SubAccount(
@@ -470,7 +470,7 @@ public class AccountControllerTest {
    * @param resource the object to validate
    */
   protected void verifyAccount(Account resource) {
-    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getUserName().equals(userName));
     assertThat(resource.getPii().equals(pii));
     assertThat(resource.getFirstName().equals(firstName));
     assertThat(resource.getLastName().equals(lastName));
@@ -483,7 +483,7 @@ public class AccountControllerTest {
    * @param resource the object to validate
    */
   protected void verifySubAccount(SubAccount resource) {
-    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getUserName().equals(userName));
     assertThat(resource.getFirstName().equals(firstName));
     assertThat(resource.getLastName().equals(lastName));
     assertThat(resource.getId()).isNotEqualTo(identifier);
@@ -495,7 +495,7 @@ public class AccountControllerTest {
    * @param response the object to validate
    */
   private void verifyAccountResponse(AccountResponse response) {
-    assertThat(response.getUserName().equals(username));
+    assertThat(response.getUserName().equals(userName));
     assertThat(response.getPii().equals(pii));
     assertThat(response.getFullName().equals(fullName));
     assertThat(response.getId()).isEqualTo(identifier);

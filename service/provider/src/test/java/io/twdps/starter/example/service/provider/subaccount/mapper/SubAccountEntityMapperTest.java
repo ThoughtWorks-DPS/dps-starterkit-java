@@ -20,7 +20,7 @@ public class SubAccountEntityMapperTest {
 
   private SubAccountEntityMapper mapper;
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String firstName = "Joe";
   private final String lastName = "Smith";
@@ -141,7 +141,7 @@ public class SubAccountEntityMapperTest {
    * @return SubAccount object
    */
   private SubAccount createSubAccount(String id) {
-    return new SubAccount(id, username, pii, firstName, lastName);
+    return new SubAccount(id, userName, pii, firstName, lastName);
   }
 
   /**
@@ -150,7 +150,7 @@ public class SubAccountEntityMapperTest {
    * @return SubAccountEntity object
    */
   private SubAccountEntity createSubAccountEntity() {
-    return new SubAccountEntity(identifier, username, pii, firstName, lastName, parentIdentifier);
+    return new SubAccountEntity(identifier, userName, pii, firstName, lastName, parentIdentifier);
   }
 
   /**
@@ -159,7 +159,7 @@ public class SubAccountEntityMapperTest {
    * @param response the object to validate
    */
   protected void verifySubAccount(SubAccount response) {
-    assertThat(response.getUserName()).isEqualTo(username);
+    assertThat(response.getUserName()).isEqualTo(userName);
     assertThat(response.getPii()).isEqualTo(pii);
     assertThat(response.getFirstName()).isEqualTo(firstName);
     assertThat(response.getLastName()).isEqualTo(lastName);
@@ -183,7 +183,7 @@ public class SubAccountEntityMapperTest {
   // CSOFF: LineLength
   private void verifySubAccountEntity(SubAccountEntity response, boolean hasId, boolean hasParentId) {
     // CSON: LineLength
-    assertThat(response.getUserName()).isEqualTo(username);
+    assertThat(response.getUserName()).isEqualTo(userName);
     assertThat(response.getPii()).isEqualTo(pii);
     assertThat(response.getFirstName()).isEqualTo(firstName);
     assertThat(response.getLastName()).isEqualTo(lastName);

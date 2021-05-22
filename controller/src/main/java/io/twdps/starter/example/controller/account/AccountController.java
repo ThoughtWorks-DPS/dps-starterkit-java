@@ -36,8 +36,8 @@ public class AccountController implements AccountResource {
   /**
    * constructor.
    *
-   * @param manager instance of account manager
-   * @param mapper instance of account request mappper
+   * @param manager instance of Account manager
+   * @param mapper instance of Account request mappper
    */
   public AccountController(
       AccountService manager, AccountRequestMapper mapper, EntityLifecycleNotifier notifier) {

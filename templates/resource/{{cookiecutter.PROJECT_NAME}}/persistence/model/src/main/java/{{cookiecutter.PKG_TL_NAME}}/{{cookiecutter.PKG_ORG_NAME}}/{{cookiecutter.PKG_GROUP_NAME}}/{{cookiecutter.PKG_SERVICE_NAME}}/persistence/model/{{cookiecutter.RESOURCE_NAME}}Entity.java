@@ -38,6 +38,6 @@ public class {{cookiecutter.RESOURCE_NAME}}Entity {
   @NonNull private String firstName;
   @NonNull private String lastName;
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
-  private String {{cookiecutter.PKG_PARENT_RESOURCE_NAME}}Id;
+  private String {{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id;
 {%- endif %}
 }

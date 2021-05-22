@@ -15,6 +15,6 @@ public interface {{cookiecutter.RESOURCE_NAME}}EntityRepository
   Page<{{cookiecutter.RESOURCE_NAME}}Entity> findByLastName(String lastName, Pageable pageable);
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
 
-  Page<{{cookiecutter.RESOURCE_NAME}}Entity> findAllBy{{cookiecutter.PARENT_RESOURCE_NAME}}Id(String {{cookiecutter.PKG_PARENT_RESOURCE_NAME}}Id, Pageable pageable);
+  Page<{{cookiecutter.RESOURCE_NAME}}Entity> findAllBy{{cookiecutter.PARENT_RESOURCE_NAME}}Id(String {{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id, Pageable pageable);
 {%- endif %}
 }

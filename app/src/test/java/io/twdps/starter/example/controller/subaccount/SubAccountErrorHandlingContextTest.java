@@ -57,7 +57,7 @@ class SubAccountErrorHandlingContextTest {
 
   private final String message = "message";
   private final String detail = "detail";
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String bogusName = "bogus";
   private final String firstName = "Joe";
@@ -72,8 +72,8 @@ class SubAccountErrorHandlingContextTest {
   // This object will be magically initialized by the initFields method below.
 
   @Autowired private JacksonTester<SubAccountRequest> jsonRequest;
-  private SubAccountRequest request = new SubAccountRequest(username, pii, firstName, lastName);
-  private SubAccount model = new SubAccount(username, pii, firstName, lastName);
+  private SubAccountRequest request = new SubAccountRequest(userName, pii, firstName, lastName);
+  private SubAccount model = new SubAccount(userName, pii, firstName, lastName);
 
   @Test
   void whenResourceNotRetrieved_thenReturns404() throws Exception {

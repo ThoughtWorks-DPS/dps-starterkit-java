@@ -42,7 +42,7 @@ public class SubAccountControllerTest {
   private EntityLifecycleNotifier notifier =
       new NoopEntityLifecycleNotifier(new MemoizedTimestampProvider(ZonedDateTime.now()));
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String bogusName = "bogus";
   private final String firstName = "Joe";
@@ -77,7 +77,7 @@ public class SubAccountControllerTest {
     // use the real mapper to generate consistent objects to use in mapper stubs
     SubAccountRequestMapper real = Mappers.getMapper(SubAccountRequestMapper.class);
 
-    request = new SubAccountRequest(username, pii, firstName, lastName);
+    request = new SubAccountRequest(userName, pii, firstName, lastName);
     resource = real.toModel(request);
     output =
         new SubAccount(
@@ -265,7 +265,7 @@ public class SubAccountControllerTest {
    * @param resource the object to validate
    */
   protected void verifySubAccount(SubAccount resource) {
-    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getUserName().equals(userName));
     assertThat(resource.getPii().equals(pii));
     assertThat(resource.getFirstName().equals(firstName));
     assertThat(resource.getLastName().equals(lastName));
@@ -278,7 +278,7 @@ public class SubAccountControllerTest {
    * @param response the object to validate
    */
   private void verifySubAccountResponse(SubAccountResponse response) {
-    assertThat(response.getUserName().equals(username));
+    assertThat(response.getUserName().equals(userName));
     assertThat(response.getPii().equals(pii));
     assertThat(response.getFullName().equals(fullName));
     assertThat(response.getId()).isEqualTo(identifier);

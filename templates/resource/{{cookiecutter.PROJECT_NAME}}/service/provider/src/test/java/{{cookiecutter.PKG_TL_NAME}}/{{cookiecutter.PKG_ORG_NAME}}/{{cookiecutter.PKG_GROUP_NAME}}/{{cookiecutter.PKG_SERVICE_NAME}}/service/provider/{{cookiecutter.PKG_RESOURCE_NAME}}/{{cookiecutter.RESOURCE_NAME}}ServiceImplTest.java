@@ -40,7 +40,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   @Mock private {{cookiecutter.SUB_RESOURCE_NAME}}EntityRepository subResourceRepository;
 {%- endif %}
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String bogusName = "bogus";
   private final String firstName = "Joe";
@@ -104,7 +104,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
 
     resource =
         {{cookiecutter.RESOURCE_NAME}}.builder()
-            .userName(username)
+            .userName(userName)
             .pii(pii)
             .firstName(firstName)
             .lastName(lastName)
@@ -136,7 +136,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
 
     subResource =
         {{cookiecutter.SUB_RESOURCE_NAME}}.builder()
-            .userName(username)
+            .userName(userName)
             .firstName(firstName)
             .lastName(lastName)
             .build();
@@ -233,9 +233,9 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void findByUserNameTest() {
 
     createOptionalMapperStubs();
-    Mockito.when(repository.findByUserName(username)).thenReturn(optionalAdded);
+    Mockito.when(repository.findByUserName(userName)).thenReturn(optionalAdded);
 
-    Optional<{{cookiecutter.RESOURCE_NAME}}> response = manager.findByUserName(username);
+    Optional<{{cookiecutter.RESOURCE_NAME}}> response = manager.findByUserName(userName);
 
     Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(added.getFirstName());
@@ -257,9 +257,9 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void findByLastNameTest() {
 
     createListMapperStubs();
-    Mockito.when(repository.findByLastName(username, pageable)).thenReturn(entityPage);
+    Mockito.when(repository.findByLastName(userName, pageable)).thenReturn(entityPage);
 
-    Page<{{cookiecutter.RESOURCE_NAME}}> response = manager.findByLastName(username, pageable);
+    Page<{{cookiecutter.RESOURCE_NAME}}> response = manager.findByLastName(userName, pageable);
 
     Assertions.assertThat(response.getContent().isEmpty()).isFalse();
     Assertions.assertThat(response.getContent().get(0).getFirstName())
@@ -431,7 +431,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void findAll{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs();
-    Mockito.when(subResourceRepository.findAllBy{{cookiecutter.PARENT_RESOURCE_NAME}}Id(identifier, pageable))
+    Mockito.when(subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(identifier, pageable))
         .thenReturn(subEntityPage);
 
     Page<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
@@ -444,7 +444,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void findAll{{cookiecutter.SUB_RESOURCE_NAME}}EmptyTest() {
 
     createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs();
-    Mockito.when(subResourceRepository.findAllBy{{cookiecutter.PARENT_RESOURCE_NAME}}Id(identifier, pageable))
+    Mockito.when(subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(identifier, pageable))
         .thenReturn(emptySubEntityPage);
 
     Page<{{cookiecutter.SUB_RESOURCE_NAME}}> response =

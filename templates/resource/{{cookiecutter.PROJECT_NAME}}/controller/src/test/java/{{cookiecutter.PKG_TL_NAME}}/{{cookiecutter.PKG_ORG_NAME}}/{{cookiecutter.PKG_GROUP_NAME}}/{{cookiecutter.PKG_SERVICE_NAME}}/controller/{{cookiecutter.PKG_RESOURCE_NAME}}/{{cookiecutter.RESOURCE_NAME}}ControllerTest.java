@@ -51,7 +51,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   private EntityLifecycleNotifier notifier =
       new NoopEntityLifecycleNotifier(new MemoizedTimestampProvider(ZonedDateTime.now()));
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String bogusName = "bogus";
   private final String firstName = "Joe";
@@ -109,7 +109,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     // use the real mapper to generate consistent objects to use in mapper stubs
     {{cookiecutter.RESOURCE_NAME}}RequestMapper real = Mappers.getMapper({{cookiecutter.RESOURCE_NAME}}RequestMapper.class);
 
-    request = new {{cookiecutter.RESOURCE_NAME}}Request(username, pii, firstName, lastName);
+    request = new {{cookiecutter.RESOURCE_NAME}}Request(userName, pii, firstName, lastName);
     resource = real.toModel(request);
     output =
         new {{cookiecutter.RESOURCE_NAME}}(
@@ -130,7 +130,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
 
-    subRequest = new {{cookiecutter.SUB_RESOURCE_NAME}}Request(username, firstName, lastName);
+    subRequest = new {{cookiecutter.SUB_RESOURCE_NAME}}Request(userName, firstName, lastName);
     subResource = real.toModel(subRequest);
     subOutput =
         new {{cookiecutter.SUB_RESOURCE_NAME}}(
@@ -491,7 +491,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
    * @param resource the object to validate
    */
   protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getUserName().equals(userName));
     assertThat(resource.getPii().equals(pii));
     assertThat(resource.getFirstName().equals(firstName));
     assertThat(resource.getLastName().equals(lastName));
@@ -506,7 +506,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
    * @param resource the object to validate
    */
   protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}({{cookiecutter.SUB_RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getUserName().equals(userName));
     assertThat(resource.getFirstName().equals(firstName));
     assertThat(resource.getLastName().equals(lastName));
     assertThat(resource.getId()).isNotEqualTo(identifier);
@@ -519,7 +519,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
    * @param response the object to validate
    */
   private void verify{{cookiecutter.RESOURCE_NAME}}Response({{cookiecutter.RESOURCE_NAME}}Response response) {
-    assertThat(response.getUserName().equals(username));
+    assertThat(response.getUserName().equals(userName));
     assertThat(response.getPii().equals(pii));
     assertThat(response.getFullName().equals(fullName));
     assertThat(response.getId()).isEqualTo(identifier);

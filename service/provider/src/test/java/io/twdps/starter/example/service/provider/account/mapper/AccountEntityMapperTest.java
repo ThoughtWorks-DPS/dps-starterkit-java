@@ -20,7 +20,7 @@ public class AccountEntityMapperTest {
 
   private AccountEntityMapper mapper;
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String firstName = "Joe";
   private final String lastName = "Smith";
@@ -140,7 +140,7 @@ public class AccountEntityMapperTest {
    * @return Account object
    */
   private Account createAccount(String id) {
-    return new Account(id, username, pii, firstName, lastName);
+    return new Account(id, userName, pii, firstName, lastName);
   }
 
   /**
@@ -149,7 +149,7 @@ public class AccountEntityMapperTest {
    * @return AccountEntity object
    */
   private AccountEntity createAccountEntity() {
-    return new AccountEntity(identifier, username, pii, firstName, lastName);
+    return new AccountEntity(identifier, userName, pii, firstName, lastName);
   }
 
   /**
@@ -158,7 +158,7 @@ public class AccountEntityMapperTest {
    * @param response the object to validate
    */
   protected void verifyAccount(Account response) {
-    assertThat(response.getUserName()).isEqualTo(username);
+    assertThat(response.getUserName()).isEqualTo(userName);
     assertThat(response.getPii()).isEqualTo(pii);
     assertThat(response.getFirstName()).isEqualTo(firstName);
     assertThat(response.getLastName()).isEqualTo(lastName);
@@ -182,7 +182,7 @@ public class AccountEntityMapperTest {
   // CSOFF: LineLength
   private void verifyAccountEntity(AccountEntity response, boolean hasId) {
     // CSON: LineLength
-    assertThat(response.getUserName()).isEqualTo(username);
+    assertThat(response.getUserName()).isEqualTo(userName);
     assertThat(response.getPii()).isEqualTo(pii);
     assertThat(response.getFirstName()).isEqualTo(firstName);
     assertThat(response.getLastName()).isEqualTo(lastName);

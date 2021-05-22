@@ -38,6 +38,7 @@ public class AccountServiceImpl implements AccountService {
    * @param resource resource info to add (id should be null)
    * @return new resource object with valid id
    */
+  @Override
   public Account add(Account resource)
       throws RequestValidationException {
     Account saved = mapper.toModel(repository.save(mapper.toEntity(resource)));
@@ -50,6 +51,7 @@ public class AccountServiceImpl implements AccountService {
    * @param lastName criteria for match
    * @return list of matching Account records
    */
+  @Override
   public Page<Account> findByLastName(String lastName, Pageable pageable) {
     log.info("looking up by lastname of:{}", lastName);
     Page<Account> responseList =
@@ -64,6 +66,7 @@ public class AccountServiceImpl implements AccountService {
    * @param userName username criteria to match
    * @return matching record, or null
    */
+  @Override
   public Optional<Account> findByUserName(String userName) {
     log.info("looking up by username:{}", userName);
     Optional<Account> resource = mapper.toModel(repository.findByUserName(userName));
@@ -111,6 +114,7 @@ public class AccountServiceImpl implements AccountService {
    * @param subResource resource info to add (id should be null)
    * @return new resource object with valid id
    */
+  @Override
   // CSOFF: LineLength
   public SubAccount addSubAccount(String id, SubAccount subResource)
       // CSON: LineLength

@@ -48,11 +48,21 @@ At the current stage of development, the "common bits" are:
 Here is a walk-through of the process for creating a new service skeleton.
 
 ```bash
-% cookiecutter https://github.com/thoughtworks-dps/dps-multi-module-starterkit-java --directory templates/project
-% cd project
+% export CC_PROJECT=https://github.com/thoughtworks-dps/dps-multi-module-starterkit-java # (1)
+% cookiecutter "${CC_PROJECT}" \
+--directory templates/project \
+PROJECT_NAME=mpi-facade \
+PACKAGE_NAME=mpifacade \
+RESOURCE_VAR_NAME=facilityVisit \
+projectDir="${CC_PROJECT}" \
+--no-input
+% cd $PROJECT_NAME
 % gradlew clean build check docker
 % gradlew :app:dockerComposeDown :app:dcPrune  :app:dockerComposeUp
 ```
+
+> Note:
+> 1. If testing locally, set this to the path to your local repo
 
 > Note: Any time you are pulling artifacts from the Github packages repository, it is likely that you will need to specify your authorizations.
 > Typically, we run the build behind `secrethub` to obtain the necessary credentials for Github Packages. 
@@ -80,3 +90,35 @@ View the Jaeger monitoring system
 % chrome http://localhost:16686/
  ```
 
+## MPI Facade example
+
+## Creating a new service
+
+Here is a walk-through of the process for creating a new service skeleton including a sub-resource structure.
+
+```bash
+% export CC_PROJECT=https://github.com/thoughtworks-dps/dps-multi-module-starterkit-java # (1)
+% cookiecutter "${CC_PROJECT}" \
+--directory templates/project \
+PROJECT_NAME=mpi-facade \
+PACKAGE_NAME=mpifacade \
+--no-input
+% cookiecutter "${CC_PROJECT}" \
+--directory templates/resource \
+PROJECT_NAME=mpi-facade \
+PACKAGE_NAME=mpifacade \
+RESOURCE_VAR_NAME=facilityVisit \
+--no-input
+% cd $PROJECT_NAME
+% gradlew clean build check docker
+% gradlew :app:dockerComposeDown :app:dcPrune  :app:dockerComposeUp
+```
+
+> Note:
+> 1. If testing locally, set this to the path to your local repo
+
+> Note: Any time you are pulling artifacts from the Github packages repository, it is likely that you will need to specify your authorizations.
+> Typically, we run the build behind `secrethub` to obtain the necessary credentials for Github Packages.
+> ```bash
+> % secrethub run -- gradlew clean build check docker
+> ```

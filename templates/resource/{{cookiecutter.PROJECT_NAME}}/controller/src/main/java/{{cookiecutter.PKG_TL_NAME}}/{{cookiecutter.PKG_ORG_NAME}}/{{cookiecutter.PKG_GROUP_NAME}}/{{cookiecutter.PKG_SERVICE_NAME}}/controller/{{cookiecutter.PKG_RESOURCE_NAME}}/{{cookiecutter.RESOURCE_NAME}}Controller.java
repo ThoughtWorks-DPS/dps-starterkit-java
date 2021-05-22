@@ -42,8 +42,8 @@ public class {{cookiecutter.RESOURCE_NAME}}Controller implements {{cookiecutter.
   /**
    * constructor.
    *
-   * @param manager instance of account manager
-   * @param mapper instance of account request mappper
+   * @param manager instance of {{cookiecutter.RESOURCE_NAME}} manager
+   * @param mapper instance of {{cookiecutter.RESOURCE_NAME}} request mappper
    */
   public {{cookiecutter.RESOURCE_NAME}}Controller(
       {{cookiecutter.RESOURCE_NAME}}Service manager, {{cookiecutter.RESOURCE_NAME}}RequestMapper mapper, EntityLifecycleNotifier notifier) {
@@ -127,7 +127,7 @@ public class {{cookiecutter.RESOURCE_NAME}}Controller implements {{cookiecutter.
 
     log.info("username->{}", addEntityRequest.getUserName());
     {{cookiecutter.SUB_RESOURCE_NAME}} resource = mapper.toModel(addEntityRequest);
-    {{cookiecutter.SUB_RESOURCE_NAME}} saved = manager.addSubAccount(id, resource);
+    {{cookiecutter.SUB_RESOURCE_NAME}} saved = manager.add{{cookiecutter.SUB_RESOURCE_NAME}}(id, resource);
     {{cookiecutter.SUB_RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(saved);
     notifier.created(saved, entityVersion, URI.create("user:anonymous"));
     return new ResponseEntity<>(response, HttpStatus.CREATED);

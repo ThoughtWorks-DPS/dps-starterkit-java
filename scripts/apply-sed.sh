@@ -56,7 +56,7 @@ function process_tree {
   [[ $debug == "y" ]] && echo "Processing tree: [${path}] sed: [${sedScript}]"
   if [ -d "${path}" ]
   then
-    find "${path}" -type f  $* | while read -r i
+    find "${path}" \( -path "${path}"/.gradle -o -path "${path}"/gradle \) -prune -false -o -type f  "$@" -print | while read -r i
     do
       process_file "${sedScript}" "${i}"
     done

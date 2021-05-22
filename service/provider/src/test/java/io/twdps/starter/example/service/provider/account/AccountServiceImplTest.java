@@ -34,7 +34,7 @@ public class AccountServiceImplTest {
   @Mock private AccountEntityMapper mapper;
   @Mock private SubAccountEntityRepository subResourceRepository;
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String bogusName = "bogus";
   private final String firstName = "Joe";
@@ -91,7 +91,7 @@ public class AccountServiceImplTest {
 
     resource =
         Account.builder()
-            .userName(username)
+            .userName(userName)
             .pii(pii)
             .firstName(firstName)
             .lastName(lastName)
@@ -117,7 +117,7 @@ public class AccountServiceImplTest {
 
     subResource =
         SubAccount.builder()
-            .userName(username)
+            .userName(userName)
             .firstName(firstName)
             .lastName(lastName)
             .build();
@@ -210,9 +210,9 @@ public class AccountServiceImplTest {
   public void findByUserNameTest() {
 
     createOptionalMapperStubs();
-    Mockito.when(repository.findByUserName(username)).thenReturn(optionalAdded);
+    Mockito.when(repository.findByUserName(userName)).thenReturn(optionalAdded);
 
-    Optional<Account> response = manager.findByUserName(username);
+    Optional<Account> response = manager.findByUserName(userName);
 
     Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(added.getFirstName());
@@ -234,9 +234,9 @@ public class AccountServiceImplTest {
   public void findByLastNameTest() {
 
     createListMapperStubs();
-    Mockito.when(repository.findByLastName(username, pageable)).thenReturn(entityPage);
+    Mockito.when(repository.findByLastName(userName, pageable)).thenReturn(entityPage);
 
-    Page<Account> response = manager.findByLastName(username, pageable);
+    Page<Account> response = manager.findByLastName(userName, pageable);
 
     Assertions.assertThat(response.getContent().isEmpty()).isFalse();
     Assertions.assertThat(response.getContent().get(0).getFirstName())

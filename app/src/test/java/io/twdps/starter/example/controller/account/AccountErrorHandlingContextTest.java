@@ -57,7 +57,7 @@ class AccountErrorHandlingContextTest {
 
   private final String message = "message";
   private final String detail = "detail";
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String bogusName = "bogus";
   private final String firstName = "Joe";
@@ -72,8 +72,8 @@ class AccountErrorHandlingContextTest {
   // This object will be magically initialized by the initFields method below.
 
   @Autowired private JacksonTester<AccountRequest> jsonRequest;
-  private AccountRequest request = new AccountRequest(username, pii, firstName, lastName);
-  private Account model = new Account(username, pii, firstName, lastName);
+  private AccountRequest request = new AccountRequest(userName, pii, firstName, lastName);
+  private Account model = new Account(userName, pii, firstName, lastName);
 
   @Test
   void whenResourceNotRetrieved_thenReturns404() throws Exception {

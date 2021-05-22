@@ -32,6 +32,7 @@ public class SubAccountServiceImpl implements SubAccountService {
    * @param resource resource info to add (id should be null)
    * @return new resource object with valid id
    */
+  @Override
   public SubAccount add(SubAccount resource)
       throws RequestValidationException {
     SubAccount saved = mapper.toModel(repository.save(mapper.toEntity(resource)));
@@ -44,6 +45,7 @@ public class SubAccountServiceImpl implements SubAccountService {
    * @param lastName criteria for match
    * @return list of matching SubAccount records
    */
+  @Override
   public Page<SubAccount> findByLastName(String lastName, Pageable pageable) {
     log.info("looking up by lastname of:{}", lastName);
     Page<SubAccount> responseList =
@@ -58,6 +60,7 @@ public class SubAccountServiceImpl implements SubAccountService {
    * @param userName username criteria to match
    * @return matching record, or null
    */
+  @Override
   public Optional<SubAccount> findByUserName(String userName) {
     log.info("looking up by username:{}", userName);
     Optional<SubAccount> resource = mapper.toModel(repository.findByUserName(userName));

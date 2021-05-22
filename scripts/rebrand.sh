@@ -4,12 +4,14 @@ path="."
 tlOrig='io'
 orgOrig='twdps'
 groupOrig='starter'
+prefixOrig='dps'
 githubOrgOrig='ThoughtWorks-DPS'
 repoNameOrig='dps-multi-module-starterkit-java'
 githubOrg='thoughtworks'
 tl='com'
 org='thoughtworks'
 group='starter'
+prefix='tw'
 repoName='starter-java'
 nukeGit=n
 dst=
@@ -29,11 +31,13 @@ function usage {
   echo "  --tl          top level package name ($tl)"
   echo "  --org         org level package name ($org)"
   echo "  --group       group level package name ($group)"
+  echo "  --prefix      prefix for package name ($prefix)"
   echo "  --orig-repo   original repository name ($repoNameOrig)"
   echo "  --orig-gh-org original github organization name [or username] ($githubOrgOrig)"
   echo "  --orig-tl     original top level package name ($tlOrig)"
   echo "  --orig-org    original org level package name ($orgOrig)"
   echo "  --orig-group  original group level package name ($groupOrig)"
+  echo "  --orig-prefix original prefix for package name ($prefixOrig)"
   echo "  --nuke-git    remove .git repository folder ($nukeGit)"
   echo "  --clear       clear destination directory of current contents"
   echo "  --test        copy to temporary directory to test"
@@ -58,9 +62,11 @@ do
   --tl) shift; tl=$1;;
   --org) shift; org=$1;;
   --group) shift; group=$1;;
+  --prefix) shift; prefix=$1;;
   --orig-tl) shift; tlOrig=$1;;
   --orig-org) shift; orgOrig=$1;;
   --orig-group) shift; groupOrig=$1;;
+  --orig-prefix) shift; prefixOrig=$1;;
   --nuke-git) nukeGit="y";;
   --clear) clear="y";;
   --help) usage; exit 0;;
@@ -81,8 +87,13 @@ then
   path="${dst}"
 fi
 
-[ -e "${path}"/.git ] && [ "${nukeGit}" = "y" ] && rm -rf "${path}"/.git
+[ -e "${path}"/.git ] && [ "${nukeGit}" = "y" ] && rm -rf "${path:?}"/.git
 [ -e "${path}"/.git ] && [ "${nukeGit}" = "n" ] && echo "Local .git repository still exists, consider deleting..."
+
+for subdir in buildSrc/build buildSrc/.gradle build .idea
+do
+  [ -e "${path}"/"${subdir}" ] && rm -rf "${path:?}"/"${subdir}"
+done
 
 githubOrgOrigLower=$(echo "${githubOrgOrig}" | tr '[:upper:]' '[:lower:]')
 sedFile=$(mktemp /tmp/sed.XXXXXX) || exit 1
@@ -98,9 +109,13 @@ sedFile=$(mktemp /tmp/sed.XXXXXX) || exit 1
   echo "s:${orgOrig}/di:${org}/di:g"
   echo "s:${orgOrig}/:${org}/:g"
   echo "s:${orgOrig}-di:${org}-di:g"
+  echo "s:${prefixOrig}-:${prefix}-:g"
   echo "s:\"${tlOrig}\":\"${tl}\":g"
+  echo "s:'${tlOrig}':'${tl}':g"
   echo "s:\"${orgOrig}\":\"${org}\":g"
+  echo "s:'${orgOrig}':'${org}':g"
   echo "s:\"${groupOrig}\":\"${group}\":g"
+  echo "s:'${groupOrig}':'${group}':g"
   echo "s:${orgOrig}:${org}:g"
 } >> "${sedFile}"
 
@@ -118,6 +133,11 @@ binDir=$(dirname "$0")
   --orig-resource ""
 "${binDir}"/apply-sed.sh --sed "${sedFile}" --tree "${path}"
 
+# Initialize git repository if it doesn't already exist
+[ -e "${path}"/.git ] || (cd "${path}" && git init && git add .)
+
 cd "${pwd}"  || fail "unable to change directory to [${pwd}]"
 rm "${sedFile}"
 echo "new repository is in ${path}"
+echo "make sure you commit changes before building"
+echo "git add -u . && git commit -m \"initial starting point\" && git branch -M main"

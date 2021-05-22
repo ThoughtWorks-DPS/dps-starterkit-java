@@ -22,7 +22,7 @@ public class SubAccountRequestMapperTest {
 
   private SubAccountRequestMapper mapper;
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String firstName = "Joe";
   private final String lastName = "Smith";
@@ -118,7 +118,7 @@ public class SubAccountRequestMapperTest {
    * @return SubAccount object
    */
   private SubAccount createSubAccount(String id) {
-    return new SubAccount(id, username, pii, firstName, lastName);
+    return new SubAccount(id, userName, pii, firstName, lastName);
   }
 
   /**
@@ -127,7 +127,7 @@ public class SubAccountRequestMapperTest {
    * @return SubAccountRequest object
    */
   private SubAccountRequest createSubAccountRequest() {
-    return new SubAccountRequest(username, pii, firstName, lastName);
+    return new SubAccountRequest(userName, pii, firstName, lastName);
   }
 
   /**
@@ -136,7 +136,7 @@ public class SubAccountRequestMapperTest {
    * @param resource the object to validate
    */
   protected void verifySubAccount(SubAccount resource) {
-    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getUserName().equals(userName));
     assertThat(resource.getPii().equals(pii));
     assertThat(resource.getFirstName().equals(firstName));
     assertThat(resource.getLastName().equals(lastName));
@@ -149,7 +149,7 @@ public class SubAccountRequestMapperTest {
    * @param response the object to validate
    */
   private void verifySubAccountResponse(SubAccountResponse response) {
-    assertThat(response.getUserName().equals(username));
+    assertThat(response.getUserName().equals(userName));
     assertThat(response.getPii().equals(pii));
     assertThat(response.getFullName().equals(fullName));
     assertThat(response.getId()).isEqualTo(identifier);

@@ -25,7 +25,7 @@ public class AccountRequestMapperTest {
 
   private AccountRequestMapper mapper;
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String firstName = "Joe";
   private final String lastName = "Smith";
@@ -182,7 +182,7 @@ public class AccountRequestMapperTest {
    * @return Account object
    */
   private Account createAccount(String id) {
-    return new Account(id, username, pii, firstName, lastName);
+    return new Account(id, userName, pii, firstName, lastName);
   }
 
   /**
@@ -192,7 +192,7 @@ public class AccountRequestMapperTest {
    * @return SubAccount object
    */
   private SubAccount createSubAccount(String id) {
-    return new SubAccount(id, username, firstName, lastName);
+    return new SubAccount(id, userName, firstName, lastName);
   }
 
   /**
@@ -201,7 +201,7 @@ public class AccountRequestMapperTest {
    * @return AccountRequest object
    */
   private AccountRequest createAccountRequest() {
-    return new AccountRequest(username, pii, firstName, lastName);
+    return new AccountRequest(userName, pii, firstName, lastName);
   }
 
   /**
@@ -210,7 +210,7 @@ public class AccountRequestMapperTest {
    * @return SubAccountRequest object
    */
   private SubAccountRequest createSubAccountRequest() {
-    return new SubAccountRequest(username, firstName, lastName);
+    return new SubAccountRequest(userName, firstName, lastName);
   }
 
   /**
@@ -219,7 +219,7 @@ public class AccountRequestMapperTest {
    * @param resource the object to validate
    */
   protected void verifyAccount(Account resource) {
-    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getUserName().equals(userName));
     assertThat(resource.getPii().equals(pii));
     assertThat(resource.getFirstName().equals(firstName));
     assertThat(resource.getLastName().equals(lastName));
@@ -232,7 +232,7 @@ public class AccountRequestMapperTest {
    * @param resource the object to validate
    */
   protected void verifySubAccount(SubAccount resource) {
-    assertThat(resource.getUserName().equals(username));
+    assertThat(resource.getUserName().equals(userName));
     assertThat(resource.getFirstName().equals(firstName));
     assertThat(resource.getLastName().equals(lastName));
     assertThat(resource.getId()).isNotEqualTo(identifier);
@@ -244,7 +244,7 @@ public class AccountRequestMapperTest {
    * @param response the object to validate
    */
   private void verifyAccountResponse(AccountResponse response) {
-    assertThat(response.getUserName().equals(username));
+    assertThat(response.getUserName().equals(userName));
     assertThat(response.getPii().equals(pii));
     assertThat(response.getFullName().equals(fullName));
     assertThat(response.getId()).isEqualTo(identifier);

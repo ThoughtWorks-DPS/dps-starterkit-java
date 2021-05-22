@@ -30,7 +30,7 @@ public class SubAccountServiceImplTest {
   @Mock private SubAccountEntityRepository repository;
   @Mock private SubAccountEntityMapper mapper;
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String bogusName = "bogus";
   private final String firstName = "Joe";
@@ -67,7 +67,7 @@ public class SubAccountServiceImplTest {
 
     resource =
         SubAccount.builder()
-            .userName(username)
+            .userName(userName)
             .pii(pii)
             .firstName(firstName)
             .lastName(lastName)
@@ -140,9 +140,9 @@ public class SubAccountServiceImplTest {
   public void findByUserNameTest() {
 
     createOptionalMapperStubs();
-    Mockito.when(repository.findByUserName(username)).thenReturn(optionalAdded);
+    Mockito.when(repository.findByUserName(userName)).thenReturn(optionalAdded);
 
-    Optional<SubAccount> response = manager.findByUserName(username);
+    Optional<SubAccount> response = manager.findByUserName(userName);
 
     Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(added.getFirstName());
@@ -164,9 +164,9 @@ public class SubAccountServiceImplTest {
   public void findByLastNameTest() {
 
     createListMapperStubs();
-    Mockito.when(repository.findByLastName(username, pageable)).thenReturn(entityPage);
+    Mockito.when(repository.findByLastName(userName, pageable)).thenReturn(entityPage);
 
-    Page<SubAccount> response = manager.findByLastName(username, pageable);
+    Page<SubAccount> response = manager.findByLastName(userName, pageable);
 
     Assertions.assertThat(response.getContent().isEmpty()).isFalse();
     Assertions.assertThat(response.getContent().get(0).getFirstName())

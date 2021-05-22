@@ -43,6 +43,7 @@ plugins {
     id("starter.metrics.build-time-tracker-conventions") version "${starter_boot_version}"
     id("starter.java.versions-conventions") version "${starter_boot_version}"
     id("starter.java.test-jacoco-aggregation-conventions") version "${starter_boot_version}"
+    id('starter.java.doc-mkdocs-conventions') version "${starter_boot_version}"
 }
 
 ext {

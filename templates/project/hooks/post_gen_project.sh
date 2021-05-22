@@ -13,12 +13,39 @@ binary=${ccBinary:-cookiecutter}
 ccOutputPath={{cookiecutter.outputPath}}
 outputPath=${ccOutputPath:-${pwd}/..}
 
-cmdline="${binary} -f --no-input -o ${outputPath} ${templatePath}/resource RESOURCE_NAME=SubAccount CREATE_PARENT_RESOURCE=y PARENT_RESOURCE_NAME=Account CREATE_SUB_RESOURCE=n"
-echo "pwd: [$(pwd)] [${cmdline}]"
+cmdline="${binary} "
+cmdline="${cmdline} --verbose"
+cmdline="${cmdline} --debug-file {{cookiecutter.debugLog}}"
+cmdline="${cmdline} -f"
+cmdline="${cmdline} --no-input"
+cmdline="${cmdline} -o ${outputPath}"
+cmdline="${cmdline} ${templatePath}"
+cmdline="${cmdline} --directory templates/resource"
+cmdline="${cmdline} RESOURCE_VAR_NAME={{cookiecutter.SUB_RESOURCE_VAR_NAME}}"
+cmdline="${cmdline} CREATE_PARENT_RESOURCE=y"
+cmdline="${cmdline} PARENT_RESOURCE_VAR_NAME={{cookiecutter.RESOURCE_VAR_NAME}}"
+cmdline="${cmdline} PROJECT_NAME={{cookiecutter.PROJECT_NAME}}"
+cmdline="${cmdline} PKG_GROUP_NAME={{cookiecutter.PKG_GROUP_NAME}}"
+cmdline="${cmdline} SERVICE_NAME={{cookiecutter.SERVICE_NAME}} "
+cmdline="${cmdline} CREATE_SUB_RESOURCE=n"
+echo "pwd: [$(pwd)] [${cmdline}]" >> {{cookiecutter.debugLog}}
 ${cmdline}
 
-cmdline="${binary} -f --no-input -o ${outputPath} ${templatePath}/resource CREATE_SUB_RESOURCE=y"
-echo "pwd: [$(pwd)] [${cmdline}]"
+cmdline="${binary} "
+cmdline="${cmdline} --verbose"
+cmdline="${cmdline} --debug-file {{cookiecutter.debugLog}}"
+cmdline="${cmdline} -f"
+cmdline="${cmdline} --no-input"
+cmdline="${cmdline} -o ${outputPath}"
+cmdline="${cmdline} ${templatePath}"
+cmdline="${cmdline} --directory templates/resource"
+cmdline="${cmdline} RESOURCE_VAR_NAME={{cookiecutter.RESOURCE_VAR_NAME}}"
+cmdline="${cmdline} SUB_RESOURCE_VAR_NAME={{cookiecutter.SUB_RESOURCE_VAR_NAME}}"
+cmdline="${cmdline} PROJECT_NAME={{cookiecutter.PROJECT_NAME}}"
+cmdline="${cmdline} PKG_GROUP_NAME={{cookiecutter.PKG_GROUP_NAME}}"
+cmdline="${cmdline} SERVICE_NAME={{cookiecutter.SERVICE_NAME}}"
+cmdline="${cmdline} CREATE_SUB_RESOURCE=y"
+echo "pwd: [$(pwd)] [${cmdline}]" >> {{cookiecutter.debugLog}}
 ${cmdline}
 
 cd "${pwd}"

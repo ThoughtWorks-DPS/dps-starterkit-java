@@ -33,8 +33,8 @@ public class SubAccountController implements SubAccountResource {
   /**
    * constructor.
    *
-   * @param manager instance of account manager
-   * @param mapper instance of account request mappper
+   * @param manager instance of SubAccount manager
+   * @param mapper instance of SubAccount request mappper
    */
   public SubAccountController(
       SubAccountService manager, SubAccountRequestMapper mapper, EntityLifecycleNotifier notifier) {

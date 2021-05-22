@@ -43,7 +43,7 @@ services:
 #      - "5432:5432"
 
   db-init:
-    image: twdps/dps-multi-module-starterkit-java-flyway:latest
+    image: {{cookiecutter.DOCKER_REGISTRY}}/{{cookiecutter.PROJECT_NAME}}-flyway:latest
     # NOTE: These are the defaults from the flyway.conf   uncomment to override, esp for secrethub passwords
     #    environment:
     #      FLYWAY_URL: jdbc:postgresql://postgres1:5432/{{cookiecutter.PKG_SERVICE_NAME}}?user={{cookiecutter.PKG_SERVICE_NAME}}_flyway&password=not-the-password
@@ -61,14 +61,14 @@ services:
       - internal
 
   opa-init:
-    image: twdps/dps-multi-module-starterkit-java-opa-init:latest
+    image: {{cookiecutter.DOCKER_REGISTRY}}/{{cookiecutter.PROJECT_NAME}}-opa-init:latest
     depends_on:
       - opa
     networks:
       - internal
 
   starter-java:
-    image: twdps/dps-multi-module-starterkit-java:latest
+    image: {{cookiecutter.DOCKER_REGISTRY}}/{{cookiecutter.PROJECT_NAME}}:latest
     hostname: starter
     ports:
       - "8080:8080"

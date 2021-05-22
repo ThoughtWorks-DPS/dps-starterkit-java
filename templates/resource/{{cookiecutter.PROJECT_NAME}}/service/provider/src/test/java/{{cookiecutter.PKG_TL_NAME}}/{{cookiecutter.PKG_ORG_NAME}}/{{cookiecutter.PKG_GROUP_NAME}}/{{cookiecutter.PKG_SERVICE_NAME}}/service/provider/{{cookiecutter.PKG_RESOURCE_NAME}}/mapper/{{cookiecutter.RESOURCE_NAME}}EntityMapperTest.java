@@ -20,7 +20,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
 
   private {{cookiecutter.RESOURCE_NAME}}EntityMapper mapper;
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String firstName = "Joe";
   private final String lastName = "Smith";
@@ -149,7 +149,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
    * @return {{cookiecutter.RESOURCE_NAME}} object
    */
   private {{cookiecutter.RESOURCE_NAME}} create{{cookiecutter.RESOURCE_NAME}}(String id) {
-    return new {{cookiecutter.RESOURCE_NAME}}(id, username, pii, firstName, lastName);
+    return new {{cookiecutter.RESOURCE_NAME}}(id, userName, pii, firstName, lastName);
   }
 
   /**
@@ -158,7 +158,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
    * @return {{cookiecutter.RESOURCE_NAME}}Entity object
    */
   private {{cookiecutter.RESOURCE_NAME}}Entity create{{cookiecutter.RESOURCE_NAME}}Entity() {
-    return new {{cookiecutter.RESOURCE_NAME}}Entity(identifier, username, pii, firstName, lastName
+    return new {{cookiecutter.RESOURCE_NAME}}Entity(identifier, userName, pii, firstName, lastName
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}, parentIdentifier{%- endif -%}
     );
   }
@@ -169,7 +169,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
    * @param response the object to validate
    */
   protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} response) {
-    assertThat(response.getUserName()).isEqualTo(username);
+    assertThat(response.getUserName()).isEqualTo(userName);
     assertThat(response.getPii()).isEqualTo(pii);
     assertThat(response.getFirstName()).isEqualTo(firstName);
     assertThat(response.getLastName()).isEqualTo(lastName);
@@ -197,7 +197,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}, boolean hasParentId{%- endif -%}
     ) {
     // CSON: LineLength
-    assertThat(response.getUserName()).isEqualTo(username);
+    assertThat(response.getUserName()).isEqualTo(userName);
     assertThat(response.getPii()).isEqualTo(pii);
     assertThat(response.getFirstName()).isEqualTo(firstName);
     assertThat(response.getLastName()).isEqualTo(lastName);

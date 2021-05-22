@@ -10,13 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,14 +25,14 @@ public class SubAccountEntityRepositoryTest {
 
   private SubAccountEntity entity;
 
-  private final String username = "jsmith";
+  private final String userName = "jsmith";
   private final String pii = "123-45-6789";
   private final String firstName = "Joe";
   private final String lastName = "Smith";
 
   @BeforeEach
   public void setup() {
-    entity = new SubAccountEntity(username, pii, firstName, lastName);
+    entity = new SubAccountEntity(userName, pii, firstName, lastName);
   }
 
   /**
@@ -65,7 +60,7 @@ public class SubAccountEntityRepositoryTest {
   public void createAndGetTest() {
     modelEntityRepository.save(entity);
 
-    Optional<SubAccountEntity> retrievedEntity = modelEntityRepository.findByUserName(username);
+    Optional<SubAccountEntity> retrievedEntity = modelEntityRepository.findByUserName(userName);
 
     assertThat(retrievedEntity.isPresent());
     assertThat(retrievedEntity.get().getFirstName()).isEqualTo(firstName);
