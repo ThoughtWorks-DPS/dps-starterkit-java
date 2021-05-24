@@ -1,5 +1,7 @@
 package io.twdps.starter.example.persistence.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -81,8 +81,7 @@ public class AccountEntityRepositoryTest {
     populate();
 
     Pageable pageable = PageRequest.of(0, 1);
-    Page<AccountEntity> retrievedSmiths =
-        modelEntityRepository.findByLastName(lastName, pageable);
+    Page<AccountEntity> retrievedSmiths = modelEntityRepository.findByLastName(lastName, pageable);
 
     assertThat(retrievedSmiths.getContent().size()).isEqualTo(1);
   }

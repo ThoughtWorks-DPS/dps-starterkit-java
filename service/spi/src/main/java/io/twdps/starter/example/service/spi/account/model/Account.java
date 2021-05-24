@@ -23,12 +23,8 @@ public class Account {
 
   private String id;
 
-  @NonNull
-  private String userName;
-  @NonNull
-  private String pii;
-  @NonNull
-  private String firstName;
-  @NonNull
-  private String lastName;
+  @NonNull private String userName;
+  @NonNull private String pii;
+  @NonNull private String firstName;
+  @NonNull private String lastName;
 }

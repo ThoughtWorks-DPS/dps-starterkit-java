@@ -1,5 +1,7 @@
 package io.twdps.starter.example.service.provider.account.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.twdps.starter.example.persistence.model.AccountEntity;
 import io.twdps.starter.example.service.spi.account.model.Account;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountEntityMapperTest {
 
@@ -98,9 +98,7 @@ public class AccountEntityMapperTest {
 
   @Test
   public void mapperEntityListTest() {
-    List<AccountEntity> entities = Arrays.asList(
-        createAccountEntity(),
-        createAccountEntity());
+    List<AccountEntity> entities = Arrays.asList(createAccountEntity(), createAccountEntity());
 
     List<Account> response = mapper.toModelList(entities);
 
@@ -114,10 +112,7 @@ public class AccountEntityMapperTest {
     Pageable pageable = PageRequest.of(0, 3);
     Page<AccountEntity> entities =
         new PageImpl<>(
-            Arrays.asList(
-                createAccountEntity(),
-                createAccountEntity(),
-                createAccountEntity()),
+            Arrays.asList(createAccountEntity(), createAccountEntity(), createAccountEntity()),
             pageable,
             100);
 

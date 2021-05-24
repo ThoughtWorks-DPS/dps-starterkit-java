@@ -4,11 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@Slf4j //lombok creates our logger as 'log' for us
+@Slf4j // lombok creates our logger as 'log' for us
 @SpringBootApplication(scanBasePackages = {"io.twdps.starter.example", "io.twdps.starter.boot"})
 public class ExampleApplication {
 
-  /** main function.
+  /**
+   * main function.
    *
    * @param args command line args
    */

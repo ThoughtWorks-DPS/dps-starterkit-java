@@ -29,7 +29,10 @@ public class SubAccountEntity {
 
   @Id
   @GeneratedValue(generator = "uuid")
-  @GenericGenerator(name = "uuid", strategy = "uuid2", parameters = {})
+  @GenericGenerator(
+      name = "uuid",
+      strategy = "uuid2",
+      parameters = {})
   @XmlAttribute
   private String id;
 

@@ -1,8 +1,8 @@
 package io.twdps.starter.example.controller.subaccount.mapper;
 
+import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.api.subaccount.requests.SubAccountRequest;
 import io.twdps.starter.example.api.subaccount.responses.SubAccountResponse;
-import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.service.spi.subaccount.model.SubAccount;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

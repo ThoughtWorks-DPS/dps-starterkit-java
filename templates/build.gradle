@@ -19,3 +19,8 @@ cookiecutterBuild {
     args = ['clean', 'build', 'test']
 }
 
+cookiecutterFormat {
+    generatedProjectName = 'dps-multi-module-starterkit-java'
+    args = ['spotlessApply']
+}
+

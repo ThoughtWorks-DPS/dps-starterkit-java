@@ -1,9 +1,12 @@
 package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.controller.{{cookiecutter.PKG_RESOURCE_NAME}};
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.exception.ResourceNotFoundException;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.EntityLifecycleNotifier;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.MemoizedTimestampProvider;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.NoopEntityLifecycleNotifier;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.lifecycle.entity.provider.MemoizedTimestampProvider;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.lifecycle.entity.provider.NoopEntityLifecycleNotifier;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.lifecycle.entity.spi.EntityLifecycleNotifier;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.SUB_RESOURCE_NAME}}Request;
@@ -36,9 +39,6 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -213,8 +213,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.add(resource)).thenReturn(output);
 
-    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response =
-        controller.addEntity(request);
+    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.addEntity(request);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(201);
     assertThat(response.getBody()).isNotNull();
@@ -229,8 +228,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.findById(identifier)).thenReturn(optionalOutput);
 
-    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response =
-        controller.findEntityById(identifier);
+    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.findEntityById(identifier);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getPii()).isEqualTo(pii);
@@ -246,8 +244,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response =
-              controller.findEntityById(bogusName);
+          ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.findEntityById(bogusName);
         });
   }
 
@@ -257,8 +254,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     createListMapperStubs();
     Mockito.when(manager.findAll(pageable)).thenReturn(outputPage);
 
-    ResponseEntity<PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response>> response =
-        controller.findEntities(pageable);
+    ResponseEntity<PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response>> response = controller.findEntities(pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getItems().size()).isEqualTo(2);
@@ -271,8 +267,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     createEmptyListMapperStubs();
     Mockito.when(manager.findAll(pageable)).thenReturn(emptyOutputPage);
 
-    ResponseEntity<PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response>> response =
-        controller.findEntities(pageable);
+    ResponseEntity<PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response>> response = controller.findEntities(pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getItems().size()).isEqualTo(0);
@@ -285,8 +280,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.updateById(identifier, resource)).thenReturn(optionalOutput);
 
-    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response =
-        controller.updateEntityById(identifier, request);
+    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.updateEntityById(identifier, request);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getPii()).isEqualTo(pii);
@@ -314,8 +308,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.deleteById(identifier)).thenReturn(optionalOutput);
 
-    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response =
-        controller.deleteEntityById(identifier);
+    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.deleteEntityById(identifier);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getPii()).isEqualTo(pii);
@@ -331,8 +324,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response =
-              controller.deleteEntityById(bogusName);
+          ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.deleteEntityById(bogusName);
         });
   }
 
@@ -341,8 +333,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   @Test
   public void findBy{{cookiecutter.SUB_RESOURCE_NAME}}IdFailTest() throws Exception {
 
-    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName))
-        .thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
+    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName)).thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
 
     assertThrows(
         ResourceNotFoundException.class,
@@ -357,11 +348,9 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
     create{{cookiecutter.SUB_RESOURCE_NAME}}ResponseMapperStubs();
-    Mockito.when(manager.add{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subResource))
-        .thenReturn(subOutput);
+    Mockito.when(manager.add{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subResource)).thenReturn(subOutput);
 
-    ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response =
-        controller.add{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subRequest);
+    ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response = controller.add{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subRequest);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(201);
     assertThat(response.getBody()).isNotNull();
@@ -372,8 +361,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   public void find{{cookiecutter.SUB_RESOURCE_NAME}}ByIdTest() throws Exception {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}ResponseMapperStubs();
-    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier))
-        .thenReturn(optionalSubOutput);
+    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier)).thenReturn(optionalSubOutput);
 
     ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response =
         controller.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier);
@@ -385,8 +373,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   @Test
   public void find{{cookiecutter.SUB_RESOURCE_NAME}}ByIdFailedTest() throws Exception {
 
-    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName))
-        .thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
+    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName)).thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
 
     assertThrows(
         ResourceNotFoundException.class,
@@ -400,8 +387,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   public void findAll{{cookiecutter.SUB_RESOURCE_NAME}}Test() throws Exception {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs();
-    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable))
-        .thenReturn(subOutputPage);
+    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable)).thenReturn(subOutputPage);
 
     ResponseEntity<PagedResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> response =
         controller.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable);
@@ -415,8 +401,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   public void findAll{{cookiecutter.SUB_RESOURCE_NAME}}EmptyTest() throws Exception {
 
     createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs();
-    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable))
-        .thenReturn(emptySubOutputPage);
+    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable)).thenReturn(emptySubOutputPage);
 
     ResponseEntity<PagedResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> response =
         controller.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable);
@@ -459,8 +444,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   public void delete{{cookiecutter.SUB_RESOURCE_NAME}}Test() throws Exception {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}ResponseMapperStubs();
-    Mockito.when(manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier))
-        .thenReturn(optionalSubOutput);
+    Mockito.when(manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier)).thenReturn(optionalSubOutput);
 
     ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response =
         controller.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier);
@@ -472,8 +456,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   @Test
   public void delete{{cookiecutter.SUB_RESOURCE_NAME}}FailedTest() throws Exception {
 
-    Mockito.when(manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName))
-        .thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
+    Mockito.when(manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName)).thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
 
     assertThrows(
         ResourceNotFoundException.class,

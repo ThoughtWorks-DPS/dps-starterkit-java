@@ -1,5 +1,7 @@
 package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.provider.{{cookiecutter.PKG_RESOURCE_NAME}}.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.RESOURCE_NAME}}Entity;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
 
@@ -107,9 +107,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
 
   @Test
   public void mapperEntityListTest() {
-    List<{{cookiecutter.RESOURCE_NAME}}Entity> entities = Arrays.asList(
-        create{{cookiecutter.RESOURCE_NAME}}Entity(),
-        create{{cookiecutter.RESOURCE_NAME}}Entity());
+    List<{{cookiecutter.RESOURCE_NAME}}Entity> entities = Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}Entity(), create{{cookiecutter.RESOURCE_NAME}}Entity());
 
     List<{{cookiecutter.RESOURCE_NAME}}> response = mapper.toModelList(entities);
 
@@ -123,10 +121,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     Pageable pageable = PageRequest.of(0, 3);
     Page<{{cookiecutter.RESOURCE_NAME}}Entity> entities =
         new PageImpl<>(
-            Arrays.asList(
-                create{{cookiecutter.RESOURCE_NAME}}Entity(),
-                create{{cookiecutter.RESOURCE_NAME}}Entity(),
-                create{{cookiecutter.RESOURCE_NAME}}Entity()),
+            Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}Entity(), create{{cookiecutter.RESOURCE_NAME}}Entity(), create{{cookiecutter.RESOURCE_NAME}}Entity()),
             pageable,
             100);
 

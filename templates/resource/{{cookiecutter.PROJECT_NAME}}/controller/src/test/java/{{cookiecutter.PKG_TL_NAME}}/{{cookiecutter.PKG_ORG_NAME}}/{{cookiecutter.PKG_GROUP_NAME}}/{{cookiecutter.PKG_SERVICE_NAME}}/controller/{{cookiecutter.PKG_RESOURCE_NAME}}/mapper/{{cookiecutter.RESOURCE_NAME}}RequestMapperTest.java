@@ -1,5 +1,7 @@
 package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.controller.{{cookiecutter.PKG_RESOURCE_NAME}}.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.SUB_RESOURCE_NAME}}Request;
@@ -24,8 +26,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
 
@@ -84,20 +84,16 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
   public void mapperOptionalEmptyTest() {
     Optional<{{cookiecutter.RESOURCE_NAME}}> resource = Optional.empty();
 
-    {{cookiecutter.RESOURCE_NAME}}Response response =
-        mapper.to{{cookiecutter.RESOURCE_NAME}}Response(resource);
+    {{cookiecutter.RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.RESOURCE_NAME}}Response(resource);
 
     assertThat(response).isNull();
   }
 
   @Test
   public void mapperEntityListTest() {
-    List<{{cookiecutter.RESOURCE_NAME}}> resources = Arrays.asList(
-        create{{cookiecutter.RESOURCE_NAME}}(identifier),
-        create{{cookiecutter.RESOURCE_NAME}}(identifier));
+    List<{{cookiecutter.RESOURCE_NAME}}> resources = Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}(identifier), create{{cookiecutter.RESOURCE_NAME}}(identifier));
 
-    List<{{cookiecutter.RESOURCE_NAME}}Response> response =
-        mapper.to{{cookiecutter.RESOURCE_NAME}}ResponseList(resources);
+    List<{{cookiecutter.RESOURCE_NAME}}Response> response = mapper.to{{cookiecutter.RESOURCE_NAME}}ResponseList(resources);
 
     assertThat(response.size()).isEqualTo(2);
     verify{{cookiecutter.RESOURCE_NAME}}Response(response.get(0));
@@ -109,8 +105,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
     Pageable pageable = PageRequest.of(0, 1);
     Page<{{cookiecutter.RESOURCE_NAME}}> resources =
         new PageImpl<>(Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}(identifier)), pageable, 100);
-    PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response> response =
-        mapper.to{{cookiecutter.RESOURCE_NAME}}ResponsePage(resources);
+    PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response> response = mapper.to{{cookiecutter.RESOURCE_NAME}}ResponsePage(resources);
 
     assertThat(response.getItems().size()).isEqualTo(1);
     assertThat(response.getTotalItems()).isEqualTo(100);
@@ -142,8 +137,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
 
   @Test
   public void mapperOptional{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource =
-        Optional.of(create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier));
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource = Optional.of(create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier));
 
     {{cookiecutter.SUB_RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(resource);
 
@@ -171,12 +165,10 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
 
   @Test
   public void mapperSubEntityListTest() {
-    List<{{cookiecutter.SUB_RESOURCE_NAME}}> resources = Arrays.asList(
-        create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier),
-        create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier));
+    List<{{cookiecutter.SUB_RESOURCE_NAME}}> resources =
+        Arrays.asList(create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier), create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier));
 
-    List<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response =
-        mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ResponseList(resources);
+    List<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ResponseList(resources);
 
     assertThat(response.size()).isEqualTo(2);
     verify{{cookiecutter.SUB_RESOURCE_NAME}}Response(response.get(0));

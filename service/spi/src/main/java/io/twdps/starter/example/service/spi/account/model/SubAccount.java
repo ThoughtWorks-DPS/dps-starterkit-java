@@ -23,10 +23,7 @@ public class SubAccount {
 
   private String id;
 
-  @NonNull
-  private String userName;
-  @NonNull
-  private String firstName;
-  @NonNull
-  private String lastName;
+  @NonNull private String userName;
+  @NonNull private String firstName;
+  @NonNull private String lastName;
 }

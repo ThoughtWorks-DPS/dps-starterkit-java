@@ -1,8 +1,10 @@
 package io.twdps.starter.example.controller.subaccount.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.api.subaccount.requests.SubAccountRequest;
 import io.twdps.starter.example.api.subaccount.responses.SubAccountResponse;
-import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.service.spi.subaccount.model.SubAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +17,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubAccountRequestMapperTest {
 
@@ -75,20 +75,17 @@ public class SubAccountRequestMapperTest {
   public void mapperOptionalEmptyTest() {
     Optional<SubAccount> resource = Optional.empty();
 
-    SubAccountResponse response =
-        mapper.toSubAccountResponse(resource);
+    SubAccountResponse response = mapper.toSubAccountResponse(resource);
 
     assertThat(response).isNull();
   }
 
   @Test
   public void mapperEntityListTest() {
-    List<SubAccount> resources = Arrays.asList(
-        createSubAccount(identifier),
-        createSubAccount(identifier));
+    List<SubAccount> resources =
+        Arrays.asList(createSubAccount(identifier), createSubAccount(identifier));
 
-    List<SubAccountResponse> response =
-        mapper.toSubAccountResponseList(resources);
+    List<SubAccountResponse> response = mapper.toSubAccountResponseList(resources);
 
     assertThat(response.size()).isEqualTo(2);
     verifySubAccountResponse(response.get(0));
@@ -100,8 +97,7 @@ public class SubAccountRequestMapperTest {
     Pageable pageable = PageRequest.of(0, 1);
     Page<SubAccount> resources =
         new PageImpl<>(Arrays.asList(createSubAccount(identifier)), pageable, 100);
-    PagedResponse<SubAccountResponse> response =
-        mapper.toSubAccountResponsePage(resources);
+    PagedResponse<SubAccountResponse> response = mapper.toSubAccountResponsePage(resources);
 
     assertThat(response.getItems().size()).isEqualTo(1);
     assertThat(response.getTotalItems()).isEqualTo(100);

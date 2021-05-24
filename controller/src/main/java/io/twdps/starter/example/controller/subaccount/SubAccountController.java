@@ -2,11 +2,11 @@ package io.twdps.starter.example.controller.subaccount;
 
 import io.twdps.starter.boot.exception.RequestValidationException;
 import io.twdps.starter.boot.exception.ResourceNotFoundException;
-import io.twdps.starter.boot.notifier.EntityLifecycleNotifier;
+import io.twdps.starter.boot.notifier.lifecycle.entity.spi.EntityLifecycleNotifier;
+import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.api.subaccount.requests.SubAccountRequest;
 import io.twdps.starter.example.api.subaccount.resources.SubAccountResource;
 import io.twdps.starter.example.api.subaccount.responses.SubAccountResponse;
-import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.controller.subaccount.mapper.SubAccountRequestMapper;
 import io.twdps.starter.example.service.spi.subaccount.SubAccountService;
 import io.twdps.starter.example.service.spi.subaccount.model.SubAccount;

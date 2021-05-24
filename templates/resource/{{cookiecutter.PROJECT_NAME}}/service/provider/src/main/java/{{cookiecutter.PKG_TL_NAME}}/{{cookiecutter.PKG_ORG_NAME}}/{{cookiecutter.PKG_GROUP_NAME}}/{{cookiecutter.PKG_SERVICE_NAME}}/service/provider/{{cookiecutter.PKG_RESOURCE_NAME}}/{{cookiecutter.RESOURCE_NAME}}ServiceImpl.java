@@ -51,8 +51,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
    * @return new resource object with valid id
    */
   @Override
-  public {{cookiecutter.RESOURCE_NAME}} add({{cookiecutter.RESOURCE_NAME}} resource)
-      throws RequestValidationException {
+  public {{cookiecutter.RESOURCE_NAME}} add({{cookiecutter.RESOURCE_NAME}} resource) throws RequestValidationException {
     {{cookiecutter.RESOURCE_NAME}} saved = mapper.toModel(repository.save(mapper.toEntity(resource)));
     return saved;
   }
@@ -66,8 +65,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   @Override
   public Page<{{cookiecutter.RESOURCE_NAME}}> findByLastName(String lastName, Pageable pageable) {
     log.info("looking up by lastname of:{}", lastName);
-    Page<{{cookiecutter.RESOURCE_NAME}}> responseList =
-        mapper.toModelPage(repository.findByLastName(lastName, pageable));
+    Page<{{cookiecutter.RESOURCE_NAME}}> responseList = mapper.toModelPage(repository.findByLastName(lastName, pageable));
     log.info("Response list size:{}", responseList.getContent().size());
     return responseList;
   }
@@ -135,8 +133,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
       throws RequestValidationException {
     {{cookiecutter.SUB_RESOURCE_NAME}}Entity entity = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Entity(subResource);
     entity.set{{cookiecutter.RESOURCE_NAME}}Id(id);
-    {{cookiecutter.SUB_RESOURCE_NAME}} saved =
-        mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(subResourceRepository.save(entity));
+    {{cookiecutter.SUB_RESOURCE_NAME}} saved = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(subResourceRepository.save(entity));
     return saved;
   }
 
@@ -167,11 +164,9 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   public Page<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}s(String id, Pageable pageable) {
     // CSON: LineLength
     Page<{{cookiecutter.SUB_RESOURCE_NAME}}> resources =
-        mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ModelPage(
-            subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(id, pageable));
+        mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ModelPage(subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(id, pageable));
     return resources;
   }
-
 
   /**
    * update a {{cookiecutter.SUB_RESOURCE_NAME}} resource based on id.
@@ -186,10 +181,12 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   public Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> update{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId, {{cookiecutter.SUB_RESOURCE_NAME}} record)
       // CSON: LineLength
       throws RequestValidationException {
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(
-        subResourceRepository.findById(subResourceId)
-            .map((obj) -> mapper.update{{cookiecutter.SUB_RESOURCE_NAME}}Metadata(record, obj))
-            .map((obj) -> subResourceRepository.save(obj)));
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource =
+        mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(
+            subResourceRepository
+                .findById(subResourceId)
+                .map((obj) -> mapper.update{{cookiecutter.SUB_RESOURCE_NAME}}Metadata(record, obj))
+                .map((obj) -> subResourceRepository.save(obj)));
 
     return resource;
   }
@@ -205,8 +202,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   // CSOFF: LineLength
   public Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> delete{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId) {
     // CSON: LineLength
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> result =
-        get{{cookiecutter.SUB_RESOURCE_NAME}}(id, subResourceId);
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> result = get{{cookiecutter.SUB_RESOURCE_NAME}}(id, subResourceId);
     subResourceRepository.deleteById(subResourceId);
     return result;
   }

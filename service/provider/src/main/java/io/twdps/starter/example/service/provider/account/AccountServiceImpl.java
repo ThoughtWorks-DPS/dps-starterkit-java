@@ -39,8 +39,7 @@ public class AccountServiceImpl implements AccountService {
    * @return new resource object with valid id
    */
   @Override
-  public Account add(Account resource)
-      throws RequestValidationException {
+  public Account add(Account resource) throws RequestValidationException {
     Account saved = mapper.toModel(repository.save(mapper.toEntity(resource)));
     return saved;
   }
@@ -54,8 +53,7 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public Page<Account> findByLastName(String lastName, Pageable pageable) {
     log.info("looking up by lastname of:{}", lastName);
-    Page<Account> responseList =
-        mapper.toModelPage(repository.findByLastName(lastName, pageable));
+    Page<Account> responseList = mapper.toModelPage(repository.findByLastName(lastName, pageable));
     log.info("Response list size:{}", responseList.getContent().size());
     return responseList;
   }
@@ -121,8 +119,7 @@ public class AccountServiceImpl implements AccountService {
       throws RequestValidationException {
     SubAccountEntity entity = mapper.toSubAccountEntity(subResource);
     entity.setAccountId(id);
-    SubAccount saved =
-        mapper.toSubAccountModel(subResourceRepository.save(entity));
+    SubAccount saved = mapper.toSubAccountModel(subResourceRepository.save(entity));
     return saved;
   }
 
@@ -153,11 +150,9 @@ public class AccountServiceImpl implements AccountService {
   public Page<SubAccount> getSubAccounts(String id, Pageable pageable) {
     // CSON: LineLength
     Page<SubAccount> resources =
-        mapper.toSubAccountModelPage(
-            subResourceRepository.findAllByAccountId(id, pageable));
+        mapper.toSubAccountModelPage(subResourceRepository.findAllByAccountId(id, pageable));
     return resources;
   }
-
 
   /**
    * update a SubAccount resource based on id.
@@ -172,10 +167,12 @@ public class AccountServiceImpl implements AccountService {
   public Optional<SubAccount> updateSubAccount(String id, String subResourceId, SubAccount record)
       // CSON: LineLength
       throws RequestValidationException {
-    Optional<SubAccount> resource = mapper.toSubAccountModel(
-        subResourceRepository.findById(subResourceId)
-            .map((obj) -> mapper.updateSubAccountMetadata(record, obj))
-            .map((obj) -> subResourceRepository.save(obj)));
+    Optional<SubAccount> resource =
+        mapper.toSubAccountModel(
+            subResourceRepository
+                .findById(subResourceId)
+                .map((obj) -> mapper.updateSubAccountMetadata(record, obj))
+                .map((obj) -> subResourceRepository.save(obj)));
 
     return resource;
   }
@@ -191,8 +188,7 @@ public class AccountServiceImpl implements AccountService {
   // CSOFF: LineLength
   public Optional<SubAccount> deleteSubAccount(String id, String subResourceId) {
     // CSON: LineLength
-    Optional<SubAccount> result =
-        getSubAccount(id, subResourceId);
+    Optional<SubAccount> result = getSubAccount(id, subResourceId);
     subResourceRepository.deleteById(subResourceId);
     return result;
   }

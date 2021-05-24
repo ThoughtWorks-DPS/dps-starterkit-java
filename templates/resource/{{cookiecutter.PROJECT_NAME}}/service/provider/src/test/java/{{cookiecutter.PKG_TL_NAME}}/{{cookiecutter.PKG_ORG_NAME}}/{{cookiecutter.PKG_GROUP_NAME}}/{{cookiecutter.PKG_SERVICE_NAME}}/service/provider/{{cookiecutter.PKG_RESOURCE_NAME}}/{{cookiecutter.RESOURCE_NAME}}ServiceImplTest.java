@@ -382,8 +382,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
     Mockito.when(subResourceRepository.findById(Mockito.any())).thenReturn(emptySubEntity);
 
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> result =
-        manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, "bogus");
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> result = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, "bogus");
     Assertions.assertThat(!result.isPresent()).isTrue();
   }
 
@@ -393,8 +392,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
     Mockito.when(subResourceRepository.save(subEntity)).thenReturn(subAdded);
 
-    {{cookiecutter.SUB_RESOURCE_NAME}} response =
-        manager.add{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subResource);
+    {{cookiecutter.SUB_RESOURCE_NAME}} response = manager.add{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subResource);
 
     Assertions.assertThat(response.getFirstName()).isEqualTo(subResource.getFirstName());
     Assertions.assertThat(response.getId()).isEqualTo(subAdded.getId());
@@ -407,8 +405,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     createOptional{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
     Mockito.when(subResourceRepository.findById(subIdentifier)).thenReturn(optionalSubAdded);
 
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
-        manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier);
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier);
 
     Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(subAdded.getFirstName());
@@ -421,8 +418,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
     Mockito.when(subResourceRepository.findById(bogusName)).thenReturn(emptySubEntity);
 
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
-        manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName);
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName);
 
     Assertions.assertThat(response.isEmpty()).isTrue();
   }
@@ -434,8 +430,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     Mockito.when(subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(identifier, pageable))
         .thenReturn(subEntityPage);
 
-    Page<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
-        manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable);
+    Page<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable);
 
     Assertions.assertThat(response.getContent().size()).isEqualTo(2);
   }
@@ -447,8 +442,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     Mockito.when(subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(identifier, pageable))
         .thenReturn(emptySubEntityPage);
 
-    Page<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
-        manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable);
+    Page<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable);
 
     Assertions.assertThat(response.getContent().size()).isEqualTo(0);
   }
@@ -457,8 +451,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void update{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
 
     createOptional{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
-    Mockito.when(mapper.update{{cookiecutter.SUB_RESOURCE_NAME}}Metadata(subResource, subAdded))
-        .thenReturn(subAdded);
+    Mockito.when(mapper.update{{cookiecutter.SUB_RESOURCE_NAME}}Metadata(subResource, subAdded)).thenReturn(subAdded);
     Mockito.when(subResourceRepository.findById(subIdentifier)).thenReturn(optionalSubAdded);
     Mockito.when(subResourceRepository.save(subAdded)).thenReturn(subAdded);
 
@@ -488,8 +481,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     createOptional{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
     Mockito.when(subResourceRepository.findById(subIdentifier)).thenReturn(optionalSubAdded);
 
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
-        manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier);
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier);
 
     Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(subAdded.getFirstName());
@@ -502,8 +494,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
     createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
     Mockito.when(subResourceRepository.findById(bogusName)).thenReturn(emptySubEntity);
 
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
-        manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName);
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName);
 
     Assertions.assertThat(response.isEmpty()).isTrue();
   }

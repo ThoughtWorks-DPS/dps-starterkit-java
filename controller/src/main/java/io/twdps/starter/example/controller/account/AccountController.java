@@ -2,7 +2,7 @@ package io.twdps.starter.example.controller.account;
 
 import io.twdps.starter.boot.exception.RequestValidationException;
 import io.twdps.starter.boot.exception.ResourceNotFoundException;
-import io.twdps.starter.boot.notifier.EntityLifecycleNotifier;
+import io.twdps.starter.boot.notifier.lifecycle.entity.spi.EntityLifecycleNotifier;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.requests.SubAccountRequest;
 import io.twdps.starter.example.api.account.resources.AccountResource;
@@ -112,7 +112,8 @@ public class AccountController implements AccountResource {
 
   @Override
   // CSOFF: LineLength
-  public ResponseEntity<SubAccountResponse> addSubAccount(String id, SubAccountRequest addEntityRequest)
+  public ResponseEntity<SubAccountResponse> addSubAccount(
+      String id, SubAccountRequest addEntityRequest)
       // CSON: LineLength
       throws RequestValidationException {
 
@@ -139,20 +140,20 @@ public class AccountController implements AccountResource {
         HttpStatus.OK);
   }
 
-
   @Override
   // CSOFF: LineLength
-  public ResponseEntity<PagedResponse<SubAccountResponse>> getSubAccounts(String id, Pageable pageable) {
+  public ResponseEntity<PagedResponse<SubAccountResponse>> getSubAccounts(
+      String id, Pageable pageable) {
     // CSON: LineLength
     Page<SubAccount> resources = manager.getSubAccounts(id, pageable);
 
     return new ResponseEntity<>(mapper.toSubAccountResponsePage(resources), HttpStatus.OK);
   }
 
-
   @Override
   // CSOFF: LineLength
-  public ResponseEntity<SubAccountResponse> updateSubAccount(String id, String subResourceId, SubAccountRequest request)
+  public ResponseEntity<SubAccountResponse> updateSubAccount(
+      String id, String subResourceId, SubAccountRequest request)
       // CSON: LineLength
       throws ResourceNotFoundException, RequestValidationException {
 

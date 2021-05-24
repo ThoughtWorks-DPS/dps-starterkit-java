@@ -2,7 +2,7 @@ package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutte
 
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.exception.RequestValidationException;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.exception.ResourceNotFoundException;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.EntityLifecycleNotifier;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.lifecycle.entity.spi.EntityLifecycleNotifier;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.SUB_RESOURCE_NAME}}Request;
@@ -121,7 +121,8 @@ public class {{cookiecutter.RESOURCE_NAME}}Controller implements {{cookiecutter.
 
   @Override
   // CSOFF: LineLength
-  public ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> add{{cookiecutter.SUB_RESOURCE_NAME}}(String id, {{cookiecutter.SUB_RESOURCE_NAME}}Request addEntityRequest)
+  public ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> add{{cookiecutter.SUB_RESOURCE_NAME}}(
+      String id, {{cookiecutter.SUB_RESOURCE_NAME}}Request addEntityRequest)
       // CSON: LineLength
       throws RequestValidationException {
 
@@ -148,20 +149,20 @@ public class {{cookiecutter.RESOURCE_NAME}}Controller implements {{cookiecutter.
         HttpStatus.OK);
   }
 
-
   @Override
   // CSOFF: LineLength
-  public ResponseEntity<PagedResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> get{{cookiecutter.SUB_RESOURCE_NAME}}s(String id, Pageable pageable) {
+  public ResponseEntity<PagedResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> get{{cookiecutter.SUB_RESOURCE_NAME}}s(
+      String id, Pageable pageable) {
     // CSON: LineLength
     Page<{{cookiecutter.SUB_RESOURCE_NAME}}> resources = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(id, pageable);
 
     return new ResponseEntity<>(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ResponsePage(resources), HttpStatus.OK);
   }
 
-
   @Override
   // CSOFF: LineLength
-  public ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> update{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId, {{cookiecutter.SUB_RESOURCE_NAME}}Request request)
+  public ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> update{{cookiecutter.SUB_RESOURCE_NAME}}(
+      String id, String subResourceId, {{cookiecutter.SUB_RESOURCE_NAME}}Request request)
       // CSON: LineLength
       throws ResourceNotFoundException, RequestValidationException {
 

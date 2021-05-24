@@ -1,5 +1,7 @@
 package io.twdps.starter.example.controller.account.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.requests.SubAccountRequest;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
@@ -18,8 +20,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountRequestMapperTest {
 
@@ -78,20 +78,16 @@ public class AccountRequestMapperTest {
   public void mapperOptionalEmptyTest() {
     Optional<Account> resource = Optional.empty();
 
-    AccountResponse response =
-        mapper.toAccountResponse(resource);
+    AccountResponse response = mapper.toAccountResponse(resource);
 
     assertThat(response).isNull();
   }
 
   @Test
   public void mapperEntityListTest() {
-    List<Account> resources = Arrays.asList(
-        createAccount(identifier),
-        createAccount(identifier));
+    List<Account> resources = Arrays.asList(createAccount(identifier), createAccount(identifier));
 
-    List<AccountResponse> response =
-        mapper.toAccountResponseList(resources);
+    List<AccountResponse> response = mapper.toAccountResponseList(resources);
 
     assertThat(response.size()).isEqualTo(2);
     verifyAccountResponse(response.get(0));
@@ -103,8 +99,7 @@ public class AccountRequestMapperTest {
     Pageable pageable = PageRequest.of(0, 1);
     Page<Account> resources =
         new PageImpl<>(Arrays.asList(createAccount(identifier)), pageable, 100);
-    PagedResponse<AccountResponse> response =
-        mapper.toAccountResponsePage(resources);
+    PagedResponse<AccountResponse> response = mapper.toAccountResponsePage(resources);
 
     assertThat(response.getItems().size()).isEqualTo(1);
     assertThat(response.getTotalItems()).isEqualTo(100);
@@ -134,8 +129,7 @@ public class AccountRequestMapperTest {
 
   @Test
   public void mapperOptionalSubAccountTest() {
-    Optional<SubAccount> resource =
-        Optional.of(createSubAccount(identifier));
+    Optional<SubAccount> resource = Optional.of(createSubAccount(identifier));
 
     SubAccountResponse response = mapper.toSubAccountResponse(resource);
 
@@ -163,12 +157,10 @@ public class AccountRequestMapperTest {
 
   @Test
   public void mapperSubEntityListTest() {
-    List<SubAccount> resources = Arrays.asList(
-        createSubAccount(identifier),
-        createSubAccount(identifier));
+    List<SubAccount> resources =
+        Arrays.asList(createSubAccount(identifier), createSubAccount(identifier));
 
-    List<SubAccountResponse> response =
-        mapper.toSubAccountResponseList(resources);
+    List<SubAccountResponse> response = mapper.toSubAccountResponseList(resources);
 
     assertThat(response.size()).isEqualTo(2);
     verifySubAccountResponse(response.get(0));

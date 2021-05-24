@@ -30,7 +30,7 @@ public class SubAccountRequest {
   /**
    * Create object from json.
    *
-   * @param userName  username of Account holder
+   * @param userName username of Account holder
    * @param firstName firstname of Account holder
    * @param lastName lastname of Account holder
    */
@@ -44,5 +44,4 @@ public class SubAccountRequest {
     this.firstName = firstName;
     this.lastName = lastName;
   }
-
 }

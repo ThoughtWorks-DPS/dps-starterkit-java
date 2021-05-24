@@ -9,8 +9,7 @@ import java.util.Optional;
 
 public interface SubAccountService {
 
-  SubAccount add(SubAccount resource)
-      throws RequestValidationException;
+  SubAccount add(SubAccount resource) throws RequestValidationException;
 
   Page<SubAccount> findByLastName(String lastName, Pageable pageable);
 
@@ -20,8 +19,7 @@ public interface SubAccountService {
 
   Page<SubAccount> findAll(Pageable pageable);
 
-  Optional<SubAccount> updateById(String id, SubAccount record)
-      throws RequestValidationException;
+  Optional<SubAccount> updateById(String id, SubAccount record) throws RequestValidationException;
 
   Optional<SubAccount> deleteById(String id);
 }

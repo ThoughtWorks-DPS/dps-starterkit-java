@@ -416,8 +416,7 @@ public interface AccountResource {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema =
-                  @Schema(implementation = PagedSubAccountResponse.class))
+                  schema = @Schema(implementation = PagedSubAccountResponse.class))
             }),
         @ApiResponse(
             responseCode = "401",

@@ -19,9 +19,7 @@ public class SubAccountServiceImpl implements SubAccountService {
   private SubAccountEntityRepository repository;
   private SubAccountEntityMapper mapper;
 
-  SubAccountServiceImpl(
-      SubAccountEntityRepository repository,
-      SubAccountEntityMapper mapper) {
+  SubAccountServiceImpl(SubAccountEntityRepository repository, SubAccountEntityMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;
   }
@@ -33,8 +31,7 @@ public class SubAccountServiceImpl implements SubAccountService {
    * @return new resource object with valid id
    */
   @Override
-  public SubAccount add(SubAccount resource)
-      throws RequestValidationException {
+  public SubAccount add(SubAccount resource) throws RequestValidationException {
     SubAccount saved = mapper.toModel(repository.save(mapper.toEntity(resource)));
     return saved;
   }

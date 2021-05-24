@@ -1,5 +1,7 @@
 package io.twdps.starter.example.service.provider.subaccount.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.twdps.starter.example.persistence.model.SubAccountEntity;
 import io.twdps.starter.example.service.spi.subaccount.model.SubAccount;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubAccountEntityMapperTest {
 
@@ -99,9 +99,8 @@ public class SubAccountEntityMapperTest {
 
   @Test
   public void mapperEntityListTest() {
-    List<SubAccountEntity> entities = Arrays.asList(
-        createSubAccountEntity(),
-        createSubAccountEntity());
+    List<SubAccountEntity> entities =
+        Arrays.asList(createSubAccountEntity(), createSubAccountEntity());
 
     List<SubAccount> response = mapper.toModelList(entities);
 
@@ -116,9 +115,7 @@ public class SubAccountEntityMapperTest {
     Page<SubAccountEntity> entities =
         new PageImpl<>(
             Arrays.asList(
-                createSubAccountEntity(),
-                createSubAccountEntity(),
-                createSubAccountEntity()),
+                createSubAccountEntity(), createSubAccountEntity(), createSubAccountEntity()),
             pageable,
             100);
 
@@ -181,7 +178,8 @@ public class SubAccountEntityMapperTest {
    * @param response the object to validate
    */
   // CSOFF: LineLength
-  private void verifySubAccountEntity(SubAccountEntity response, boolean hasId, boolean hasParentId) {
+  private void verifySubAccountEntity(
+      SubAccountEntity response, boolean hasId, boolean hasParentId) {
     // CSON: LineLength
     assertThat(response.getUserName()).isEqualTo(userName);
     assertThat(response.getPii()).isEqualTo(pii);

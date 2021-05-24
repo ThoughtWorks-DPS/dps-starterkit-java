@@ -10,8 +10,7 @@ import java.util.Optional;
 
 public interface AccountService {
 
-  Account add(Account resource)
-      throws RequestValidationException;
+  Account add(Account resource) throws RequestValidationException;
 
   Page<Account> findByLastName(String lastName, Pageable pageable);
 
@@ -21,13 +20,11 @@ public interface AccountService {
 
   Page<Account> findAll(Pageable pageable);
 
-  Optional<Account> updateById(String id, Account record)
-      throws RequestValidationException;
+  Optional<Account> updateById(String id, Account record) throws RequestValidationException;
 
   Optional<Account> deleteById(String id);
 
-  SubAccount addSubAccount(String id, SubAccount subResource)
-      throws RequestValidationException;
+  SubAccount addSubAccount(String id, SubAccount subResource) throws RequestValidationException;
 
   Page<SubAccount> getSubAccounts(String id, Pageable pageable);
 

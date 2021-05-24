@@ -1,11 +1,15 @@
 package io.twdps.starter.example.controller.subaccount;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.twdps.starter.boot.config.ErrorHandlerAdvice;
-import io.twdps.starter.boot.config.ErrorHandlerConfig;
-import io.twdps.starter.boot.config.OpenApiConfiguration;
+import io.twdps.starter.boot.errorhandling.advice.ErrorHandlerAdvice;
+import io.twdps.starter.boot.errorhandling.config.ErrorHandlerConfig;
 import io.twdps.starter.boot.exception.RequestValidationException;
 import io.twdps.starter.boot.exception.ResourceNotFoundException;
+import io.twdps.starter.boot.openapi.config.OpenApiConfiguration;
 import io.twdps.starter.example.SecurityAllowConfig;
 import io.twdps.starter.example.api.subaccount.requests.SubAccountRequest;
 import io.twdps.starter.example.api.subaccount.resources.SubAccountResource;
@@ -28,10 +32,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.zalando.problem.Problem;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Slf4j
 @ExtendWith(SpringExtension.class)

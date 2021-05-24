@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 @AllArgsConstructor
-//@RequiredArgsConstructor
+// @RequiredArgsConstructor
 @Getter
 @Schema(
     name = "SubAccountResponse",

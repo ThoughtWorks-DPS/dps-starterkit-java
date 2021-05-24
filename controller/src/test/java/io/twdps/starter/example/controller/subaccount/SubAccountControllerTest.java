@@ -1,12 +1,15 @@
 package io.twdps.starter.example.controller.subaccount;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import io.twdps.starter.boot.exception.ResourceNotFoundException;
-import io.twdps.starter.boot.notifier.EntityLifecycleNotifier;
-import io.twdps.starter.boot.notifier.MemoizedTimestampProvider;
-import io.twdps.starter.boot.notifier.NoopEntityLifecycleNotifier;
+import io.twdps.starter.boot.notifier.lifecycle.entity.provider.MemoizedTimestampProvider;
+import io.twdps.starter.boot.notifier.lifecycle.entity.provider.NoopEntityLifecycleNotifier;
+import io.twdps.starter.boot.notifier.lifecycle.entity.spi.EntityLifecycleNotifier;
+import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.api.subaccount.requests.SubAccountRequest;
 import io.twdps.starter.example.api.subaccount.responses.SubAccountResponse;
-import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.controller.subaccount.mapper.SubAccountRequestMapper;
 import io.twdps.starter.example.service.spi.subaccount.SubAccountService;
 import io.twdps.starter.example.service.spi.subaccount.model.SubAccount;
@@ -27,9 +30,6 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -136,8 +136,7 @@ public class SubAccountControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.add(resource)).thenReturn(output);
 
-    ResponseEntity<SubAccountResponse> response =
-        controller.addEntity(request);
+    ResponseEntity<SubAccountResponse> response = controller.addEntity(request);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(201);
     assertThat(response.getBody()).isNotNull();
@@ -152,8 +151,7 @@ public class SubAccountControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.findById(identifier)).thenReturn(optionalOutput);
 
-    ResponseEntity<SubAccountResponse> response =
-        controller.findEntityById(identifier);
+    ResponseEntity<SubAccountResponse> response = controller.findEntityById(identifier);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getPii()).isEqualTo(pii);
@@ -169,8 +167,7 @@ public class SubAccountControllerTest {
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<SubAccountResponse> response =
-              controller.findEntityById(bogusName);
+          ResponseEntity<SubAccountResponse> response = controller.findEntityById(bogusName);
         });
   }
 
@@ -180,8 +177,7 @@ public class SubAccountControllerTest {
     createListMapperStubs();
     Mockito.when(manager.findAll(pageable)).thenReturn(outputPage);
 
-    ResponseEntity<PagedResponse<SubAccountResponse>> response =
-        controller.findEntities(pageable);
+    ResponseEntity<PagedResponse<SubAccountResponse>> response = controller.findEntities(pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getItems().size()).isEqualTo(2);
@@ -194,8 +190,7 @@ public class SubAccountControllerTest {
     createEmptyListMapperStubs();
     Mockito.when(manager.findAll(pageable)).thenReturn(emptyOutputPage);
 
-    ResponseEntity<PagedResponse<SubAccountResponse>> response =
-        controller.findEntities(pageable);
+    ResponseEntity<PagedResponse<SubAccountResponse>> response = controller.findEntities(pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getItems().size()).isEqualTo(0);
@@ -208,8 +203,7 @@ public class SubAccountControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.updateById(identifier, resource)).thenReturn(optionalOutput);
 
-    ResponseEntity<SubAccountResponse> response =
-        controller.updateEntityById(identifier, request);
+    ResponseEntity<SubAccountResponse> response = controller.updateEntityById(identifier, request);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getPii()).isEqualTo(pii);
@@ -237,8 +231,7 @@ public class SubAccountControllerTest {
     createResponseMapperStubs();
     Mockito.when(manager.deleteById(identifier)).thenReturn(optionalOutput);
 
-    ResponseEntity<SubAccountResponse> response =
-        controller.deleteEntityById(identifier);
+    ResponseEntity<SubAccountResponse> response = controller.deleteEntityById(identifier);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getPii()).isEqualTo(pii);
@@ -254,8 +247,7 @@ public class SubAccountControllerTest {
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<SubAccountResponse> response =
-              controller.deleteEntityById(bogusName);
+          ResponseEntity<SubAccountResponse> response = controller.deleteEntityById(bogusName);
         });
   }
 
