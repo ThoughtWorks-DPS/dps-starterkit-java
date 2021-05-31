@@ -5,6 +5,6 @@ CREATE TABLE {{cookiecutter.PKG_SERVICE_NAME}}.{{cookiecutter.RESOURCE_TABLE_NAM
     firstName VARCHAR NOT NULL,
     lastName VARCHAR NOT NULL
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
-    {{cookiecutter.PKG_PARENT_RESOURCE_NAME}}Id VARCHAR NOT NULL
+    {{cookiecutter.PKG_PARENT_RESOURCE_NAME}}Id VARCHAR
 {%- endif %}
 );

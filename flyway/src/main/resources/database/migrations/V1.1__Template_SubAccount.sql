@@ -4,5 +4,5 @@ CREATE TABLE example.subaccount (
     pii VARCHAR NOT NULL,
     firstName VARCHAR NOT NULL,
     lastName VARCHAR NOT NULL,
-    accountId VARCHAR NOT NULL
+    accountId VARCHAR
 );

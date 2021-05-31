@@ -9,26 +9,64 @@ This is the repository for the Java API Starter from Template.
 ## Developer environment 
 
 ### Build requirements
-- Java 11+
+
+- Java 14+
+
+Mac users can execute the following command to install the latest version of Java: 
+
+```bash
+brew install java
+```
+
+Verify that the correct Java version is being used by running:
+
+```bash
+java -version
+```
+
+If needed, set your machine to use the correct version of Java (JAVA_VERSION in the command below) that was installed by 
+adding the following line to your .bashrc or .zshrc:
+
+```bash
+export JAVA_HOME=/usr/local/Cellar/openjdk/<JAVA_VERSION>/libexec/openjdk.jdk/Contents/Home 
+```
+
+Reload the shell by running:
+
+```bash
+source .bashrc
+#or
+source .zshrc
+```
 
 ### Dev Tools Setup
+
 - `cd scripts`
 - Run `sh mac-dev-tools.sh`
 
+### Generating an app skeleton
+
+The rest of this document is for developing this project.
+In order to generate an app skeleton, follow: docs/tutorial.md.
+
 ### Running locally
+
 - Run: `./gradlew run`
 - To pass in secrets from secrethub as environment variables to docker: `secrethub run -- ./gradlew run`.
-  - secrethub will look within `secrethub.env` for defined secrets to map to environment variables.
+    - secrethub will look within `secrethub.env` for defined secrets to map to environment variables.
 - If run without secrethub before gradle, the environment variables defined with `build.gradle` will default to `override-me`
 
 ### Running locally in docker
+
 - First, build the image by running `./gradlew docker`
 - Then, run `./gradlew dockerRun`
 
 ### Running tests
+
 - Run: `./gradlew test`
 
 ### Running performance tests
+
 - With the server running (either via `./gradlew bootRun` or `./gradlew run` for Docker), run: `./gradlew :app:gatlingRun`
 - At the end of test execution, html file should be created.
 Open up to see test results.
@@ -36,6 +74,7 @@ Open up to see test results.
 - Add configuration in `app/src/gatling/resources/gatling.conf`
 
 ### Watching Kafka queues
+
 - With the docker-compose running (`./gradlew :app:dockerComposeUp`)
 - Run the gatling load test to generate traffic (`./gradlew :app:gatlingRun`)
 - Run the command-line consumer within a shell inside the kafka container
@@ -46,8 +85,10 @@ docker exec -it -u root docker_kafka_1 /bin/bash -c \
 ```
 
 ### Setting up SecretHub credentials
+
 SecretHub is used both locally, in CircleCI, and our deployments.
 For local development, developers will need to install and setup their workstation with the `secrethub-cli`:
+
 - If you ran the `mac-dev-tools.sh` script, `secrethub-cli` should be installed.
 Otherwise, run `brew install secrethub/tools/secrethub-cli`.
 - Sign up for a SecretHub account through [https://signup.secrethub.io/signup].
@@ -59,6 +100,7 @@ Keep this secret, keep it safe (don't commit nor share)!
 - Add SecretHub username for which credentials are initialized to `secrethub.user` in `local.properties`.
 
 ### Adding to Architecture Decision Record (ADR)
+
 - First, install adr-tools: https://github.com/npryce/adr-tools/blob/master/INSTALL.md
 - ADR has already been initialized on the template project.
 You can see an example of it in the initial ADR record in `<root>/docs/architecture-decisions/template/0001-record-architecture-decisions.md`
@@ -66,10 +108,13 @@ You can see an example of it in the initial ADR record in `<root>/docs/architect
 - To see additional commands, run `adr help`
 
 ### Linting
+
+Linting via Spotless is set to execute automatically prior to committing via pre-commit.
+
 - Linting using spotless locally
-  - Allows autocorrection of lint offenders
-  - https://github.com/diffplug/spotless/tree/master/plugin-gradle#java
-  - https://github.com/google/google-java-format
+    - Allows autocorrection of lint offenders
+    - https://github.com/diffplug/spotless/tree/master/plugin-gradle#java
+    - https://github.com/google/google-java-format
 - Run: `./gradlew spotlessCheck` to execute linting checks
 - Run: `./gradlew spotlessApply` to attempt to auto-format and correct linting errors
 - Reports for test coverage: `/build/jacoco/test/index.html`

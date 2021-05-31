@@ -41,34 +41,46 @@ At the current stage of development, the "common bits" are:
 * Local execution support
   * Docker-Compose definition for running service and dependencies
   * Supporting Postgres, Kafka, Jaeger, OPA, Spring-Boot app
- 
 
-## Creating a new service
+## Dependencies
 
-Here is a walk-through of the process for creating a new service skeleton.
+1. Refer to build requirements in the README.md of the root of this repo
+2. Install CookieCutter as per: https://cookiecutter.readthedocs.io/en/1.7.3/installation.html
+3. Clone the following repo: https://github.com/thoughtworks-dps/dps-multi-module-starter-boot
+
+## Generating a new API service
+
+Here is a walk-through of the process for creating a new service skeleton including a sub-resource structure, using a project called bookbinder as an example.
 
 ```bash
 % export CC_PROJECT=https://github.com/thoughtworks-dps/dps-multi-module-starterkit-java # (1)
+% export PROJECT_NAME=bookbinder
 % cookiecutter "${CC_PROJECT}" \
 --directory templates/project \
-PROJECT_NAME=mpi-facade \
-PACKAGE_NAME=mpifacade \
-RESOURCE_VAR_NAME=facilityVisit \
+PROJECT_NAME="${PROJECT_NAME}" \
+PACKAGE_NAME="${PROJECT_NAME}" \
+RESOURCE_VAR_NAME=bindingContract \ # this is the name of your database entity
 projectDir="${CC_PROJECT}" \
 --no-input
-% cd $PROJECT_NAME
+
+% cd "${PROJECT_NAME}"
+
 % gradlew clean build check docker
-% gradlew :app:dockerComposeDown :app:dcPrune  :app:dockerComposeUp
+% gradlew :app:dockerComposeDown :app:dcPrune :app:dockerComposeUp # (2)
 ```
 
 > Note:
 > 1. If testing locally, set this to the path to your local repo
+> 2. If there are issues with flyway migrations, pruning the docker volumes may resolve them: `./gradlew :app:dcPruneVolume`
 
 > Note: Any time you are pulling artifacts from the Github packages repository, it is likely that you will need to specify your authorizations.
 > Typically, we run the build behind `secrethub` to obtain the necessary credentials for Github Packages. 
 > ```bash
 > % secrethub run -- gradlew clean build check docker
 > ```
+> You may also be required to use a Personal Access Token in lieu of your password.
+
+## Load/Performance Tests
 
 In order to see the system working, attach a consumer to the Kafka queue.
 Then run the performance test to generate traffic.
@@ -78,11 +90,26 @@ Then run the performance test to generate traffic.
 % gradlew :app:gatlingRun  
 ```
 
+The console output of the Gatling tests will provide a link to a browser view with details on the tests, e.g.
+
+```
+Reports generated in 0s.
+Please open the following file: /<path>/<to>/<project>/app/build/reports/gatling/<api-name>simulation-<timestamp>/index.html
+== CSV Build Time Summary ==
+Build time today: 6:50.347
+Total build time: 6:50.347
+(measured since 8 minutes ago)
+```
+
+## OpenAPI Spec
+
 View the OpenAPI documentation for your service
 
 ```bash
-% chrome http://localhost:8080/swagger-ui/index.html
+% chrome http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
  ```
+
+## Tracing
 
 View the Jaeger monitoring system
 
@@ -90,35 +117,3 @@ View the Jaeger monitoring system
 % chrome http://localhost:16686/
  ```
 
-## MPI Facade example
-
-## Creating a new service
-
-Here is a walk-through of the process for creating a new service skeleton including a sub-resource structure.
-
-```bash
-% export CC_PROJECT=https://github.com/thoughtworks-dps/dps-multi-module-starterkit-java # (1)
-% cookiecutter "${CC_PROJECT}" \
---directory templates/project \
-PROJECT_NAME=mpi-facade \
-PACKAGE_NAME=mpifacade \
---no-input
-% cookiecutter "${CC_PROJECT}" \
---directory templates/resource \
-PROJECT_NAME=mpi-facade \
-PACKAGE_NAME=mpifacade \
-RESOURCE_VAR_NAME=facilityVisit \
---no-input
-% cd $PROJECT_NAME
-% gradlew clean build check docker
-% gradlew :app:dockerComposeDown :app:dcPrune  :app:dockerComposeUp
-```
-
-> Note:
-> 1. If testing locally, set this to the path to your local repo
-
-> Note: Any time you are pulling artifacts from the Github packages repository, it is likely that you will need to specify your authorizations.
-> Typically, we run the build behind `secrethub` to obtain the necessary credentials for Github Packages.
-> ```bash
-> % secrethub run -- gradlew clean build check docker
-> ```
