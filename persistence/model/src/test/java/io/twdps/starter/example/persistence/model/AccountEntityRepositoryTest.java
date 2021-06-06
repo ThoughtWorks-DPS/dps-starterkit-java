@@ -2,37 +2,54 @@ package io.twdps.starter.example.persistence.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.twdps.starter.boot.test.data.spi.DataFactory;
+import io.twdps.starter.example.data.account.model.AccountData;
+import io.twdps.starter.example.data.account.provider.AccountDataFactory;
+import io.twdps.starter.example.data.account.provider.AccountDataProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
+@EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@ContextConfiguration(classes = {AccountDataFactory.class, AccountDataProperties.class})
 public class AccountEntityRepositoryTest {
 
   @Autowired private AccountEntityRepository modelEntityRepository;
 
   private AccountEntity entity;
 
-  private final String userName = "jsmith";
-  private final String pii = "123-45-6789";
-  private final String firstName = "Joe";
-  private final String lastName = "Smith";
+  @Autowired private AccountDataFactory testData;
 
+  private AccountData reference;
+  private AccountData bogus;
+
+  /** Setup test data. */
   @BeforeEach
   public void setup() {
-    entity = new AccountEntity(userName, pii, firstName, lastName);
+    reference = testData.getNamedData(DataFactory.DEFAULT_NAME);
+    bogus = testData.getNamedData("bogus");
+
+    entity =
+        new AccountEntity(
+            reference.getUserName(),
+            reference.getPii(),
+            reference.getFirstName(),
+            reference.getLastName());
   }
 
   /**
@@ -42,11 +59,13 @@ public class AccountEntityRepositoryTest {
    */
   public AccountEntity populate() {
     AccountEntity result = modelEntityRepository.save(entity);
-    AccountEntity agentSmith = new AccountEntity("asmith", pii, "Agent", lastName);
-    modelEntityRepository.save(agentSmith);
-    AccountEntity maryQuiteContrary =
-        new AccountEntity("maryQuiteContrary", pii, "Mary", "Contrary");
-    modelEntityRepository.save(maryQuiteContrary);
+    testData.getNamedDataCollection(DataFactory.DEFAULT_NAME).stream()
+        .forEach(
+            d -> {
+              AccountEntity ref =
+                  new AccountEntity(d.getUserName(), d.getPii(), d.getFirstName(), d.getLastName());
+              modelEntityRepository.save(ref);
+            });
 
     return result;
   }
@@ -60,20 +79,21 @@ public class AccountEntityRepositoryTest {
   public void createAndGetTest() {
     modelEntityRepository.save(entity);
 
-    Optional<AccountEntity> retrievedEntity = modelEntityRepository.findByUserName(userName);
+    Optional<AccountEntity> retrievedEntity =
+        modelEntityRepository.findByUserName(reference.getUserName());
 
     assertThat(retrievedEntity.isPresent());
-    assertThat(retrievedEntity.get().getFirstName()).isEqualTo(firstName);
+    assertThat(retrievedEntity.get().getFirstName()).isEqualTo(reference.getFirstName());
   }
 
   @Test
   public void testFindByLastName() {
     populate();
 
-    Page<AccountEntity> retrievedSmiths =
-        modelEntityRepository.findByLastName(lastName, Pageable.unpaged());
+    Page<AccountEntity> results =
+        modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
 
-    assertThat(retrievedSmiths.getContent().size()).isEqualTo(2);
+    assertThat(results.getContent().size()).isEqualTo(2);
   }
 
   @Test
@@ -81,25 +101,25 @@ public class AccountEntityRepositoryTest {
     populate();
 
     Pageable pageable = PageRequest.of(0, 1);
-    Page<AccountEntity> retrievedSmiths = modelEntityRepository.findByLastName(lastName, pageable);
+    Page<AccountEntity> results =
+        modelEntityRepository.findByLastName(reference.getLastName(), pageable);
 
-    assertThat(retrievedSmiths.getContent().size()).isEqualTo(1);
+    assertThat(results.getContent().size()).isEqualTo(1);
   }
 
   @Test
   public void testUpdateRecord() {
-    final String newName = "Contrary";
     AccountEntity saved = modelEntityRepository.save(entity);
-    saved.setLastName(newName);
+    saved.setLastName(bogus.getLastName());
 
     AccountEntity updated = modelEntityRepository.save(saved);
 
-    Page<AccountEntity> retrievedSmiths =
-        modelEntityRepository.findByLastName(lastName, Pageable.unpaged());
-    assertThat(retrievedSmiths.getContent().size()).isEqualTo(0);
-    Page<AccountEntity> retrievedContrarians =
-        modelEntityRepository.findByLastName(newName, Pageable.unpaged());
-    assertThat(retrievedContrarians.getContent().size()).isEqualTo(1);
+    Page<AccountEntity> results =
+        modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
+    assertThat(results.getContent().size()).isEqualTo(0);
+    Page<AccountEntity> bogonResults =
+        modelEntityRepository.findByLastName(bogus.getLastName(), Pageable.unpaged());
+    assertThat(bogonResults.getContent().size()).isEqualTo(1);
   }
 
   @Test
@@ -108,9 +128,9 @@ public class AccountEntityRepositoryTest {
 
     modelEntityRepository.deleteById(saved.getId());
 
-    Page<AccountEntity> retrievedSmiths =
-        modelEntityRepository.findByLastName("Smith", Pageable.unpaged());
-    assertThat(retrievedSmiths.getContent().size()).isEqualTo(1);
+    Page<AccountEntity> results =
+        modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
+    assertThat(results.getContent().size()).isEqualTo(1);
   }
 
   @Test

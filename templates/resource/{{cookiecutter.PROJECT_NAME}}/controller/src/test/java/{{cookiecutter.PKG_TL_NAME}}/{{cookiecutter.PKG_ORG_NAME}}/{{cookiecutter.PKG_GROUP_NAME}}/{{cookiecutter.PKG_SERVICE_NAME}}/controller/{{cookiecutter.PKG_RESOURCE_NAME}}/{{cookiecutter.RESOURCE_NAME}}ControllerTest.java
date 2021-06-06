@@ -7,19 +7,24 @@ import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.e
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.lifecycle.entity.provider.MemoizedTimestampProvider;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.lifecycle.entity.provider.NoopEntityLifecycleNotifier;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.lifecycle.entity.spi.EntityLifecycleNotifier;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.spi.DataFactory;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
-{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.SUB_RESOURCE_NAME}}Request;
-{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.RESOURCE_NAME}}Response;
-{%-if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.SUB_RESOURCE_NAME}}Response;
-{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.responses.PagedResponse;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.controller.{{cookiecutter.PKG_RESOURCE_NAME}}.mapper.{{cookiecutter.RESOURCE_NAME}}RequestMapper;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}}Data;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataFactory;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataProperties;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}TestData;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.{{cookiecutter.RESOURCE_NAME}}Service;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.SUB_RESOURCE_NAME}}Response;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.SUB_RESOURCE_NAME}}Request;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}Data;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.provider.{{cookiecutter.SUB_RESOURCE_NAME}}DataFactory;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.provider.{{cookiecutter.SUB_RESOURCE_NAME}}DataProperties;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.provider.{{cookiecutter.SUB_RESOURCE_NAME}}TestData;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}};
 {%- endif %}
 import lombok.extern.slf4j.Slf4j;
@@ -48,18 +53,23 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
 
   @Mock private {{cookiecutter.RESOURCE_NAME}}Service manager;
   @Mock private {{cookiecutter.RESOURCE_NAME}}RequestMapper mapper;
+
   private EntityLifecycleNotifier notifier =
       new NoopEntityLifecycleNotifier(new MemoizedTimestampProvider(ZonedDateTime.now()));
 
-  private final String userName = "jsmith";
-  private final String pii = "123-45-6789";
-  private final String bogusName = "bogus";
-  private final String firstName = "Joe";
-  private final String lastName = "Smith";
-  private final String identifier = "12345";
-  private final String fullName = "Joe Smith";
+  private {{cookiecutter.RESOURCE_NAME}}TestData resourceTestDataLoader = new {{cookiecutter.RESOURCE_NAME}}TestData();
+  private {{cookiecutter.RESOURCE_NAME}}DataFactory resourceTestData = new {{cookiecutter.RESOURCE_NAME}}DataFactory(resourceTestDataLoader);
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-  private final String subIdentifier = "abcde";
+  private {{cookiecutter.SUB_RESOURCE_NAME}}TestData subResourceTestDataLoader = new {{cookiecutter.SUB_RESOURCE_NAME}}TestData();
+  private {{cookiecutter.SUB_RESOURCE_NAME}}DataFactory subResourceTestData= new {{cookiecutter.SUB_RESOURCE_NAME}}DataFactory(
+    subResourceTestDataLoader);
+{%- endif %}
+
+  private {{cookiecutter.RESOURCE_NAME}}Data reference;
+  private {{cookiecutter.RESOURCE_NAME}}Data bogus;
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+  private {{cookiecutter.SUB_RESOURCE_NAME}}Data subReference;
+  private {{cookiecutter.SUB_RESOURCE_NAME}}Data subBogus;
 {%- endif %}
 
   private {{cookiecutter.RESOURCE_NAME}} resource;
@@ -106,14 +116,24 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
 
     controller = new {{cookiecutter.RESOURCE_NAME}}Controller(manager, mapper, notifier);
 
+    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
+    bogus = resourceTestData.getNamedData("bogus");
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+    subReference = subResourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
+    subBogus = subResourceTestData.getNamedData("bogus");
+{%- endif %}
+
     // use the real mapper to generate consistent objects to use in mapper stubs
     {{cookiecutter.RESOURCE_NAME}}RequestMapper real = Mappers.getMapper({{cookiecutter.RESOURCE_NAME}}RequestMapper.class);
 
-    request = new {{cookiecutter.RESOURCE_NAME}}Request(userName, pii, firstName, lastName);
+    request = new {{cookiecutter.RESOURCE_NAME}}Request(reference.getUserName(),
+        reference.getPii(),
+        reference.getFirstName(),
+        reference.getLastName());
     resource = real.toModel(request);
     output =
         new {{cookiecutter.RESOURCE_NAME}}(
-            identifier,
+            reference.getId(),
             resource.getUserName(),
             resource.getPii(),
             resource.getFirstName(),
@@ -130,11 +150,13 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
 
-    subRequest = new {{cookiecutter.SUB_RESOURCE_NAME}}Request(userName, firstName, lastName);
+    subRequest = new {{cookiecutter.SUB_RESOURCE_NAME}}Request(subReference.getUserName(),
+        subReference.getFirstName(),
+        subReference.getLastName());
     subResource = real.toModel(subRequest);
     subOutput =
         new {{cookiecutter.SUB_RESOURCE_NAME}}(
-            subIdentifier,
+            subReference.getId(),
             subResource.getUserName(),
             subResource.getFirstName(),
             subResource.getLastName());
@@ -197,12 +219,12 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   @Test
   public void findBy{{cookiecutter.RESOURCE_NAME}}IdFailTest() throws Exception {
 
-    Mockito.when(manager.findById(bogusName)).thenReturn(empty{{cookiecutter.RESOURCE_NAME}});
+    Mockito.when(manager.findById(bogus.getId())).thenReturn(empty{{cookiecutter.RESOURCE_NAME}});
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.findEntityById(bogusName);
+          ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.findEntityById(bogus.getId());
         });
   }
 
@@ -217,34 +239,34 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
 
     assertThat(response.getStatusCodeValue()).isEqualTo(201);
     assertThat(response.getBody()).isNotNull();
-    assertThat(response.getBody().getPii()).isEqualTo(pii);
-    assertThat(response.getBody().getFullName()).isEqualTo(fullName);
-    assertThat(response.getBody().getId()).isEqualTo(identifier);
+    assertThat(response.getBody().getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getBody().getFullName()).isEqualTo(reference.getFullName());
+    assertThat(response.getBody().getId()).isEqualTo(reference.getId());
   }
 
   @Test
   public void findByIdTest() throws Exception {
 
     createResponseMapperStubs();
-    Mockito.when(manager.findById(identifier)).thenReturn(optionalOutput);
+    Mockito.when(manager.findById(reference.getId())).thenReturn(optionalOutput);
 
-    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.findEntityById(identifier);
+    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.findEntityById(reference.getId());
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getPii()).isEqualTo(pii);
-    assertThat(response.getBody().getFullName()).isEqualTo(fullName);
-    assertThat(response.getBody().getId()).isEqualTo(identifier);
+    assertThat(response.getBody().getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getBody().getFullName()).isEqualTo(reference.getFullName());
+    assertThat(response.getBody().getId()).isEqualTo(reference.getId());
   }
 
   @Test
   public void findByIdFailedTest() throws Exception {
 
-    Mockito.when(manager.findById(bogusName)).thenReturn(empty{{cookiecutter.RESOURCE_NAME}});
+    Mockito.when(manager.findById(bogus.getId())).thenReturn(empty{{cookiecutter.RESOURCE_NAME}});
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.findEntityById(bogusName);
+          ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.findEntityById(bogus.getId());
         });
   }
 
@@ -278,27 +300,27 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
 
     createMapperStubs();
     createResponseMapperStubs();
-    Mockito.when(manager.updateById(identifier, resource)).thenReturn(optionalOutput);
+    Mockito.when(manager.updateById(reference.getId(), resource)).thenReturn(optionalOutput);
 
-    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.updateEntityById(identifier, request);
+    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.updateEntityById(reference.getId(), request);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getPii()).isEqualTo(pii);
-    assertThat(response.getBody().getFullName()).isEqualTo(fullName);
-    assertThat(response.getBody().getId()).isEqualTo(identifier);
+    assertThat(response.getBody().getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getBody().getFullName()).isEqualTo(reference.getFullName());
+    assertThat(response.getBody().getId()).isEqualTo(reference.getId());
   }
 
   @Test
   public void updateFailedTest() throws Exception {
 
     createMapperStubs();
-    Mockito.when(manager.updateById(bogusName, resource)).thenReturn(empty{{cookiecutter.RESOURCE_NAME}});
+    Mockito.when(manager.updateById(bogus.getId(), resource)).thenReturn(empty{{cookiecutter.RESOURCE_NAME}});
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
           ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response =
-              controller.updateEntityById(bogusName, request);
+              controller.updateEntityById(bogus.getId(), request);
         });
   }
 
@@ -306,25 +328,25 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   public void deleteTest() throws Exception {
 
     createResponseMapperStubs();
-    Mockito.when(manager.deleteById(identifier)).thenReturn(optionalOutput);
+    Mockito.when(manager.deleteById(reference.getId())).thenReturn(optionalOutput);
 
-    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.deleteEntityById(identifier);
+    ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.deleteEntityById(reference.getId());
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getPii()).isEqualTo(pii);
-    assertThat(response.getBody().getFullName()).isEqualTo(fullName);
-    assertThat(response.getBody().getId()).isEqualTo(identifier);
+    assertThat(response.getBody().getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getBody().getFullName()).isEqualTo(reference.getFullName());
+    assertThat(response.getBody().getId()).isEqualTo(reference.getId());
   }
 
   @Test
   public void deleteFailedTest() throws Exception {
 
-    Mockito.when(manager.deleteById(bogusName)).thenReturn(empty{{cookiecutter.RESOURCE_NAME}});
+    Mockito.when(manager.deleteById(bogus.getId())).thenReturn(empty{{cookiecutter.RESOURCE_NAME}});
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.deleteEntityById(bogusName);
+          ResponseEntity<{{cookiecutter.RESOURCE_NAME}}Response> response = controller.deleteEntityById(bogus.getId());
         });
   }
 
@@ -333,13 +355,13 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   @Test
   public void findBy{{cookiecutter.SUB_RESOURCE_NAME}}IdFailTest() throws Exception {
 
-    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName)).thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
+    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subBogus.getId())).thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
           ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response =
-              controller.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName);
+              controller.get{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subBogus.getId());
         });
   }
 
@@ -348,38 +370,38 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
     create{{cookiecutter.SUB_RESOURCE_NAME}}ResponseMapperStubs();
-    Mockito.when(manager.add{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subResource)).thenReturn(subOutput);
+    Mockito.when(manager.add{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subResource)).thenReturn(subOutput);
 
-    ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response = controller.add{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subRequest);
+    ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response = controller.add{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subRequest);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(201);
     assertThat(response.getBody()).isNotNull();
-    assertThat(response.getBody().getId()).isEqualTo(subIdentifier);
+    assertThat(response.getBody().getId()).isEqualTo(subReference.getId());
   }
 
   @Test
   public void find{{cookiecutter.SUB_RESOURCE_NAME}}ByIdTest() throws Exception {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}ResponseMapperStubs();
-    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier)).thenReturn(optionalSubOutput);
+    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subReference.getId())).thenReturn(optionalSubOutput);
 
     ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response =
-        controller.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier);
+        controller.get{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subReference.getId());
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getId()).isEqualTo(subIdentifier);
+    assertThat(response.getBody().getId()).isEqualTo(subReference.getId());
   }
 
   @Test
   public void find{{cookiecutter.SUB_RESOURCE_NAME}}ByIdFailedTest() throws Exception {
 
-    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName)).thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
+    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subBogus.getId())).thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
           ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response =
-              controller.get{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName);
+              controller.get{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subBogus.getId());
         });
   }
 
@@ -387,10 +409,10 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   public void findAll{{cookiecutter.SUB_RESOURCE_NAME}}Test() throws Exception {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs();
-    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable)).thenReturn(subOutputPage);
+    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(reference.getId(), pageable)).thenReturn(subOutputPage);
 
     ResponseEntity<PagedResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> response =
-        controller.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable);
+        controller.get{{cookiecutter.SUB_RESOURCE_NAME}}s(reference.getId(), pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getItems().size()).isEqualTo(2);
@@ -401,10 +423,10 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   public void findAll{{cookiecutter.SUB_RESOURCE_NAME}}EmptyTest() throws Exception {
 
     createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs();
-    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable)).thenReturn(emptySubOutputPage);
+    Mockito.when(manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(reference.getId(), pageable)).thenReturn(emptySubOutputPage);
 
     ResponseEntity<PagedResponse<{{cookiecutter.SUB_RESOURCE_NAME}}Response>> response =
-        controller.get{{cookiecutter.SUB_RESOURCE_NAME}}s(identifier, pageable);
+        controller.get{{cookiecutter.SUB_RESOURCE_NAME}}s(reference.getId(), pageable);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getBody().getItems().size()).isEqualTo(0);
@@ -415,28 +437,28 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
     create{{cookiecutter.SUB_RESOURCE_NAME}}ResponseMapperStubs();
-    Mockito.when(manager.update{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier, subResource))
+    Mockito.when(manager.update{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subReference.getId(), subResource))
         .thenReturn(optionalSubOutput);
 
     ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response =
-        controller.update{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier, subRequest);
+        controller.update{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subReference.getId(), subRequest);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getId()).isEqualTo(subIdentifier);
+    assertThat(response.getBody().getId()).isEqualTo(subReference.getId());
   }
 
   @Test
   public void update{{cookiecutter.SUB_RESOURCE_NAME}}FailedTest() throws Exception {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
-    Mockito.when(manager.update{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName, subResource))
+    Mockito.when(manager.update{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subBogus.getId(), subResource))
         .thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
           ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response =
-              controller.update{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName, subRequest);
+              controller.update{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subBogus.getId(), subRequest);
         });
   }
 
@@ -444,25 +466,25 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
   public void delete{{cookiecutter.SUB_RESOURCE_NAME}}Test() throws Exception {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}ResponseMapperStubs();
-    Mockito.when(manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier)).thenReturn(optionalSubOutput);
+    Mockito.when(manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subReference.getId())).thenReturn(optionalSubOutput);
 
     ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response =
-        controller.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, subIdentifier);
+        controller.delete{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subReference.getId());
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getId()).isEqualTo(subIdentifier);
+    assertThat(response.getBody().getId()).isEqualTo(subReference.getId());
   }
 
   @Test
   public void delete{{cookiecutter.SUB_RESOURCE_NAME}}FailedTest() throws Exception {
 
-    Mockito.when(manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName)).thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
+    Mockito.when(manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subBogus.getId())).thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
           ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response =
-              controller.delete{{cookiecutter.SUB_RESOURCE_NAME}}(identifier, bogusName);
+              controller.delete{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subBogus.getId());
         });
   }
 
@@ -474,11 +496,11 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
    * @param resource the object to validate
    */
   protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(userName));
-    assertThat(resource.getPii().equals(pii));
-    assertThat(resource.getFirstName().equals(firstName));
-    assertThat(resource.getLastName().equals(lastName));
-    assertThat(resource.getId()).isNotEqualTo(identifier);
+    assertThat(resource.getUserName().equals(reference.getUserName()));
+    assertThat(resource.getPii().equals(reference.getPii()));
+    assertThat(resource.getFirstName().equals(reference.getFirstName()));
+    assertThat(resource.getLastName().equals(reference.getLastName()));
+    assertThat(resource.getId()).isNotEqualTo(reference.getId());
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
@@ -489,10 +511,10 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
    * @param resource the object to validate
    */
   protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}({{cookiecutter.SUB_RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(userName));
-    assertThat(resource.getFirstName().equals(firstName));
-    assertThat(resource.getLastName().equals(lastName));
-    assertThat(resource.getId()).isNotEqualTo(identifier);
+    assertThat(resource.getUserName().equals(subReference.getUserName()));
+    assertThat(resource.getFirstName().equals(subReference.getFirstName()));
+    assertThat(resource.getLastName().equals(subReference.getLastName()));
+    assertThat(resource.getId()).isNotEqualTo(subReference.getId());
   }
 {%- endif %}
 
@@ -502,10 +524,11 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
    * @param response the object to validate
    */
   private void verify{{cookiecutter.RESOURCE_NAME}}Response({{cookiecutter.RESOURCE_NAME}}Response response) {
-    assertThat(response.getUserName().equals(userName));
-    assertThat(response.getPii().equals(pii));
-    assertThat(response.getFullName().equals(fullName));
-    assertThat(response.getId()).isEqualTo(identifier);
+    assertThat(response.getUserName().equals(reference.getUserName()));
+    assertThat(response.getPii().equals(reference.getPii()));
+    assertThat(response.getFirstName().equals(reference.getFirstName()));
+    assertThat(response.getFullName().equals(reference.getFullName()));
+    assertThat(response.getId()).isEqualTo(reference.getId());
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
@@ -516,7 +539,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
    * @param response the object to validate
    */
   protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}Response({{cookiecutter.SUB_RESOURCE_NAME}}Response response) {
-    assertThat(response.getId()).isEqualTo(identifier);
+    assertThat(response.getId()).isEqualTo(subReference.getId());
   }
 {%- endif %}
 }

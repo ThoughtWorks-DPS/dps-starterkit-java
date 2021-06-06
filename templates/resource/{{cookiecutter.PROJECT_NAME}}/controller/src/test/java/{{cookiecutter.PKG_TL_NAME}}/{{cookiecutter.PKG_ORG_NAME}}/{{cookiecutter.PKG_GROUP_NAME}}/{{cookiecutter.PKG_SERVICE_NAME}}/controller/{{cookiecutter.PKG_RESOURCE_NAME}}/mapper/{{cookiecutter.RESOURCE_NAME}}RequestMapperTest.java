@@ -2,17 +2,22 @@ package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutte
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.spi.DataFactory;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
-{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.SUB_RESOURCE_NAME}}Request;
-{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.RESOURCE_NAME}}Response;
-{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.SUB_RESOURCE_NAME}}Response;
-{%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.responses.PagedResponse;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}}Data;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataFactory;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataProperties;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}TestData;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.SUB_RESOURCE_NAME}}Request;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.SUB_RESOURCE_NAME}}Response;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}Data;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.provider.{{cookiecutter.SUB_RESOURCE_NAME}}DataFactory;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.provider.{{cookiecutter.SUB_RESOURCE_NAME}}DataProperties;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.provider.{{cookiecutter.SUB_RESOURCE_NAME}}TestData;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}};
 {%- endif %}
 import org.junit.jupiter.api.BeforeEach;
@@ -31,16 +36,28 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
 
   private {{cookiecutter.RESOURCE_NAME}}RequestMapper mapper;
 
-  private final String userName = "jsmith";
-  private final String pii = "123-45-6789";
-  private final String firstName = "Joe";
-  private final String lastName = "Smith";
-  private final String identifier = "12345";
-  private final String fullName = "Joe Smith";
+  private {{cookiecutter.RESOURCE_NAME}}TestData resourceTestDataLoader = new {{cookiecutter.RESOURCE_NAME}}TestData();
+  private {{cookiecutter.RESOURCE_NAME}}DataFactory resourceTestData = new {{cookiecutter.RESOURCE_NAME}}DataFactory(resourceTestDataLoader);
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+  private {{cookiecutter.SUB_RESOURCE_NAME}}TestData subResourceTestDataLoader = new {{cookiecutter.SUB_RESOURCE_NAME}}TestData();
+  private {{cookiecutter.SUB_RESOURCE_NAME}}DataFactory subResourceTestData= new {{cookiecutter.SUB_RESOURCE_NAME}}DataFactory(
+      subResourceTestDataLoader);
+{%- endif %}
 
+  private {{cookiecutter.RESOURCE_NAME}}Data reference;
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+  private {{cookiecutter.SUB_RESOURCE_NAME}}Data subReference;
+{%- endif %}
+
+  /** Setup mapper and test data factory before each test. */
   @BeforeEach
   public void setup() {
     mapper = Mappers.getMapper({{cookiecutter.RESOURCE_NAME}}RequestMapper.class);
+
+    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
+    subReference = subResourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
+{%- endif %}
   }
 
   @Test
@@ -54,7 +71,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
 
   @Test
   public void mapper{{cookiecutter.RESOURCE_NAME}}ResponseTest() {
-    {{cookiecutter.RESOURCE_NAME}} resource = create{{cookiecutter.RESOURCE_NAME}}(identifier);
+    {{cookiecutter.RESOURCE_NAME}} resource = create{{cookiecutter.RESOURCE_NAME}}(reference.getId());
 
     {{cookiecutter.RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.RESOURCE_NAME}}Response(resource);
 
@@ -63,7 +80,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
 
   @Test
   public void mapperOptionalTest() {
-    Optional<{{cookiecutter.RESOURCE_NAME}}> resource = Optional.of(create{{cookiecutter.RESOURCE_NAME}}(identifier));
+    Optional<{{cookiecutter.RESOURCE_NAME}}> resource = Optional.of(create{{cookiecutter.RESOURCE_NAME}}(reference.getId()));
 
     {{cookiecutter.RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.RESOURCE_NAME}}Response(resource);
 
@@ -91,7 +108,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
 
   @Test
   public void mapperEntityListTest() {
-    List<{{cookiecutter.RESOURCE_NAME}}> resources = Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}(identifier), create{{cookiecutter.RESOURCE_NAME}}(identifier));
+    List<{{cookiecutter.RESOURCE_NAME}}> resources = Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}(reference.getId()), create{{cookiecutter.RESOURCE_NAME}}(reference.getId()));
 
     List<{{cookiecutter.RESOURCE_NAME}}Response> response = mapper.to{{cookiecutter.RESOURCE_NAME}}ResponseList(resources);
 
@@ -104,7 +121,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
   public void mapperEntityPageTest() {
     Pageable pageable = PageRequest.of(0, 1);
     Page<{{cookiecutter.RESOURCE_NAME}}> resources =
-        new PageImpl<>(Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}(identifier)), pageable, 100);
+        new PageImpl<>(Arrays.asList(create{{cookiecutter.RESOURCE_NAME}}(reference.getId())), pageable, 100);
     PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response> response = mapper.to{{cookiecutter.RESOURCE_NAME}}ResponsePage(resources);
 
     assertThat(response.getItems().size()).isEqualTo(1);
@@ -128,7 +145,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
 
   @Test
   public void mapper{{cookiecutter.SUB_RESOURCE_NAME}}ResponseTest() {
-    {{cookiecutter.SUB_RESOURCE_NAME}} resource = create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier);
+    {{cookiecutter.SUB_RESOURCE_NAME}} resource = create{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId());
 
     {{cookiecutter.SUB_RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(resource);
 
@@ -137,7 +154,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
 
   @Test
   public void mapperOptional{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource = Optional.of(create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier));
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource = Optional.of(create{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId()));
 
     {{cookiecutter.SUB_RESOURCE_NAME}}Response response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(resource);
 
@@ -166,7 +183,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
   @Test
   public void mapperSubEntityListTest() {
     List<{{cookiecutter.SUB_RESOURCE_NAME}}> resources =
-        Arrays.asList(create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier), create{{cookiecutter.SUB_RESOURCE_NAME}}(identifier));
+        Arrays.asList(create{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId()), create{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId()));
 
     List<{{cookiecutter.SUB_RESOURCE_NAME}}Response> response = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ResponseList(resources);
 
@@ -183,7 +200,11 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @return {{cookiecutter.RESOURCE_NAME}} object
    */
   private {{cookiecutter.RESOURCE_NAME}} create{{cookiecutter.RESOURCE_NAME}}(String id) {
-    return new {{cookiecutter.RESOURCE_NAME}}(id, userName, pii, firstName, lastName);
+    return new {{cookiecutter.RESOURCE_NAME}}(id,
+        reference.getUserName(),
+        reference.getPii(),
+        reference.getFirstName(),
+        reference.getLastName());
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
@@ -195,7 +216,10 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @return {{cookiecutter.SUB_RESOURCE_NAME}} object
    */
   private {{cookiecutter.SUB_RESOURCE_NAME}} create{{cookiecutter.SUB_RESOURCE_NAME}}(String id) {
-    return new {{cookiecutter.SUB_RESOURCE_NAME}}(id, userName, firstName, lastName);
+    return new {{cookiecutter.SUB_RESOURCE_NAME}}(id,
+        subReference.getUserName(),
+        subReference.getFirstName(),
+        subReference.getLastName());
   }
 {%- endif %}
 
@@ -205,7 +229,10 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @return {{cookiecutter.RESOURCE_NAME}}Request object
    */
   private {{cookiecutter.RESOURCE_NAME}}Request create{{cookiecutter.RESOURCE_NAME}}Request() {
-    return new {{cookiecutter.RESOURCE_NAME}}Request(userName, pii, firstName, lastName);
+    return new {{cookiecutter.RESOURCE_NAME}}Request(reference.getUserName(),
+        reference.getPii(),
+        reference.getFirstName(),
+        reference.getLastName());
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
@@ -216,7 +243,9 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @return {{cookiecutter.SUB_RESOURCE_NAME}}Request object
    */
   private {{cookiecutter.SUB_RESOURCE_NAME}}Request create{{cookiecutter.SUB_RESOURCE_NAME}}Request() {
-    return new {{cookiecutter.SUB_RESOURCE_NAME}}Request(userName, firstName, lastName);
+    return new {{cookiecutter.SUB_RESOURCE_NAME}}Request(subReference.getUserName(),
+        subReference.getFirstName(),
+        subReference.getLastName());
   }
 {%- endif %}
 
@@ -226,11 +255,11 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @param resource the object to validate
    */
   protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(userName));
-    assertThat(resource.getPii().equals(pii));
-    assertThat(resource.getFirstName().equals(firstName));
-    assertThat(resource.getLastName().equals(lastName));
-    assertThat(resource.getId()).isNotEqualTo(identifier);
+    assertThat(resource.getUserName().equals(reference.getUserName()));
+    assertThat(resource.getPii().equals(reference.getPii()));
+    assertThat(resource.getFirstName().equals(reference.getFirstName()));
+    assertThat(resource.getLastName().equals(reference.getLastName()));
+    assertThat(resource.getId()).isNotEqualTo(reference.getId());
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
@@ -241,10 +270,10 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @param resource the object to validate
    */
   protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}({{cookiecutter.SUB_RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(userName));
-    assertThat(resource.getFirstName().equals(firstName));
-    assertThat(resource.getLastName().equals(lastName));
-    assertThat(resource.getId()).isNotEqualTo(identifier);
+    assertThat(resource.getUserName().equals(subReference.getUserName()));
+    assertThat(resource.getFirstName().equals(subReference.getFirstName()));
+    assertThat(resource.getLastName().equals(subReference.getLastName()));
+    assertThat(resource.getId()).isNotEqualTo(subReference.getId());
   }
 {%- endif %}
 
@@ -254,10 +283,10 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @param response the object to validate
    */
   private void verify{{cookiecutter.RESOURCE_NAME}}Response({{cookiecutter.RESOURCE_NAME}}Response response) {
-    assertThat(response.getUserName().equals(userName));
-    assertThat(response.getPii().equals(pii));
-    assertThat(response.getFullName().equals(fullName));
-    assertThat(response.getId()).isEqualTo(identifier);
+    assertThat(response.getUserName().equals(reference.getUserName()));
+    assertThat(response.getPii().equals(reference.getPii()));
+    assertThat(response.getFullName().equals(reference.getFullName()));
+    assertThat(response.getId()).isEqualTo(reference.getId());
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
@@ -268,7 +297,7 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @param response the object to validate
    */
   protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}Response({{cookiecutter.SUB_RESOURCE_NAME}}Response response) {
-    assertThat(response.getId()).isEqualTo(identifier);
+    assertThat(response.getId()).isEqualTo(subReference.getId());
   }
 {%- endif %}
 }

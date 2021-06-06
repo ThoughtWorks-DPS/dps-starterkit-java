@@ -14,4 +14,6 @@ dependencies {
     implementation project(':persistence:model')
     implementation project(':service:spi')
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    testImplementation project(':data')
+    testImplementation 'io.twdps.starter:test-data'
 }

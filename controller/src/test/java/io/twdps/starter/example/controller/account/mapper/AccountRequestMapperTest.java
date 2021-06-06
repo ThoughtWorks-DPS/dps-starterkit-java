@@ -2,11 +2,18 @@ package io.twdps.starter.example.controller.account.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.twdps.starter.boot.test.data.spi.DataFactory;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.requests.SubAccountRequest;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
 import io.twdps.starter.example.api.account.responses.SubAccountResponse;
 import io.twdps.starter.example.api.responses.PagedResponse;
+import io.twdps.starter.example.data.account.model.AccountData;
+import io.twdps.starter.example.data.account.provider.AccountDataFactory;
+import io.twdps.starter.example.data.account.provider.AccountTestData;
+import io.twdps.starter.example.data.subaccount.model.SubAccountData;
+import io.twdps.starter.example.data.subaccount.provider.SubAccountDataFactory;
+import io.twdps.starter.example.data.subaccount.provider.SubAccountTestData;
 import io.twdps.starter.example.service.spi.account.model.Account;
 import io.twdps.starter.example.service.spi.account.model.SubAccount;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,16 +32,22 @@ public class AccountRequestMapperTest {
 
   private AccountRequestMapper mapper;
 
-  private final String userName = "jsmith";
-  private final String pii = "123-45-6789";
-  private final String firstName = "Joe";
-  private final String lastName = "Smith";
-  private final String identifier = "12345";
-  private final String fullName = "Joe Smith";
+  private AccountTestData resourceTestDataLoader = new AccountTestData();
+  private AccountDataFactory resourceTestData = new AccountDataFactory(resourceTestDataLoader);
+  private SubAccountTestData subResourceTestDataLoader = new SubAccountTestData();
+  private SubAccountDataFactory subResourceTestData =
+      new SubAccountDataFactory(subResourceTestDataLoader);
 
+  private AccountData reference;
+  private SubAccountData subReference;
+
+  /** Setup mapper and test data factory before each test. */
   @BeforeEach
   public void setup() {
     mapper = Mappers.getMapper(AccountRequestMapper.class);
+
+    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
+    subReference = subResourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
   }
 
   @Test
@@ -48,7 +61,7 @@ public class AccountRequestMapperTest {
 
   @Test
   public void mapperAccountResponseTest() {
-    Account resource = createAccount(identifier);
+    Account resource = createAccount(reference.getId());
 
     AccountResponse response = mapper.toAccountResponse(resource);
 
@@ -57,7 +70,7 @@ public class AccountRequestMapperTest {
 
   @Test
   public void mapperOptionalTest() {
-    Optional<Account> resource = Optional.of(createAccount(identifier));
+    Optional<Account> resource = Optional.of(createAccount(reference.getId()));
 
     AccountResponse response = mapper.toAccountResponse(resource);
 
@@ -85,7 +98,8 @@ public class AccountRequestMapperTest {
 
   @Test
   public void mapperEntityListTest() {
-    List<Account> resources = Arrays.asList(createAccount(identifier), createAccount(identifier));
+    List<Account> resources =
+        Arrays.asList(createAccount(reference.getId()), createAccount(reference.getId()));
 
     List<AccountResponse> response = mapper.toAccountResponseList(resources);
 
@@ -98,7 +112,7 @@ public class AccountRequestMapperTest {
   public void mapperEntityPageTest() {
     Pageable pageable = PageRequest.of(0, 1);
     Page<Account> resources =
-        new PageImpl<>(Arrays.asList(createAccount(identifier)), pageable, 100);
+        new PageImpl<>(Arrays.asList(createAccount(reference.getId())), pageable, 100);
     PagedResponse<AccountResponse> response = mapper.toAccountResponsePage(resources);
 
     assertThat(response.getItems().size()).isEqualTo(1);
@@ -120,7 +134,7 @@ public class AccountRequestMapperTest {
 
   @Test
   public void mapperSubAccountResponseTest() {
-    SubAccount resource = createSubAccount(identifier);
+    SubAccount resource = createSubAccount(reference.getId());
 
     SubAccountResponse response = mapper.toSubAccountResponse(resource);
 
@@ -129,7 +143,7 @@ public class AccountRequestMapperTest {
 
   @Test
   public void mapperOptionalSubAccountTest() {
-    Optional<SubAccount> resource = Optional.of(createSubAccount(identifier));
+    Optional<SubAccount> resource = Optional.of(createSubAccount(reference.getId()));
 
     SubAccountResponse response = mapper.toSubAccountResponse(resource);
 
@@ -158,7 +172,7 @@ public class AccountRequestMapperTest {
   @Test
   public void mapperSubEntityListTest() {
     List<SubAccount> resources =
-        Arrays.asList(createSubAccount(identifier), createSubAccount(identifier));
+        Arrays.asList(createSubAccount(reference.getId()), createSubAccount(reference.getId()));
 
     List<SubAccountResponse> response = mapper.toSubAccountResponseList(resources);
 
@@ -174,7 +188,12 @@ public class AccountRequestMapperTest {
    * @return Account object
    */
   private Account createAccount(String id) {
-    return new Account(id, userName, pii, firstName, lastName);
+    return new Account(
+        id,
+        reference.getUserName(),
+        reference.getPii(),
+        reference.getFirstName(),
+        reference.getLastName());
   }
 
   /**
@@ -184,7 +203,8 @@ public class AccountRequestMapperTest {
    * @return SubAccount object
    */
   private SubAccount createSubAccount(String id) {
-    return new SubAccount(id, userName, firstName, lastName);
+    return new SubAccount(
+        id, subReference.getUserName(), subReference.getFirstName(), subReference.getLastName());
   }
 
   /**
@@ -193,7 +213,11 @@ public class AccountRequestMapperTest {
    * @return AccountRequest object
    */
   private AccountRequest createAccountRequest() {
-    return new AccountRequest(userName, pii, firstName, lastName);
+    return new AccountRequest(
+        reference.getUserName(),
+        reference.getPii(),
+        reference.getFirstName(),
+        reference.getLastName());
   }
 
   /**
@@ -202,7 +226,8 @@ public class AccountRequestMapperTest {
    * @return SubAccountRequest object
    */
   private SubAccountRequest createSubAccountRequest() {
-    return new SubAccountRequest(userName, firstName, lastName);
+    return new SubAccountRequest(
+        subReference.getUserName(), subReference.getFirstName(), subReference.getLastName());
   }
 
   /**
@@ -211,11 +236,11 @@ public class AccountRequestMapperTest {
    * @param resource the object to validate
    */
   protected void verifyAccount(Account resource) {
-    assertThat(resource.getUserName().equals(userName));
-    assertThat(resource.getPii().equals(pii));
-    assertThat(resource.getFirstName().equals(firstName));
-    assertThat(resource.getLastName().equals(lastName));
-    assertThat(resource.getId()).isNotEqualTo(identifier);
+    assertThat(resource.getUserName().equals(reference.getUserName()));
+    assertThat(resource.getPii().equals(reference.getPii()));
+    assertThat(resource.getFirstName().equals(reference.getFirstName()));
+    assertThat(resource.getLastName().equals(reference.getLastName()));
+    assertThat(resource.getId()).isNotEqualTo(reference.getId());
   }
 
   /**
@@ -224,10 +249,10 @@ public class AccountRequestMapperTest {
    * @param resource the object to validate
    */
   protected void verifySubAccount(SubAccount resource) {
-    assertThat(resource.getUserName().equals(userName));
-    assertThat(resource.getFirstName().equals(firstName));
-    assertThat(resource.getLastName().equals(lastName));
-    assertThat(resource.getId()).isNotEqualTo(identifier);
+    assertThat(resource.getUserName().equals(subReference.getUserName()));
+    assertThat(resource.getFirstName().equals(subReference.getFirstName()));
+    assertThat(resource.getLastName().equals(subReference.getLastName()));
+    assertThat(resource.getId()).isNotEqualTo(subReference.getId());
   }
 
   /**
@@ -236,10 +261,10 @@ public class AccountRequestMapperTest {
    * @param response the object to validate
    */
   private void verifyAccountResponse(AccountResponse response) {
-    assertThat(response.getUserName().equals(userName));
-    assertThat(response.getPii().equals(pii));
-    assertThat(response.getFullName().equals(fullName));
-    assertThat(response.getId()).isEqualTo(identifier);
+    assertThat(response.getUserName().equals(reference.getUserName()));
+    assertThat(response.getPii().equals(reference.getPii()));
+    assertThat(response.getFullName().equals(reference.getFullName()));
+    assertThat(response.getId()).isEqualTo(reference.getId());
   }
 
   /**
@@ -248,6 +273,6 @@ public class AccountRequestMapperTest {
    * @param response the object to validate
    */
   protected void verifySubAccountResponse(SubAccountResponse response) {
-    assertThat(response.getId()).isEqualTo(identifier);
+    assertThat(response.getId()).isEqualTo(subReference.getId());
   }
 }

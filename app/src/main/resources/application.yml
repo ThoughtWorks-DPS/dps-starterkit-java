@@ -132,6 +132,7 @@ springdoc:
   show-actuator: true
   swagger-ui:
     operations-sorter: method
+    path: swagger
 
 starter:
   openapi:
@@ -163,4 +164,4 @@ opa:
     enabled: true
     document-path: authz
     instance: http://opa:8181
-    endpoints-whitelist: /actuator/**,/swagger-ui/**,/v3/api-docs/**
+    endpoints-whitelist: /actuator/**,/swagger*/**,/v3/api-docs/**

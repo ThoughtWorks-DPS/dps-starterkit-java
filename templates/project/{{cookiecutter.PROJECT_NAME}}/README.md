@@ -10,7 +10,7 @@ This is the repository for the Java API Starter from Template.
 
 ### Build requirements
 
-- Java 14+
+- Java 11
 
 Mac users can execute the following command to install the latest version of Java: 
 

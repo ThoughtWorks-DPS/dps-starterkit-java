@@ -1,0 +1,10 @@
+plugins {
+    id 'starter.std.java.library-spring-conventions'
+}
+
+dependencies {
+    annotationBom platform("io.twdps.starter:starter-bom:${starter_boot_version}")
+    checkstyleRules platform("io.twdps.starter:checkstyle-bom:${starter_boot_version}")
+
+    api 'io.twdps.starter:test-data'
+}

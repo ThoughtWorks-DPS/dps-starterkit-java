@@ -1,4 +1,3 @@
-
 plugins {
     id 'starter.std.java.library-spring-conventions'
 }
@@ -14,9 +13,11 @@ dependencies {
     implementation "io.twdps.starter:entity-lifecycle-notifier"
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.data:spring-data-commons'
 
     implementation "io.opentracing.contrib:opentracing-spring-web-starter"
 //    implementation('org.postgresql:postgresql')
 
+    testImplementation project(':data')
+    testImplementation 'io.twdps.starter:test-data'
 }
-

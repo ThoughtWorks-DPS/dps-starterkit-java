@@ -10,13 +10,18 @@ import io.twdps.starter.boot.errorhandling.config.ErrorHandlerConfig;
 import io.twdps.starter.boot.exception.RequestValidationException;
 import io.twdps.starter.boot.exception.ResourceNotFoundException;
 import io.twdps.starter.boot.openapi.config.OpenApiConfiguration;
+import io.twdps.starter.boot.test.data.spi.DataFactory;
 import io.twdps.starter.example.SecurityAllowConfig;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.resources.AccountResource;
 import io.twdps.starter.example.controller.account.mapper.AccountRequestMapper;
+import io.twdps.starter.example.data.account.model.AccountData;
+import io.twdps.starter.example.data.account.provider.AccountDataFactory;
+import io.twdps.starter.example.data.account.provider.AccountDataProperties;
 import io.twdps.starter.example.service.spi.account.AccountService;
 import io.twdps.starter.example.service.spi.account.model.Account;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -42,7 +47,9 @@ import org.zalando.problem.Problem;
       SecurityAllowConfig.class,
       ErrorHandlerAdvice.class,
       OpenApiConfiguration.class,
-      ErrorHandlerConfig.class
+      ErrorHandlerConfig.class,
+      AccountDataFactory.class,
+      AccountDataProperties.class
     })
 class AccountErrorHandlingContextTest {
   @Autowired private MockMvc mockMvc;
@@ -55,14 +62,12 @@ class AccountErrorHandlingContextTest {
 
   @MockBean private AccountResource controller;
 
+  @Autowired private AccountDataFactory testData;
+
+  private AccountData reference;
+  private AccountData bogus;
+
   private final String message = "message";
-  private final String detail = "detail";
-  private final String userName = "jsmith";
-  private final String pii = "123-45-6789";
-  private final String bogusName = "bogus";
-  private final String firstName = "Joe";
-  private final String lastName = "Smith";
-  private final String identifier = "12345";
   private final String traceHeaderName = "X-B3-TraceId";
   private final String traceInfo = "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01";
   private final String baseUrl = "https://starter.twdps.io";
@@ -72,18 +77,39 @@ class AccountErrorHandlingContextTest {
   // This object will be magically initialized by the initFields method below.
 
   @Autowired private JacksonTester<AccountRequest> jsonRequest;
-  private AccountRequest request = new AccountRequest(userName, pii, firstName, lastName);
-  private Account model = new Account(userName, pii, firstName, lastName);
+  private AccountRequest request;
+  private Account model;
+
+  /** Setup mapper and test data factory before each test. */
+  @BeforeEach
+  public void setup() {
+    reference = testData.getNamedData(DataFactory.DEFAULT_NAME);
+    bogus = testData.getNamedData("bogus");
+
+    request =
+        new AccountRequest(
+            reference.getUserName(),
+            reference.getPii(),
+            reference.getFirstName(),
+            reference.getLastName());
+    model =
+        new Account(
+            reference.getUserName(),
+            reference.getPii(),
+            reference.getFirstName(),
+            reference.getLastName());
+  }
 
   @Test
   void whenResourceNotRetrieved_thenReturns404() throws Exception {
-    Mockito.when(controller.findEntityById("foo")).thenThrow(new ResourceNotFoundException("foo"));
+    Mockito.when(controller.findEntityById(bogus.getId()))
+        .thenThrow(new ResourceNotFoundException(bogus.getId()));
 
     // when
     MockHttpServletResponse response =
         mockMvc
             .perform(
-                get("/v1/example/accounts/foo")
+                get(String.format("/v1/example/accounts/%s", bogus.getId()))
                     .header(traceHeaderName, traceInfo)
                     .accept(MediaType.APPLICATION_JSON))
             .andReturn()
@@ -98,20 +124,20 @@ class AccountErrorHandlingContextTest {
     Problem error = objectMapper.readValue(content, Problem.class);
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     assertThat(error.getType().toString()).isEqualTo(notFoundType);
-    assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
-    assertThat(error.getDetail()).isEqualTo("Resource 'foo' not found");
+    assertThat(error.getInstance().toString()).isEqualTo("%s/%s", baseUrl, traceInfo);
+    assertThat(error.getDetail()).isEqualTo("Resource '%s' not found", bogus.getId());
   }
 
   @Test
   void whenResourceNotFound_thenReturns404() throws Exception {
-    Mockito.when(controller.findEntityById("foo")).thenThrow(new ResourceNotFoundException("foo"));
+    Mockito.when(controller.findEntityById(bogus.getId()))
+        .thenThrow(new ResourceNotFoundException(bogus.getId()));
 
     // when
     MockHttpServletResponse response =
         mockMvc
             .perform(
-                get("/v1/example/accounts/foo")
+                get(String.format("/v1/example/accounts/%s", bogus.getId()))
                     .header(traceHeaderName, traceInfo)
                     .accept(MediaType.APPLICATION_JSON))
             .andReturn()
@@ -126,9 +152,8 @@ class AccountErrorHandlingContextTest {
     Problem error = objectMapper.readValue(content, Problem.class);
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     assertThat(error.getType().toString()).isEqualTo(notFoundType);
-    assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
-    assertThat(error.getDetail()).isEqualTo("Resource 'foo' not found");
+    assertThat(error.getInstance().toString()).isEqualTo("%s/%s", baseUrl, traceInfo);
+    assertThat(error.getDetail()).isEqualTo("Resource '%s' not found", bogus.getId());
   }
 
   @Test
@@ -157,8 +182,7 @@ class AccountErrorHandlingContextTest {
     Problem error = objectMapper.readValue(content, Problem.class);
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     assertThat(error.getType().toString()).isEqualTo(requestValidationType);
-    assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
+    assertThat(error.getInstance().toString()).isEqualTo("%s/%s", baseUrl, traceInfo);
     assertThat(error.getDetail()).contains("userName is marked non-null but is null");
   }
 
@@ -187,8 +211,7 @@ class AccountErrorHandlingContextTest {
     Problem error = objectMapper.readValue(content, Problem.class);
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     assertThat(error.getType().toString()).isEqualTo(requestValidationType);
-    assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
+    assertThat(error.getInstance().toString()).isEqualTo("%s/%s", baseUrl, traceInfo);
     assertThat(error.getDetail()).isEqualTo("Resource 'message' invalid request");
   }
 
@@ -214,8 +237,7 @@ class AccountErrorHandlingContextTest {
     Problem error = objectMapper.readValue(content, Problem.class);
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     assertThat(error.getType().toString()).isEqualTo(requestValidationType);
-    assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
+    assertThat(error.getInstance().toString()).isEqualTo("%s/%s", baseUrl, traceInfo);
     assertThat(error.getDetail()).contains("Required request body is missing");
   }
 }

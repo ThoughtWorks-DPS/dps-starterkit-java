@@ -2,6 +2,10 @@ package io.twdps.starter.example.service.provider.subaccount.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.twdps.starter.boot.test.data.spi.DataFactory;
+import io.twdps.starter.example.data.subaccount.model.SubAccountData;
+import io.twdps.starter.example.data.subaccount.provider.SubAccountDataFactory;
+import io.twdps.starter.example.data.subaccount.provider.SubAccountTestData;
 import io.twdps.starter.example.persistence.model.SubAccountEntity;
 import io.twdps.starter.example.service.spi.subaccount.model.SubAccount;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,17 +23,20 @@ import java.util.Optional;
 public class SubAccountEntityMapperTest {
 
   private SubAccountEntityMapper mapper;
-
-  private final String userName = "jsmith";
-  private final String pii = "123-45-6789";
-  private final String firstName = "Joe";
-  private final String lastName = "Smith";
-  private final String identifier = "12345";
   private final String parentIdentifier = "abcde";
 
+  private SubAccountTestData resourceTestDataLoader = new SubAccountTestData();
+  private SubAccountDataFactory resourceTestData =
+      new SubAccountDataFactory(resourceTestDataLoader);
+
+  private SubAccountData reference;
+
+  /** Setup mapper and test data factory before each test. */
   @BeforeEach
   public void setup() {
     mapper = Mappers.getMapper(SubAccountEntityMapper.class);
+
+    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
   }
 
   @Test
@@ -43,7 +50,7 @@ public class SubAccountEntityMapperTest {
 
   @Test
   public void mapperSubAccountTest() {
-    SubAccount resource = createSubAccount(identifier);
+    SubAccount resource = createSubAccount(reference.getId());
 
     SubAccountEntity response = mapper.toEntity(resource);
 
@@ -138,7 +145,12 @@ public class SubAccountEntityMapperTest {
    * @return SubAccount object
    */
   private SubAccount createSubAccount(String id) {
-    return new SubAccount(id, userName, pii, firstName, lastName);
+    return new SubAccount(
+        id,
+        reference.getUserName(),
+        reference.getPii(),
+        reference.getFirstName(),
+        reference.getLastName());
   }
 
   /**
@@ -147,7 +159,13 @@ public class SubAccountEntityMapperTest {
    * @return SubAccountEntity object
    */
   private SubAccountEntity createSubAccountEntity() {
-    return new SubAccountEntity(identifier, userName, pii, firstName, lastName, parentIdentifier);
+    return new SubAccountEntity(
+        reference.getId(),
+        reference.getUserName(),
+        reference.getPii(),
+        reference.getFirstName(),
+        reference.getLastName(),
+        parentIdentifier);
   }
 
   /**
@@ -156,11 +174,11 @@ public class SubAccountEntityMapperTest {
    * @param response the object to validate
    */
   protected void verifySubAccount(SubAccount response) {
-    assertThat(response.getUserName()).isEqualTo(userName);
-    assertThat(response.getPii()).isEqualTo(pii);
-    assertThat(response.getFirstName()).isEqualTo(firstName);
-    assertThat(response.getLastName()).isEqualTo(lastName);
-    assertThat(response.getId()).isEqualTo(identifier);
+    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(response.getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    assertThat(response.getId()).isEqualTo(reference.getId());
   }
 
   /**
@@ -181,19 +199,19 @@ public class SubAccountEntityMapperTest {
   private void verifySubAccountEntity(
       SubAccountEntity response, boolean hasId, boolean hasParentId) {
     // CSON: LineLength
-    assertThat(response.getUserName()).isEqualTo(userName);
-    assertThat(response.getPii()).isEqualTo(pii);
-    assertThat(response.getFirstName()).isEqualTo(firstName);
-    assertThat(response.getLastName()).isEqualTo(lastName);
+    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(response.getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(response.getLastName()).isEqualTo(reference.getLastName());
     if (hasParentId) {
       assertThat(response.getAccountId()).isEqualTo(parentIdentifier);
     } else {
       assertThat(response.getAccountId()).isNotEqualTo(parentIdentifier);
     }
     if (hasId) {
-      assertThat(response.getId()).isEqualTo(identifier);
+      assertThat(response.getId()).isEqualTo(reference.getId());
     } else {
-      assertThat(response.getId()).isNotEqualTo(identifier);
+      assertThat(response.getId()).isNotEqualTo(reference.getId());
     }
   }
 }

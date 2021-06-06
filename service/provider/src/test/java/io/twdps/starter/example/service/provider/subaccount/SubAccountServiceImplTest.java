@@ -1,5 +1,9 @@
 package io.twdps.starter.example.service.provider.subaccount;
 
+import io.twdps.starter.boot.test.data.spi.DataFactory;
+import io.twdps.starter.example.data.subaccount.model.SubAccountData;
+import io.twdps.starter.example.data.subaccount.provider.SubAccountDataFactory;
+import io.twdps.starter.example.data.subaccount.provider.SubAccountTestData;
 import io.twdps.starter.example.persistence.model.SubAccountEntity;
 import io.twdps.starter.example.persistence.model.SubAccountEntityRepository;
 import io.twdps.starter.example.service.provider.subaccount.mapper.SubAccountEntityMapper;
@@ -30,12 +34,12 @@ public class SubAccountServiceImplTest {
   @Mock private SubAccountEntityRepository repository;
   @Mock private SubAccountEntityMapper mapper;
 
-  private final String userName = "jsmith";
-  private final String pii = "123-45-6789";
-  private final String bogusName = "bogus";
-  private final String firstName = "Joe";
-  private final String lastName = "Smith";
-  private final String identifier = "12345";
+  private SubAccountTestData resourceTestDataLoader = new SubAccountTestData();
+  private SubAccountDataFactory resourceTestData =
+      new SubAccountDataFactory(resourceTestDataLoader);
+
+  private SubAccountData reference;
+  private SubAccountData bogus;
 
   private SubAccount resource;
   private SubAccount output;
@@ -62,20 +66,23 @@ public class SubAccountServiceImplTest {
 
     manager = new SubAccountServiceImpl(repository, mapper);
 
+    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
+    bogus = resourceTestData.getNamedData("bogus");
+
     // use the real mapper to generate consistent objects to use in mapper stubs
     SubAccountEntityMapper real = Mappers.getMapper(SubAccountEntityMapper.class);
 
     resource =
         SubAccount.builder()
-            .userName(userName)
-            .pii(pii)
-            .firstName(firstName)
-            .lastName(lastName)
+            .userName(reference.getUserName())
+            .pii(reference.getPii())
+            .firstName(reference.getFirstName())
+            .lastName(reference.getLastName())
             .build();
     entity = real.toEntity(resource);
     added =
         new SubAccountEntity(
-            identifier,
+            reference.getId(),
             entity.getUserName(),
             entity.getPii(),
             entity.getFirstName(),
@@ -120,7 +127,7 @@ public class SubAccountServiceImplTest {
     createEmptyMapperStubs();
     Mockito.when(repository.findById(Mockito.any())).thenReturn(emptyEntity);
 
-    Optional<SubAccount> result = manager.findById("bogus");
+    Optional<SubAccount> result = manager.findById(bogus.getId());
     Assertions.assertThat(!result.isPresent()).isTrue();
   }
 
@@ -140,9 +147,9 @@ public class SubAccountServiceImplTest {
   public void findByUserNameTest() {
 
     createOptionalMapperStubs();
-    Mockito.when(repository.findByUserName(userName)).thenReturn(optionalAdded);
+    Mockito.when(repository.findByUserName(reference.getUserName())).thenReturn(optionalAdded);
 
-    Optional<SubAccount> response = manager.findByUserName(userName);
+    Optional<SubAccount> response = manager.findByUserName(reference.getUserName());
 
     Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(added.getFirstName());
@@ -153,9 +160,9 @@ public class SubAccountServiceImplTest {
   public void findByUserNameFailedTest() {
 
     createEmptyMapperStubs();
-    Mockito.when(repository.findByUserName(bogusName)).thenReturn(emptyEntity);
+    Mockito.when(repository.findByUserName(bogus.getUserName())).thenReturn(emptyEntity);
 
-    Optional<SubAccount> response = manager.findByUserName(bogusName);
+    Optional<SubAccount> response = manager.findByUserName(bogus.getUserName());
 
     Assertions.assertThat(response.isEmpty()).isTrue();
   }
@@ -164,9 +171,10 @@ public class SubAccountServiceImplTest {
   public void findByLastNameTest() {
 
     createListMapperStubs();
-    Mockito.when(repository.findByLastName(userName, pageable)).thenReturn(entityPage);
+    Mockito.when(repository.findByLastName(reference.getLastName(), pageable))
+        .thenReturn(entityPage);
 
-    Page<SubAccount> response = manager.findByLastName(userName, pageable);
+    Page<SubAccount> response = manager.findByLastName(reference.getLastName(), pageable);
 
     Assertions.assertThat(response.getContent().isEmpty()).isFalse();
     Assertions.assertThat(response.getContent().get(0).getFirstName())
@@ -178,9 +186,10 @@ public class SubAccountServiceImplTest {
   public void findByLastNameFailedTest() {
 
     createEmptyListMapperStubs();
-    Mockito.when(repository.findByLastName(bogusName, pageable)).thenReturn(emptyEntityPage);
+    Mockito.when(repository.findByLastName(bogus.getLastName(), pageable))
+        .thenReturn(emptyEntityPage);
 
-    Page<SubAccount> response = manager.findByLastName(bogusName, pageable);
+    Page<SubAccount> response = manager.findByLastName(bogus.getLastName(), pageable);
 
     Assertions.assertThat(response.getContent().isEmpty()).isTrue();
   }
@@ -189,9 +198,9 @@ public class SubAccountServiceImplTest {
   public void findByIdTest() {
 
     createOptionalMapperStubs();
-    Mockito.when(repository.findById(identifier)).thenReturn(optionalAdded);
+    Mockito.when(repository.findById(reference.getId())).thenReturn(optionalAdded);
 
-    Optional<SubAccount> response = manager.findById(identifier);
+    Optional<SubAccount> response = manager.findById(reference.getId());
 
     Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(added.getFirstName());
@@ -202,9 +211,9 @@ public class SubAccountServiceImplTest {
   public void findByIdFailedTest() {
 
     createEmptyMapperStubs();
-    Mockito.when(repository.findById(bogusName)).thenReturn(emptyEntity);
+    Mockito.when(repository.findById(bogus.getId())).thenReturn(emptyEntity);
 
-    Optional<SubAccount> response = manager.findById(bogusName);
+    Optional<SubAccount> response = manager.findById(bogus.getId());
 
     Assertions.assertThat(response.isEmpty()).isTrue();
   }
@@ -236,23 +245,23 @@ public class SubAccountServiceImplTest {
 
     createOptionalMapperStubs();
     Mockito.when(mapper.updateMetadata(resource, added)).thenReturn(added);
-    Mockito.when(repository.findById(identifier)).thenReturn(optionalAdded);
+    Mockito.when(repository.findById(reference.getId())).thenReturn(optionalAdded);
     Mockito.when(repository.save(added)).thenReturn(added);
 
-    Optional<SubAccount> response = manager.updateById(identifier, resource);
+    Optional<SubAccount> response = manager.updateById(reference.getId(), resource);
 
     Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(resource.getFirstName());
-    Assertions.assertThat(response.get().getId()).isEqualTo(identifier);
+    Assertions.assertThat(response.get().getId()).isEqualTo(reference.getId());
   }
 
   @Test
   public void updateFailedTest() {
 
     createEmptyMapperStubs();
-    Mockito.when(repository.findById(identifier)).thenReturn(emptyEntity);
+    Mockito.when(repository.findById(reference.getId())).thenReturn(emptyEntity);
 
-    Optional<SubAccount> response = manager.updateById(identifier, resource);
+    Optional<SubAccount> response = manager.updateById(reference.getId(), resource);
 
     Assertions.assertThat(response.isEmpty()).isTrue();
   }
@@ -261,9 +270,9 @@ public class SubAccountServiceImplTest {
   public void deleteTest() {
 
     createOptionalMapperStubs();
-    Mockito.when(repository.findById(identifier)).thenReturn(optionalAdded);
+    Mockito.when(repository.findById(reference.getId())).thenReturn(optionalAdded);
 
-    Optional<SubAccount> response = manager.deleteById(identifier);
+    Optional<SubAccount> response = manager.deleteById(reference.getId());
 
     Assertions.assertThat(response.isPresent()).isTrue();
     Assertions.assertThat(response.get().getFirstName()).isEqualTo(added.getFirstName());
@@ -274,9 +283,9 @@ public class SubAccountServiceImplTest {
   public void deleteFailedTest() {
 
     createEmptyMapperStubs();
-    Mockito.when(repository.findById(bogusName)).thenReturn(emptyEntity);
+    Mockito.when(repository.findById(bogus.getId())).thenReturn(emptyEntity);
 
-    Optional<SubAccount> response = manager.deleteById(bogusName);
+    Optional<SubAccount> response = manager.deleteById(bogus.getId());
 
     Assertions.assertThat(response.isEmpty()).isTrue();
   }

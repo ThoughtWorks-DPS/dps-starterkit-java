@@ -2,6 +2,11 @@ package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutte
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.spi.DataFactory;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}}Data;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataFactory;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataProperties;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}TestData;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.RESOURCE_NAME}}Entity;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
 import org.junit.jupiter.api.BeforeEach;
@@ -20,18 +25,22 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
 
   private {{cookiecutter.RESOURCE_NAME}}EntityMapper mapper;
 
-  private final String userName = "jsmith";
-  private final String pii = "123-45-6789";
-  private final String firstName = "Joe";
-  private final String lastName = "Smith";
-  private final String identifier = "12345";
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
   private final String parentIdentifier = "abcde";
 {%- endif %}
 
+  private {{cookiecutter.RESOURCE_NAME}}TestData resourceTestDataLoader = new {{cookiecutter.RESOURCE_NAME}}TestData();
+  private {{cookiecutter.RESOURCE_NAME}}DataFactory resourceTestData = new {{cookiecutter.RESOURCE_NAME}}DataFactory(resourceTestDataLoader);
+
+  private {{cookiecutter.RESOURCE_NAME}}Data reference;
+
+
+  /** Setup mapper and test data factory before each test. */
   @BeforeEach
   public void setup() {
     mapper = Mappers.getMapper({{cookiecutter.RESOURCE_NAME}}EntityMapper.class);
+
+    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
   }
 
   @Test
@@ -47,7 +56,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
 
   @Test
   public void mapper{{cookiecutter.RESOURCE_NAME}}Test() {
-    {{cookiecutter.RESOURCE_NAME}} resource = create{{cookiecutter.RESOURCE_NAME}}(identifier);
+    {{cookiecutter.RESOURCE_NAME}} resource = create{{cookiecutter.RESOURCE_NAME}}(reference.getId());
 
     {{cookiecutter.RESOURCE_NAME}}Entity response = mapper.toEntity(resource);
 
@@ -144,7 +153,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
    * @return {{cookiecutter.RESOURCE_NAME}} object
    */
   private {{cookiecutter.RESOURCE_NAME}} create{{cookiecutter.RESOURCE_NAME}}(String id) {
-    return new {{cookiecutter.RESOURCE_NAME}}(id, userName, pii, firstName, lastName);
+    return new {{cookiecutter.RESOURCE_NAME}}(id, reference.getUserName(), reference.getPii(), reference.getFirstName(), reference.getLastName());
   }
 
   /**
@@ -153,7 +162,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
    * @return {{cookiecutter.RESOURCE_NAME}}Entity object
    */
   private {{cookiecutter.RESOURCE_NAME}}Entity create{{cookiecutter.RESOURCE_NAME}}Entity() {
-    return new {{cookiecutter.RESOURCE_NAME}}Entity(identifier, userName, pii, firstName, lastName
+    return new {{cookiecutter.RESOURCE_NAME}}Entity(reference.getId(), reference.getUserName(), reference.getPii(), reference.getFirstName(), reference.getLastName()
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}, parentIdentifier{%- endif -%}
     );
   }
@@ -164,11 +173,11 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
    * @param response the object to validate
    */
   protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} response) {
-    assertThat(response.getUserName()).isEqualTo(userName);
-    assertThat(response.getPii()).isEqualTo(pii);
-    assertThat(response.getFirstName()).isEqualTo(firstName);
-    assertThat(response.getLastName()).isEqualTo(lastName);
-    assertThat(response.getId()).isEqualTo(identifier);
+    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(response.getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    assertThat(response.getId()).isEqualTo(reference.getId());
   }
 
   /**
@@ -192,10 +201,10 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}, boolean hasParentId{%- endif -%}
     ) {
     // CSON: LineLength
-    assertThat(response.getUserName()).isEqualTo(userName);
-    assertThat(response.getPii()).isEqualTo(pii);
-    assertThat(response.getFirstName()).isEqualTo(firstName);
-    assertThat(response.getLastName()).isEqualTo(lastName);
+    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(response.getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(response.getLastName()).isEqualTo(reference.getLastName());
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
     if (hasParentId) {
       assertThat(response.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isEqualTo(parentIdentifier);
@@ -204,9 +213,9 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     }
 {%- endif %}
     if (hasId) {
-      assertThat(response.getId()).isEqualTo(identifier);
+      assertThat(response.getId()).isEqualTo(reference.getId());
     } else {
-      assertThat(response.getId()).isNotEqualTo(identifier);
+      assertThat(response.getId()).isNotEqualTo(reference.getId());
     }
   }
 }

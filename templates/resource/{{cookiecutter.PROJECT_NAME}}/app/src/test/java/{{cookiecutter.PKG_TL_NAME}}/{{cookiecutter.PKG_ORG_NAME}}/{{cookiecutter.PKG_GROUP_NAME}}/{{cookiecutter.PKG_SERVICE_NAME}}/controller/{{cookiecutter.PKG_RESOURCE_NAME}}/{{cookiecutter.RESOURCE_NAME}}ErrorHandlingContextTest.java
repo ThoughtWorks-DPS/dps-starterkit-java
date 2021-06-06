@@ -10,13 +10,18 @@ import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.e
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.exception.RequestValidationException;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.exception.ResourceNotFoundException;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.openapi.config.OpenApiConfiguration;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.spi.DataFactory;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.SecurityAllowConfig;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.resources.{{cookiecutter.RESOURCE_NAME}}Resource;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.controller.{{cookiecutter.PKG_RESOURCE_NAME}}.mapper.{{cookiecutter.RESOURCE_NAME}}RequestMapper;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}}Data;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataFactory;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataProperties;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.{{cookiecutter.RESOURCE_NAME}}Service;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -42,7 +47,9 @@ import org.zalando.problem.Problem;
       SecurityAllowConfig.class,
       ErrorHandlerAdvice.class,
       OpenApiConfiguration.class,
-      ErrorHandlerConfig.class
+      ErrorHandlerConfig.class,
+      {{cookiecutter.RESOURCE_NAME}}DataFactory.class,
+      {{cookiecutter.RESOURCE_NAME}}DataProperties.class
     })
 class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
   @Autowired private MockMvc mockMvc;
@@ -55,14 +62,12 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
 
   @MockBean private {{cookiecutter.RESOURCE_NAME}}Resource controller;
 
+  @Autowired private {{cookiecutter.RESOURCE_NAME}}DataFactory testData;
+
+  private {{cookiecutter.RESOURCE_NAME}}Data reference;
+  private {{cookiecutter.RESOURCE_NAME}}Data bogus;
+
   private final String message = "message";
-  private final String detail = "detail";
-  private final String userName = "jsmith";
-  private final String pii = "123-45-6789";
-  private final String bogusName = "bogus";
-  private final String firstName = "Joe";
-  private final String lastName = "Smith";
-  private final String identifier = "12345";
   private final String traceHeaderName = "X-B3-TraceId";
   private final String traceInfo = "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01";
   private final String baseUrl = "https://starter.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_TL_NAME}}";
@@ -72,18 +77,38 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
   // This object will be magically initialized by the initFields method below.
 
   @Autowired private JacksonTester<{{cookiecutter.RESOURCE_NAME}}Request> jsonRequest;
-  private {{cookiecutter.RESOURCE_NAME}}Request request = new {{cookiecutter.RESOURCE_NAME}}Request(userName, pii, firstName, lastName);
-  private {{cookiecutter.RESOURCE_NAME}} model = new {{cookiecutter.RESOURCE_NAME}}(userName, pii, firstName, lastName);
+  private {{cookiecutter.RESOURCE_NAME}}Request request;
+  private {{cookiecutter.RESOURCE_NAME}} model;
+
+  /** Setup mapper and test data factory before each test. */
+  @BeforeEach
+  public void setup() {
+    reference = testData.getNamedData(DataFactory.DEFAULT_NAME);
+    bogus = testData.getNamedData("bogus");
+
+    request =
+       new {{cookiecutter.RESOURCE_NAME}}Request(
+           reference.getUserName(),
+           reference.getPii(),
+           reference.getFirstName(),
+           reference.getLastName());
+    model =
+       new {{cookiecutter.RESOURCE_NAME}}(
+           reference.getUserName(),
+           reference.getPii(),
+           reference.getFirstName(),
+           reference.getLastName());
+  }
 
   @Test
   void whenResourceNotRetrieved_thenReturns404() throws Exception {
-    Mockito.when(controller.findEntityById("foo")).thenThrow(new ResourceNotFoundException("foo"));
+    Mockito.when(controller.findEntityById(bogus.getId())).thenThrow(new ResourceNotFoundException(bogus.getId()));
 
     // when
     MockHttpServletResponse response =
         mockMvc
             .perform(
-                get("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/foo")
+                get(String.format("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/%s", bogus.getId()))
                     .header(traceHeaderName, traceInfo)
                     .accept(MediaType.APPLICATION_JSON))
             .andReturn()
@@ -99,19 +124,19 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     assertThat(error.getType().toString()).isEqualTo(notFoundType);
     assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
-    assertThat(error.getDetail()).isEqualTo("Resource 'foo' not found");
+        .isEqualTo("%s/%s", baseUrl, traceInfo);
+    assertThat(error.getDetail()).isEqualTo("Resource '%s' not found", bogus.getId());
   }
 
   @Test
   void whenResourceNotFound_thenReturns404() throws Exception {
-    Mockito.when(controller.findEntityById("foo")).thenThrow(new ResourceNotFoundException("foo"));
+    Mockito.when(controller.findEntityById(bogus.getId())).thenThrow(new ResourceNotFoundException(bogus.getId()));
 
     // when
     MockHttpServletResponse response =
         mockMvc
             .perform(
-                get("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/foo")
+                get(String.format("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/%s", bogus.getId()))
                     .header(traceHeaderName, traceInfo)
                     .accept(MediaType.APPLICATION_JSON))
             .andReturn()
@@ -127,8 +152,8 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     assertThat(error.getType().toString()).isEqualTo(notFoundType);
     assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
-    assertThat(error.getDetail()).isEqualTo("Resource 'foo' not found");
+        .isEqualTo("%s/%s", baseUrl, traceInfo);
+    assertThat(error.getDetail()).isEqualTo("Resource '%s' not found", bogus.getId());
   }
 
   @Test
@@ -158,7 +183,7 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     assertThat(error.getType().toString()).isEqualTo(requestValidationType);
     assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
+        .isEqualTo("%s/%s", baseUrl, traceInfo);
     assertThat(error.getDetail()).contains("userName is marked non-null but is null");
   }
 
@@ -188,7 +213,7 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     assertThat(error.getType().toString()).isEqualTo(requestValidationType);
     assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
+        .isEqualTo("%s/%s", baseUrl, traceInfo);
     assertThat(error.getDetail()).isEqualTo("Resource 'message' invalid request");
   }
 
@@ -215,7 +240,7 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     assertThat(error.getType().toString()).isEqualTo(requestValidationType);
     assertThat(error.getInstance().toString())
-        .isEqualTo(String.format("%s/%s", baseUrl, traceInfo));
+        .isEqualTo("%s/%s", baseUrl, traceInfo);
     assertThat(error.getDetail()).contains("Required request body is missing");
   }
 }

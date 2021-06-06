@@ -11,5 +11,6 @@ dependencies {
     implementation "io.opentracing.contrib:opentracing-spring-cloud-jdbc-starter"
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     testImplementation "com.h2database:h2"
-
+    testImplementation project(':data')
+    testImplementation 'io.twdps.starter:test-data'
 }

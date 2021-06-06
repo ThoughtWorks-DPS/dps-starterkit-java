@@ -7,10 +7,14 @@ import io.twdps.starter.boot.exception.ResourceNotFoundException;
 import io.twdps.starter.boot.notifier.lifecycle.entity.provider.MemoizedTimestampProvider;
 import io.twdps.starter.boot.notifier.lifecycle.entity.provider.NoopEntityLifecycleNotifier;
 import io.twdps.starter.boot.notifier.lifecycle.entity.spi.EntityLifecycleNotifier;
+import io.twdps.starter.boot.test.data.spi.DataFactory;
 import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.api.subaccount.requests.SubAccountRequest;
 import io.twdps.starter.example.api.subaccount.responses.SubAccountResponse;
 import io.twdps.starter.example.controller.subaccount.mapper.SubAccountRequestMapper;
+import io.twdps.starter.example.data.subaccount.model.SubAccountData;
+import io.twdps.starter.example.data.subaccount.provider.SubAccountDataFactory;
+import io.twdps.starter.example.data.subaccount.provider.SubAccountTestData;
 import io.twdps.starter.example.service.spi.subaccount.SubAccountService;
 import io.twdps.starter.example.service.spi.subaccount.model.SubAccount;
 import lombok.extern.slf4j.Slf4j;
@@ -39,16 +43,16 @@ public class SubAccountControllerTest {
 
   @Mock private SubAccountService manager;
   @Mock private SubAccountRequestMapper mapper;
+
   private EntityLifecycleNotifier notifier =
       new NoopEntityLifecycleNotifier(new MemoizedTimestampProvider(ZonedDateTime.now()));
 
-  private final String userName = "jsmith";
-  private final String pii = "123-45-6789";
-  private final String bogusName = "bogus";
-  private final String firstName = "Joe";
-  private final String lastName = "Smith";
-  private final String identifier = "12345";
-  private final String fullName = "Joe Smith";
+  private SubAccountTestData resourceTestDataLoader = new SubAccountTestData();
+  private SubAccountDataFactory resourceTestData =
+      new SubAccountDataFactory(resourceTestDataLoader);
+
+  private SubAccountData reference;
+  private SubAccountData bogus;
 
   private SubAccount resource;
   private SubAccount output;
@@ -74,14 +78,22 @@ public class SubAccountControllerTest {
 
     controller = new SubAccountController(manager, mapper, notifier);
 
+    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
+    bogus = resourceTestData.getNamedData("bogus");
+
     // use the real mapper to generate consistent objects to use in mapper stubs
     SubAccountRequestMapper real = Mappers.getMapper(SubAccountRequestMapper.class);
 
-    request = new SubAccountRequest(userName, pii, firstName, lastName);
+    request =
+        new SubAccountRequest(
+            reference.getUserName(),
+            reference.getPii(),
+            reference.getFirstName(),
+            reference.getLastName());
     resource = real.toModel(request);
     output =
         new SubAccount(
-            identifier,
+            reference.getId(),
             resource.getUserName(),
             resource.getPii(),
             resource.getFirstName(),
@@ -120,12 +132,12 @@ public class SubAccountControllerTest {
   @Test
   public void findBySubAccountIdFailTest() throws Exception {
 
-    Mockito.when(manager.findById(bogusName)).thenReturn(emptySubAccount);
+    Mockito.when(manager.findById(bogus.getId())).thenReturn(emptySubAccount);
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<SubAccountResponse> response = controller.findEntityById(bogusName);
+          ResponseEntity<SubAccountResponse> response = controller.findEntityById(bogus.getId());
         });
   }
 
@@ -140,34 +152,34 @@ public class SubAccountControllerTest {
 
     assertThat(response.getStatusCodeValue()).isEqualTo(201);
     assertThat(response.getBody()).isNotNull();
-    assertThat(response.getBody().getPii()).isEqualTo(pii);
-    assertThat(response.getBody().getFullName()).isEqualTo(fullName);
-    assertThat(response.getBody().getId()).isEqualTo(identifier);
+    assertThat(response.getBody().getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getBody().getFullName()).isEqualTo(reference.getFullName());
+    assertThat(response.getBody().getId()).isEqualTo(reference.getId());
   }
 
   @Test
   public void findByIdTest() throws Exception {
 
     createResponseMapperStubs();
-    Mockito.when(manager.findById(identifier)).thenReturn(optionalOutput);
+    Mockito.when(manager.findById(reference.getId())).thenReturn(optionalOutput);
 
-    ResponseEntity<SubAccountResponse> response = controller.findEntityById(identifier);
+    ResponseEntity<SubAccountResponse> response = controller.findEntityById(reference.getId());
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getPii()).isEqualTo(pii);
-    assertThat(response.getBody().getFullName()).isEqualTo(fullName);
-    assertThat(response.getBody().getId()).isEqualTo(identifier);
+    assertThat(response.getBody().getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getBody().getFullName()).isEqualTo(reference.getFullName());
+    assertThat(response.getBody().getId()).isEqualTo(reference.getId());
   }
 
   @Test
   public void findByIdFailedTest() throws Exception {
 
-    Mockito.when(manager.findById(bogusName)).thenReturn(emptySubAccount);
+    Mockito.when(manager.findById(bogus.getId())).thenReturn(emptySubAccount);
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<SubAccountResponse> response = controller.findEntityById(bogusName);
+          ResponseEntity<SubAccountResponse> response = controller.findEntityById(bogus.getId());
         });
   }
 
@@ -201,27 +213,28 @@ public class SubAccountControllerTest {
 
     createMapperStubs();
     createResponseMapperStubs();
-    Mockito.when(manager.updateById(identifier, resource)).thenReturn(optionalOutput);
+    Mockito.when(manager.updateById(reference.getId(), resource)).thenReturn(optionalOutput);
 
-    ResponseEntity<SubAccountResponse> response = controller.updateEntityById(identifier, request);
+    ResponseEntity<SubAccountResponse> response =
+        controller.updateEntityById(reference.getId(), request);
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getPii()).isEqualTo(pii);
-    assertThat(response.getBody().getFullName()).isEqualTo(fullName);
-    assertThat(response.getBody().getId()).isEqualTo(identifier);
+    assertThat(response.getBody().getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getBody().getFullName()).isEqualTo(reference.getFullName());
+    assertThat(response.getBody().getId()).isEqualTo(reference.getId());
   }
 
   @Test
   public void updateFailedTest() throws Exception {
 
     createMapperStubs();
-    Mockito.when(manager.updateById(bogusName, resource)).thenReturn(emptySubAccount);
+    Mockito.when(manager.updateById(bogus.getId(), resource)).thenReturn(emptySubAccount);
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
           ResponseEntity<SubAccountResponse> response =
-              controller.updateEntityById(bogusName, request);
+              controller.updateEntityById(bogus.getId(), request);
         });
   }
 
@@ -229,25 +242,25 @@ public class SubAccountControllerTest {
   public void deleteTest() throws Exception {
 
     createResponseMapperStubs();
-    Mockito.when(manager.deleteById(identifier)).thenReturn(optionalOutput);
+    Mockito.when(manager.deleteById(reference.getId())).thenReturn(optionalOutput);
 
-    ResponseEntity<SubAccountResponse> response = controller.deleteEntityById(identifier);
+    ResponseEntity<SubAccountResponse> response = controller.deleteEntityById(reference.getId());
 
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
-    assertThat(response.getBody().getPii()).isEqualTo(pii);
-    assertThat(response.getBody().getFullName()).isEqualTo(fullName);
-    assertThat(response.getBody().getId()).isEqualTo(identifier);
+    assertThat(response.getBody().getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getBody().getFullName()).isEqualTo(reference.getFullName());
+    assertThat(response.getBody().getId()).isEqualTo(reference.getId());
   }
 
   @Test
   public void deleteFailedTest() throws Exception {
 
-    Mockito.when(manager.deleteById(bogusName)).thenReturn(emptySubAccount);
+    Mockito.when(manager.deleteById(bogus.getId())).thenReturn(emptySubAccount);
 
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          ResponseEntity<SubAccountResponse> response = controller.deleteEntityById(bogusName);
+          ResponseEntity<SubAccountResponse> response = controller.deleteEntityById(bogus.getId());
         });
   }
 
@@ -257,11 +270,11 @@ public class SubAccountControllerTest {
    * @param resource the object to validate
    */
   protected void verifySubAccount(SubAccount resource) {
-    assertThat(resource.getUserName().equals(userName));
-    assertThat(resource.getPii().equals(pii));
-    assertThat(resource.getFirstName().equals(firstName));
-    assertThat(resource.getLastName().equals(lastName));
-    assertThat(resource.getId()).isNotEqualTo(identifier);
+    assertThat(resource.getUserName().equals(reference.getUserName()));
+    assertThat(resource.getPii().equals(reference.getPii()));
+    assertThat(resource.getFirstName().equals(reference.getFirstName()));
+    assertThat(resource.getLastName().equals(reference.getLastName()));
+    assertThat(resource.getId()).isNotEqualTo(reference.getId());
   }
 
   /**
@@ -270,9 +283,10 @@ public class SubAccountControllerTest {
    * @param response the object to validate
    */
   private void verifySubAccountResponse(SubAccountResponse response) {
-    assertThat(response.getUserName().equals(userName));
-    assertThat(response.getPii().equals(pii));
-    assertThat(response.getFullName().equals(fullName));
-    assertThat(response.getId()).isEqualTo(identifier);
+    assertThat(response.getUserName().equals(reference.getUserName()));
+    assertThat(response.getPii().equals(reference.getPii()));
+    assertThat(response.getFirstName().equals(reference.getFirstName()));
+    assertThat(response.getFullName().equals(reference.getFullName()));
+    assertThat(response.getId()).isEqualTo(reference.getId());
   }
 }

@@ -2,9 +2,13 @@ package io.twdps.starter.example.controller.subaccount.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.twdps.starter.boot.test.data.spi.DataFactory;
 import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.api.subaccount.requests.SubAccountRequest;
 import io.twdps.starter.example.api.subaccount.responses.SubAccountResponse;
+import io.twdps.starter.example.data.subaccount.model.SubAccountData;
+import io.twdps.starter.example.data.subaccount.provider.SubAccountDataFactory;
+import io.twdps.starter.example.data.subaccount.provider.SubAccountTestData;
 import io.twdps.starter.example.service.spi.subaccount.model.SubAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,16 +26,18 @@ public class SubAccountRequestMapperTest {
 
   private SubAccountRequestMapper mapper;
 
-  private final String userName = "jsmith";
-  private final String pii = "123-45-6789";
-  private final String firstName = "Joe";
-  private final String lastName = "Smith";
-  private final String identifier = "12345";
-  private final String fullName = "Joe Smith";
+  private SubAccountTestData resourceTestDataLoader = new SubAccountTestData();
+  private SubAccountDataFactory resourceTestData =
+      new SubAccountDataFactory(resourceTestDataLoader);
 
+  private SubAccountData reference;
+
+  /** Setup mapper and test data factory before each test. */
   @BeforeEach
   public void setup() {
     mapper = Mappers.getMapper(SubAccountRequestMapper.class);
+
+    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
   }
 
   @Test
@@ -45,7 +51,7 @@ public class SubAccountRequestMapperTest {
 
   @Test
   public void mapperSubAccountResponseTest() {
-    SubAccount resource = createSubAccount(identifier);
+    SubAccount resource = createSubAccount(reference.getId());
 
     SubAccountResponse response = mapper.toSubAccountResponse(resource);
 
@@ -54,7 +60,7 @@ public class SubAccountRequestMapperTest {
 
   @Test
   public void mapperOptionalTest() {
-    Optional<SubAccount> resource = Optional.of(createSubAccount(identifier));
+    Optional<SubAccount> resource = Optional.of(createSubAccount(reference.getId()));
 
     SubAccountResponse response = mapper.toSubAccountResponse(resource);
 
@@ -83,7 +89,7 @@ public class SubAccountRequestMapperTest {
   @Test
   public void mapperEntityListTest() {
     List<SubAccount> resources =
-        Arrays.asList(createSubAccount(identifier), createSubAccount(identifier));
+        Arrays.asList(createSubAccount(reference.getId()), createSubAccount(reference.getId()));
 
     List<SubAccountResponse> response = mapper.toSubAccountResponseList(resources);
 
@@ -96,7 +102,7 @@ public class SubAccountRequestMapperTest {
   public void mapperEntityPageTest() {
     Pageable pageable = PageRequest.of(0, 1);
     Page<SubAccount> resources =
-        new PageImpl<>(Arrays.asList(createSubAccount(identifier)), pageable, 100);
+        new PageImpl<>(Arrays.asList(createSubAccount(reference.getId())), pageable, 100);
     PagedResponse<SubAccountResponse> response = mapper.toSubAccountResponsePage(resources);
 
     assertThat(response.getItems().size()).isEqualTo(1);
@@ -114,7 +120,12 @@ public class SubAccountRequestMapperTest {
    * @return SubAccount object
    */
   private SubAccount createSubAccount(String id) {
-    return new SubAccount(id, userName, pii, firstName, lastName);
+    return new SubAccount(
+        id,
+        reference.getUserName(),
+        reference.getPii(),
+        reference.getFirstName(),
+        reference.getLastName());
   }
 
   /**
@@ -123,7 +134,11 @@ public class SubAccountRequestMapperTest {
    * @return SubAccountRequest object
    */
   private SubAccountRequest createSubAccountRequest() {
-    return new SubAccountRequest(userName, pii, firstName, lastName);
+    return new SubAccountRequest(
+        reference.getUserName(),
+        reference.getPii(),
+        reference.getFirstName(),
+        reference.getLastName());
   }
 
   /**
@@ -132,11 +147,11 @@ public class SubAccountRequestMapperTest {
    * @param resource the object to validate
    */
   protected void verifySubAccount(SubAccount resource) {
-    assertThat(resource.getUserName().equals(userName));
-    assertThat(resource.getPii().equals(pii));
-    assertThat(resource.getFirstName().equals(firstName));
-    assertThat(resource.getLastName().equals(lastName));
-    assertThat(resource.getId()).isNotEqualTo(identifier);
+    assertThat(resource.getUserName().equals(reference.getUserName()));
+    assertThat(resource.getPii().equals(reference.getPii()));
+    assertThat(resource.getFirstName().equals(reference.getFirstName()));
+    assertThat(resource.getLastName().equals(reference.getLastName()));
+    assertThat(resource.getId()).isNotEqualTo(reference.getId());
   }
 
   /**
@@ -145,9 +160,9 @@ public class SubAccountRequestMapperTest {
    * @param response the object to validate
    */
   private void verifySubAccountResponse(SubAccountResponse response) {
-    assertThat(response.getUserName().equals(userName));
-    assertThat(response.getPii().equals(pii));
-    assertThat(response.getFullName().equals(fullName));
-    assertThat(response.getId()).isEqualTo(identifier);
+    assertThat(response.getUserName().equals(reference.getUserName()));
+    assertThat(response.getPii().equals(reference.getPii()));
+    assertThat(response.getFullName().equals(reference.getFullName()));
+    assertThat(response.getId()).isEqualTo(reference.getId());
   }
 }

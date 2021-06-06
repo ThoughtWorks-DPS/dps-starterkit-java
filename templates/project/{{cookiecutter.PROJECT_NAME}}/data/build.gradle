@@ -1,0 +1,10 @@
+plugins {
+    id 'starter.std.java.library-spring-conventions'
+}
+
+dependencies {
+    annotationBom platform("{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:starter-bom:${starter_boot_version}")
+    checkstyleRules platform("{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:checkstyle-bom:${starter_boot_version}")
+
+    api '{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:test-data'
+}

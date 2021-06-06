@@ -27,6 +27,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'com.bisnode.opa:opa-filter-spring-boot-starter'
 
+    testImplementation project(':data')
+    testImplementation 'io.twdps.starter:test-data'
     testImplementation 'com.h2database:h2'
     integrationTestImplementation 'com.h2database:h2'
     //runtime 'com.h2database:h2'

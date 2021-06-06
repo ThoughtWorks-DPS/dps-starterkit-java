@@ -8,12 +8,14 @@ outputPath="."
 projectName="dps-multi-module-starterkit-java"
 serviceName="Example"
 binary="cookiecutter"
+tag=""
 
 function usage {
-  echo "${0} [--parent <name>] [--child <name>] [--resource <name>] \ "
+  echo "${0} [--tag <tag>] [--parent <name>] [--child <name>] [--resource <name>] \ "
   echo "     [--gen-parent] [--gen-child] [--gen-resource] [--gen-link] \ "
   echo "     [--repo <repo>] [--output <path>]  [--binary <path>] \ "
   echo "     [--project <projectName>] [--service <serviceName>]"
+  echo "  --tag          release tag to checkout ($tag)"
   echo "  --parent       name of parent resource variable name (${parent})"
   echo "  --child        name of child resource variable name (${child})"
   echo "  --resource     name of standalone / link resource variable name (${resource})"
@@ -46,9 +48,10 @@ function get_baseline {
   baseline="${baseline} -f"
   baseline="${baseline} -o ${outputPath}"
   baseline="${baseline} ${repo}"
+  [ -z "${path}" ] || baseline="${baseline} --directory ${path}"
+  [ -z "${tag}" ] || baseline="${baseline} --checkout ${tag}"
   baseline="${baseline} PROJECT_NAME=${projectName}"
   baseline="${baseline} SERVICE_NAME=${serviceName}"
-  [ -z "${path}" ] || baseline="${baseline} --directory ${path}"
 
   echo "${baseline}"
 }
@@ -109,6 +112,7 @@ function generate_link {
 while [ $# -gt 0 ]
 do
   case $1 in
+  --tag) shift; tag=$1;;
   --parent) shift; parent=$1;;
   --child) shift; child=$1;;
   --resource) shift; resource=$1;;
