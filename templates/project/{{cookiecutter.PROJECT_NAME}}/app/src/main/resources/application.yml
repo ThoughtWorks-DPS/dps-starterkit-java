@@ -99,11 +99,11 @@ spring:
       #client-id: "${pod.name}_${pod.namespace}_${pod.id}"
       group-id: starter
       key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
-      value-deserializer: io.twdps.starter.boot.kafka.CustomJsonDeserializer
+      value-deserializer: io.twdps.starter.boot.kafkaconnectors.serde.CustomJsonDeserializer
       level.concurrency: 1
       properties:
         spring.json.trusted.packages: io.twdps.starter.*
-        spring.json.value.default.type: io.twdps.starter.boot.notifier.EntityLifecycleNotification
+        spring.json.value.default.type: io.twdps.starter.boot.notifier.lifecycle.entity.model.EntityLifecycleNotification
     producer:
       # This means the leader will wait for the full set of in-sync replicas to acknowledge
       # the record. This guarantees that the record will not be lost as long as at least one
@@ -117,10 +117,10 @@ spring:
       compression-type: lz4
       retries: 3
       key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
-      value-serializer: io.twdps.starter.boot.kafka.CustomJsonSerializer
+      value-serializer: io.twdps.starter.boot.kafkaconnectors.serde.CustomJsonSerializer
       properties:
         max.in.flight.requests.per.connection: 2
-        spring.json.value.default.type: io.twdps.starter.boot.notifier.EntityLifecycleNotification
+        spring.json.value.default.type: io.twdps.starter.boot.notifier.lifecycle.entity.model.EntityLifecycleNotification
 
 opentracing:
   zipkin:
