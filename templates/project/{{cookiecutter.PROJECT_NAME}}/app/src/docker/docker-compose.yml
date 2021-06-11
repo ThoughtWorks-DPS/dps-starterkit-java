@@ -68,7 +68,7 @@ services:
       - internal
 
   starter-java:
-    image: {{cookiecutter.DOCKER_REGISTRY}}/{{cookiecutter.PROJECT_NAME}}:latest
+    image: {{cookiecutter.DOCKER_REGISTRY}}/{{cookiecutter.PROJECT_NAME}}-app:latest
     hostname: starter
     ports:
       - "8080:8080"

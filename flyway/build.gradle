@@ -9,14 +9,10 @@ plugins {
 }
 
 docker {
-    name "${dockerRegistry}/${rootProject.name}-flyway"
-    tag "Build", "${dockerRegistry}/${rootProject.name}-flyway:${dockerImageVersion}"
-    tag "Latest", "${dockerRegistry}/${rootProject.name}-flyway:latest"
     copySpec.from("src/main/resources").into(".")
 }
 
 dockerRun {
-    image "${dockerRegistry}/${rootProject.name}-flyway"
     env 'FLYWAY_DEFAULT_SCHEMA': getEnvOrDefault('DB_NAME', 'example'),
             'FLYWAY_URL': "jdbc:${getEnvOrDefault('DB_SERVER', 'postgresql')}://${getEnvOrDefault('DB_HOST', 'localhost')}:5432/${getEnvOrDefault('DB_NAME', 'example')}?user=${getEnvOrDefault('DB_ROOT_USER', 'example_flyway')}&password=${getEnvOrDefault('DB_ROOT_USER_PASSWORD', 'not-the-user-password')}",
             'FLYWAY_USER': getEnvOrDefault('DB_ROOT_USER', 'example_flyway'),

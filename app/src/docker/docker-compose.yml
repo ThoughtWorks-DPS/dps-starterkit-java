@@ -68,7 +68,7 @@ services:
       - internal
 
   starter-java:
-    image: twdps/dps-multi-module-starterkit-java:latest
+    image: twdps/dps-multi-module-starterkit-java-app:latest
     hostname: starter
     ports:
       - "8080:8080"
