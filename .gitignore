@@ -19,7 +19,6 @@ target/
 
 helmchart/envsecrets.env
 tasks/config.temp.dev
-/bin
 opa/ingress/test.rego
 helmchart/opa-policies/ingress/test.rego
 
@@ -38,7 +37,8 @@ HELP.md
 .settings
 .springBeans
 .sts4-cache
-bin/
+
+!app/bin
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
