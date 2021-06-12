@@ -43,7 +43,7 @@ jobs:
       - secrethub/exec:
           step-name: Run tests
           command: |
-            ./gradlew test
+            ./gradlew check -x shellcheck
 
   publish:
     executor: build-agent
@@ -77,10 +77,10 @@ jobs:
       - secrethub/exec:
           step-name: Build jar
           command: |
-            ./gradlew build -x test
+            ./gradlew build -x check
 
       - run:
-          name: Build Image
+          name: Build Images
           command: ./gradlew docker
 
       - run:
@@ -88,8 +88,12 @@ jobs:
           command: docker tag twdps/dps-multi-module-starterkit-java-flyway:latest twdps/dps-multi-module-starterkit-java-flyway:$CIRCLE_BUILD_NUM
 
       - run:
+          name: Tag OPA Init Image
+          command: docker tag twdps/dps-multi-module-starterkit-java-opa-init:latest twdps/dps-multi-module-starterkit-java-opa-init:$CIRCLE_BUILD_NUM
+
+      - run:
           name: Tag Main Image
-          command: docker tag twdps/dps-multi-module-starterkit-java:latest twdps/dps-multi-module-starterkit-java:$CIRCLE_BUILD_NUM
+          command: docker tag twdps/dps-multi-module-starterkit-java-app:latest twdps/dps-multi-module-starterkit-java-app:$CIRCLE_BUILD_NUM
 
       - run:
           name: Docker authentication
@@ -106,8 +110,12 @@ jobs:
           command: docker push twdps/dps-multi-module-starterkit-java-flyway
 
       - run:
+          name: Publish OPA Init Image
+          command: docker push twdps/dps-multi-module-starterkit-java-opa-init
+
+      - run:
           name: Publish Main Image
-          command: docker push twdps/dps-multi-module-starterkit-java
+          command: docker push twdps/dps-multi-module-starterkit-java-app
 
   dev-deploy:
     executor: deploy-agent

@@ -43,7 +43,7 @@ jobs:
       - secrethub/exec:
           step-name: Run tests
           command: |
-            ./gradlew test
+            ./gradlew check -x shellcheck
 
   publish:
     executor: build-agent
@@ -72,20 +72,28 @@ jobs:
 
       - run:
           name: Tag init container
-          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:latest {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:$CIRCLE_BUILD_NUM
+          ∫command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:latest {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:$CIRCLE_BUILD_NUM
 
       - secrethub/exec:
           step-name: Build jar
           command: |
-            ./gradlew build -x test
+            ./gradlew build -x check
 
       - run:
-          name: Build Image
-          command: docker build app -t {{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PACKAGE_NAME}}:latest
+          name: Build Images
+          command: ./gradlew docker
+
+      - run:
+          name: Tag Flyway Image
+          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-flyway:latest {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-flyway:$CIRCLE_BUILD_NUM
+
+      - run:
+          name: Tag OPA Init Image
+          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-opa-init:latest {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-opa-init:$CIRCLE_BUILD_NUM
 
       - run:
           name: Tag Main Image
-          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PACKAGE_NAME}}:latest {{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PACKAGE_NAME}}:$CIRCLE_BUILD_NUM
+          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-app:latest {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-app:$CIRCLE_BUILD_NUM
 
       - run:
           name: Docker authentication
@@ -98,8 +106,16 @@ jobs:
           command: docker push {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:latest
 
       - run:
-          name: Publish Docker Image
-          command: docker push {{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PACKAGE_NAME}}:latest
+          name: Publish Flyway Image
+          command: docker push {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-flyway
+
+      - run:
+          name: Publish OPA Init Image
+          command: docker push {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-opa-init
+
+      - run:
+          name: Publish Main Image
+          command: docker push {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-app
 
   dev-deploy:
     executor: deploy-agent
