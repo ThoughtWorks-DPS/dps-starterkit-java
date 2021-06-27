@@ -51,19 +51,19 @@ ext {
     jacoco_minimum_coverage = 0.8
     subModules = [':app',
                   ':api',
+                  ':container-init',
                   ':controller',
                   ':data',
-                  ':service:spi',
-                  ':service:activator',
-                  ':service:provider',
+                  ':db-init',
+                  ':opa-init',
                   ':persistence:impl',
                   ':persistence:model',
-                  ':flyway',
-                  ':init-container',
-                  ':opa-init']
+                  ':service:activator',
+                  ':service:provider',
+                  ':service:spi']
     dockerModules = [':app',
-                     ':flyway',
-                     ':init-container',
+                     ':container-init',
+                     ':db-init',
                      ':opa-init']
 }
 
@@ -84,9 +84,6 @@ tasks.named('build').configure {
 tasks.named('check').configure {
     //mustRunAfter tasks.named('build')
     subModules.each {
-        dependsOn gradle.includedBuild('skeleton').task("${it}:check")
-    }
-    dockerModules.each {
         dependsOn gradle.includedBuild('skeleton').task("${it}:check")
     }
 }

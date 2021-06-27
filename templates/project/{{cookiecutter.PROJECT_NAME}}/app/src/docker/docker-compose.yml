@@ -43,7 +43,7 @@ services:
 #      - "5432:5432"
 
   db-init:
-    image: {{cookiecutter.DOCKER_REGISTRY}}/{{cookiecutter.PROJECT_NAME}}-flyway:latest
+    image: {{cookiecutter.DOCKER_REGISTRY}}/{{cookiecutter.PROJECT_NAME}}-db-init:latest
     # NOTE: These are the defaults from the flyway.conf   uncomment to override, esp for secrethub passwords
     #    environment:
     #      FLYWAY_URL: jdbc:postgresql://postgres1:5432/{{cookiecutter.PKG_SERVICE_NAME}}?user={{cookiecutter.PKG_SERVICE_NAME}}_flyway&password=not-the-password

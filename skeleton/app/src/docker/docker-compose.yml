@@ -43,7 +43,7 @@ services:
 #      - "5432:5432"
 
   db-init:
-    image: twdps/dps-multi-module-starterkit-java-flyway:latest
+    image: twdps/dps-multi-module-starterkit-java-db-init:latest
     # NOTE: These are the defaults from the flyway.conf   uncomment to override, esp for secrethub passwords
     #    environment:
     #      FLYWAY_URL: jdbc:postgresql://postgres1:5432/example?user=example_flyway&password=not-the-password

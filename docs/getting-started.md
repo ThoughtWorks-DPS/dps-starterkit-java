@@ -67,9 +67,10 @@ The root `build.gradle` file provides a few convenience tasks that help with the
 - restartloop - stops the docker containers, deletes unused images, then proceeds with `devloop`
 - resetloop - stops the docker containers, deletes unused images and volumes, then proceeds with `devloop`.
   This effectively re-initializes the database from scratch.
-- ccloop - regenerates a skeleton from the template, formats via `spotlessApply`, build/test the generated project.
-  This task also runs a recursive `diff` to compare the generated skeleton with the canonical `skeleton/` code tree.
+- ccdiff - regenerates a skeleton from the template, formats via `spotlessApply`.
+  This task runs a recursive `diff` to compare the generated skeleton with the canonical `skeleton/` code tree.
   Once the `diff` is clean, we can be assured that the templates are accurately generating identical to the `skeleton/` source.
+- ccloop - runs ccdiff task, then build/test the generated project.
 
 The `devloop`, `restartloop`, and `resetloop` tasks are also available in the `skeleton/` tree .
 These tasks are also part of the generated skeleton, and help the development teams as they extend the skeleton to build the services.

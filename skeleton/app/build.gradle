@@ -35,9 +35,9 @@ dependencies {
     //runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
 
-    docker project(':flyway')
+    docker project(':container-init')
+    docker project(':db-init')
     docker project(':opa-init')
-    docker project(':init-container')
 }
 
 
@@ -59,7 +59,7 @@ bootJar {
 }
 
 tasks.named('dockerComposeUp').configure {
-    dependsOn ':flyway:docker'
+    dependsOn ':container-init:docker'
+    dependsOn ':db-init:docker'
     dependsOn ':opa-init:docker'
-    dependsOn ':init-container:docker'
 }

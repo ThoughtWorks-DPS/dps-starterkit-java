@@ -9,7 +9,7 @@ function remove {
   rm "${file}"
 }
 
-cd flyway/src/main/resources/database/migrations
+cd db-init/src/main/resources/database/migrations
 latestVersion=$(ls | sort | head -1 | sed -e 's/__.*//')
 nextVersion="${latestVersion}.1"
 mv {VNEXT,${nextVersion}}__Template_{{cookiecutter.RESOURCE_NAME}}.sql

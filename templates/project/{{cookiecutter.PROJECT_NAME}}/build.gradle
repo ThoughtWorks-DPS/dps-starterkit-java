@@ -52,19 +52,19 @@ ext {
     jacoco_minimum_coverage = 0.8
     subModules = [':app',
                   ':api',
+                  ':container-init',
                   ':controller',
                   ':data',
-                  ':service:spi',
-                  ':service:activator',
-                  ':service:provider',
+                  ':db-init',
+                  ':opa-init',
                   ':persistence:impl',
                   ':persistence:model',
-                  ':flyway',
-                  ':init-container',
-                  ':opa-init']
+                  ':service:activator',
+                  ':service:provider',
+                  ':service:spi']
     dockerModules = [':app',
-                     ':flyway',
-                     ':init-container',
+                     ':container-init',
+                     ':db-init',
                      ':opa-init']
 }
 
@@ -73,7 +73,6 @@ def maintainerclean = tasks.register('maintainerclean') {
     description = "clean all submodules"
     def tb = taskBuilder('clean')
     subModules.each { dependsOn tb(it) }
-    dockerModules.each { dependsOn tb(it) }
     //depender subModules, taskBuilder('clean')
     //depender dockerModules, taskBuilder('clean')
 }
