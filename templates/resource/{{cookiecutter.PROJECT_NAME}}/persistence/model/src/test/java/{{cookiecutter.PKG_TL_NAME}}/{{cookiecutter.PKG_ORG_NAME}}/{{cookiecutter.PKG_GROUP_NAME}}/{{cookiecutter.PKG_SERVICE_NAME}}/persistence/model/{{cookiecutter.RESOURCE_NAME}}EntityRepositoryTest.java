@@ -2,7 +2,7 @@ package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutte
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.spi.DataFactory;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.provider.NamedDataFactory;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}}Data;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataFactory;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataProperties;
@@ -41,8 +41,8 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
   /** Setup test data. */
   @BeforeEach
   public void setup() {
-    reference = testData.getNamedData(DataFactory.DEFAULT_NAME);
-    bogus = testData.getNamedData("bogus");
+    reference = testData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    bogus = testData.createBySpec("bogus");
 
     entity = new {{cookiecutter.RESOURCE_NAME}}Entity(
         reference.getUserName(),
@@ -58,7 +58,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
    */
   public {{cookiecutter.RESOURCE_NAME}}Entity populate() {
     {{cookiecutter.RESOURCE_NAME}}Entity result = modelEntityRepository.save(entity);
-    testData.getNamedDataCollection(DataFactory.DEFAULT_NAME).stream()
+    testData.createCollectionBySpec(NamedDataFactory.DEFAULT_SPEC).stream()
         .forEach(
             d -> {
               {{cookiecutter.RESOURCE_NAME}}Entity ref =

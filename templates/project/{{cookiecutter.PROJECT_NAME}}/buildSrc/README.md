@@ -3,6 +3,23 @@
 NOTE: This readme is generated from the plugin source files.
 Do not edit directly.
 
+## README.md Construction
+
+The README.md is constructed from the plugin source and uses snippet files to piece the content together.
+The snippet files are located in the `src/main/resource/gradle` folder.
+The `toptick` and `bottomtick` files bracket the plugin code with Markdown code blocks.
+
+The `header` file provides the header formatting, to which the plugin filename is appended.
+Note, the `header` file **MUST NOT** have a trailing newline character.
+If you edit the file with `vi` or Intellij, they will add the trailing newline.
+In this situation, it is simple to reconstruct the `header` file:
+
+```bash
+% (echo && echo -n "## ") > plugins/src/main/resources/gradle/header
+```
+
+## Mixin Plugins
+
 The mixins are meant to provide snippets of Gradle configuration based on specific functional groupings.
 The groups are identified as starter scripts, and roughly grouped:
 
@@ -29,7 +46,6 @@ If 'spotless' gets more complicated, then these two should be split and propagat
 
 ```groovy
 plugins {
-    id 'java'
 }
 
 sourceCompatibility = getPropertyOrDefault('java_version', '11')
@@ -165,8 +181,9 @@ ext {
 
 ```groovy
 /**
- * Tasks for maintaining copyright dates
- * - updateCopyrights  scans modified files for copyright string and updates to current year
+ * Git convenience helpers
+ * - gitPresent  determines if there is a .git repository present in the project
+ * - modifiedFiles   set to a collection of the files which are currently modified since last comit
  */
 plugins {
     id 'org.ajoberstar.grgit'
@@ -223,6 +240,30 @@ ext {
 
 ```
 
+## starter.java.build-utils-task-conventions.gradle
+
+```groovy
+ext {
+    /**
+     * Utility function for constructing and applying task dependencies.
+     *
+     * @param modules module names (as array or list supporting ::each)
+     * @param taskClosure closure which constructs the task name given a module name
+     */
+    depender = { modules, taskClosure -> modules.each { dependsOn taskClosure(it) } }
+
+    /**
+     * Utility function to construct a closure given a task name (or task path).
+     *
+     * @param name task name (as String)
+     * @return closure constructing name of submodule task give submodule name
+     */
+    taskBuilder = { name -> return { module -> { "${module}:${name}" } } }
+
+}
+
+```
+
 ## starter.java.config-conventions.gradle
 
 ```groovy
@@ -264,24 +305,24 @@ plugins {
 // id 'starter.java.build-utils-property-conventions'
 
 ext {
-    dockerRegistry = project.hasProperty("dockerRegistry") ? "${project.dockerRegistry}" : "${group}"
+    dockerRegistry = getPropertyOrDefault('dockerRegistry', group)
     dockerImageVersion = project.hasProperty("buildNumber") ? "${project.version}-${project.buildNumber}" : project.version
 }
 
 docker {
     dependsOn(assemble)
-    name "${dockerRegistry}/${rootProject.name}"
-    tag "Build", "${dockerRegistry}/${rootProject.name}:${dockerImageVersion}"
-    tag "Latest", "${dockerRegistry}/${rootProject.name}:latest"
+    name "${dockerRegistry}/${rootProject.name}-${project.name}"
+    tag "Build", "${dockerRegistry}/${rootProject.name}-${project.name}:${dockerImageVersion}"
+    tag "Latest", "${dockerRegistry}/${rootProject.name}-${project.name}:latest"
     noCache true
     dockerfile file('src/docker/Dockerfile')
 }
 
 dockerRun {
     name project.name
-    image "${dockerRegistry}/${rootProject.name}"
+    image "${dockerRegistry}/${rootProject.name}-${project.name}"
     ports '8080:8080'
-    env 'SECRET_HELLO': getEnvOrDefault('SECRET_HELLO', 'override-me')
+    env 'SECRETHUB_HELLO': getEnvOrDefault('SECRETHUB_HELLO', 'override-me')
 }
 
 dockerCompose {
@@ -289,41 +330,85 @@ dockerCompose {
 }
 
 def dockerStart = tasks.register('dockerStart', DefaultTask) {
-    dependsOn "dockerPrune", "docker", "dockerRun"
-}
-
-def dockerPrune = tasks.register('dockerPrune', DefaultTask) {
-    mustRunAfter 'dockerStop', 'dockerRemoveContainer'
-    dependsOn 'dockerPruneContainer', 'dockerPruneImage'
+    group = "Docker Run"
+    description = "Remove unused containers, build image, run container"
+    dependsOn tasks.named("dockerPrune")
+    dependsOn tasks.named("docker")
+    dependsOn tasks.named("dockerRun")
 }
 
 def dockerPruneContainer = tasks.register('dockerPruneContainer', Exec) {
+    group = "Docker"
+    description = "Remove unused containers"
     executable "docker"
     args "container", "prune", "-f"
 }
 
 def dockerPruneImage = tasks.register('dockerPruneImage', Exec) {
+    group = "Docker"
+    description = "Remove unused images"
     executable "docker"
     args "image", "prune", "-f"
 }
 
 def dockerPruneVolume = tasks.register('dockerPruneVolume', Exec) {
+    group = "Docker"
+    description = "Remove unused volumes"
     executable "docker"
     args "volume", "prune", "-f"
 }
 
+def dockerPrune = tasks.register('dockerPrune', DefaultTask) {
+    group = "Docker"
+    description = "Stop container, then remove unused containers and images"
+    mustRunAfter tasks.named('dockerStop')
+    mustRunAfter tasks.named('dockerRemoveContainer')
+    dependsOn dockerPruneContainer
+    dependsOn dockerPruneImage
+}
+
 def dcPrune = tasks.register('dcPrune', DefaultTask) {
-    mustRunAfter('dockerComposeDown')
-    dependsOn 'dockerPruneContainer', 'dockerPruneImage'
+    group = "Docker Container"
+    description = "Stop containers, then remove unused containers and images"
+    mustRunAfter tasks.named('dockerComposeDown')
+    dependsOn dockerPruneContainer
+    dependsOn dockerPruneImage
 }
 
 def dcPruneVolume = tasks.register('dcPruneVolume', DefaultTask) {
-    mustRunAfter('dockerComposeDown')
-    dependsOn 'dockerPruneVolume'
+    group = "Docker Container"
+    description = "Stop containers, then remove unused volumes"
+    mustRunAfter tasks.named('dockerComposeDown')
+    dependsOn dockerPruneVolume
+}
+
+def lintDockerfile = tasks.register('lintDockerfile', DefaultTask) {
+    group = JavaBasePlugin.VERIFICATION_GROUP
+    description = "Use linter (default hadolint) to perform static analysis on Dockerfile"
+    ext.binary = "/usr/local/bin/hadolint"
+    ext.targets = ["src/docker/Dockerfile"]
+    ext.taskTimeout = 10000L
+    def result = 0
+    def sout = new StringBuilder()
+    def serr = new StringBuilder()
+    doLast {
+        ext.targets.each { f ->
+            def cmdLine = "${ext.binary} ${f}"
+            def proc = cmdLine.execute(null, project.projectDir)
+            proc.consumeProcessOutput(sout, serr)
+            proc.waitForOrKill(ext.taskTimeout)
+            result |= proc.exitValue()
+        }
+        if (result != 0) {
+            logger.error("stderr: {}", serr.toString())
+            logger.error("stdout: {}", sout.toString())
+        }
+        return result
+    }
 }
 
 tasks.named("dockerRemoveContainer").configure {
-    mustRunAfter('dockerStop')
+    mustRunAfter tasks.named('dockerStop')
 }
 
 tasks.named("dockerComposeUp").configure {
@@ -332,6 +417,37 @@ tasks.named("dockerComposeUp").configure {
 
 tasks.named("dockerRun").configure {
     dependsOn tasks.named("docker")
+}
+
+tasks.named("check").configure {
+    dependsOn tasks.named("lintDockerfile")
+}
+```
+
+## starter.java.container-docker-compose-conventions.gradle
+
+```groovy
+plugins {
+    id 'starter.java.build-utils-property-conventions'
+}
+// NOTE: This is a simplified implementation.
+// For some reason, the tasks from com.palantir.docker don't have proper
+// input/outputs defined for the context where we just define a docker-compose.yaml
+// file and don't actually build our own docker image.
+// We re-use the same task names for consistency
+
+var dockerComposeUp = tasks.register('dockerComposeUp', Exec) {
+    group = JavaBasePlugin.VERIFICATION_GROUP
+    description = "Start up a set of containers defined by a docker-compose.yaml file"
+    executable 'docker-compose'
+    args "-f", "${project.projectDir}/src/docker/${getPropertyOrDefault('dockerComposeFile', 'docker-compose.yml')}", "up", "-d"
+}
+
+var dockerComposeDown = tasks.register('dockerComposeDown', Exec) {
+    group = JavaBasePlugin.VERIFICATION_GROUP
+    description = "Shut down a set of containers defined by a docker-compose.yaml file"
+    executable 'docker-compose'
+    args "-f", "${project.projectDir}/src/docker/${getPropertyOrDefault('dockerComposeFile', 'docker-compose.yml')}", "down"
 }
 ```
 
@@ -354,7 +470,7 @@ docker {
 }
 
 dockerRun {
-    env 'SECRET_HELLO': getEnvOrDefault('SECRET_HELLO', 'override-me'),
+    env 'SECRETHUB_HELLO': getEnvOrDefault('SECRETHUB_HELLO', 'override-me'),
             'JAVA_PROFILE': '-Dspring.profiles.include=docker'
 }
 
@@ -371,14 +487,10 @@ dockerRun {
 // starter.java.build-javatarget-conventions
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-autoconfigure'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-
-    implementation "org.zalando:problem-spring-web"
-    implementation "org.springdoc:springdoc-openapi-ui"
-    implementation "org.springdoc:springdoc-openapi-webmvc-core"
-    //implementation "org.springdoc:springdoc-openapi-security"
-    implementation "org.springdoc:springdoc-openapi-data-rest"
     implementation 'org.mapstruct:mapstruct'
+    implementation 'org.slf4j:slf4j-api'
 
     compileOnly 'org.projectlombok:lombok'
 
@@ -427,6 +539,23 @@ dependencies {
 }
 ```
 
+## starter.java.deps-openapi-conventions.gradle
+
+```groovy
+/**
+ * Provides a set of common dependencies for typical build.
+ * Includes proper dependencies for lombok and mapstruct annotation processing.
+ */
+
+// starter.java.build-javatarget-conventions
+
+dependencies {
+    implementation 'io.swagger.core.v3:swagger-annotations'
+    implementation 'io.swagger.core.v3:swagger-models'
+}
+
+```
+
 ## starter.java.deps-plugin-conventions.gradle
 
 ```groovy
@@ -462,6 +591,45 @@ dependencies {
 
 ```
 
+## starter.java.deps-spring-config-conventions.gradle
+
+```groovy
+/**
+ * Provides a set of common dependencies for typical build.
+ * Includes proper dependencies for lombok and mapstruct annotation processing.
+ */
+
+// starter.java.build-javatarget-conventions
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-autoconfigure'
+    annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'
+
+    testImplementation 'org.springframework:spring-web'
+}
+
+```
+
+## starter.java.deps-springdoc-conventions.gradle
+
+```groovy
+/**
+ * Provides a set of common dependencies for typical build.
+ * Includes proper dependencies for lombok and mapstruct annotation processing.
+ */
+
+// starter.java.build-javatarget-conventions
+
+dependencies {
+    implementation 'org.zalando:problem-spring-web'
+    implementation 'org.springdoc:springdoc-openapi-ui'
+    implementation 'org.springdoc:springdoc-openapi-webmvc-core'
+    //implementation 'org.springdoc:springdoc-openapi-security'
+    implementation 'org.springdoc:springdoc-openapi-data-rest'
+}
+
+```
+
 ## starter.java.deps-test-conventions.gradle
 
 ```groovy
@@ -493,6 +661,105 @@ dependencies {
 
 ```
 
+## starter.java.doc-asciidoc-conventions.gradle
+
+```groovy
+/**
+ * Swaggerhub configurations
+ */
+
+plugins {
+    id 'org.asciidoctor.jvm.pdf'
+    id 'org.asciidoctor.jvm.gems'
+    id 'org.asciidoctor.jvm.convert'
+}
+
+configurations {
+    docs
+}
+
+dependencies {
+    docs "io.spring.docresources:spring-doc-resources:${doc_resources_version}@zip"
+}
+
+
+tasks.register('prepareAsciidocBuild', type: Sync) {
+    dependsOn configurations.docs
+    from {
+        configurations.docs.collect { zipTree(it) }
+    }
+    from 'docs/src/main/asciidoc/','docs/src/main/java','docs/src/main/kotlin'
+    into "$buildDir/asciidoc"
+}
+
+asciidoctorPdf {
+    dependsOn prepareAsciidocBuild
+    baseDirFollowsSourceFile()
+    configurations 'asciidoctorExt'
+
+    asciidoctorj {
+        sourceDir "$buildDir/asciidoc"
+        inputs.dir(sourceDir)
+        sources {
+            include 'index.adoc'
+        }
+        options doctype: 'book'
+        attributes 'icons': 'font',
+                'sectanchors': '',
+                'sectnums': '',
+                'toc': '',
+                'source-highlighter' : 'coderay',
+                revnumber: project.version,
+                'project-version': project.version
+    }
+}
+
+asciidoctorj {
+    version = '2.4.1'
+    // fatalWarnings ".*"
+    options doctype: 'book', eruby: 'erubis'
+    attributes([
+            icons: 'font',
+            idprefix: '',
+            idseparator: '-',
+            docinfo: 'shared',
+            revnumber: project.version,
+            sectanchors: '',
+            sectnums: '',
+            'source-highlighter': 'highlight.js',
+            highlightjsdir: 'js/highlight',
+            'highlightjs-theme': 'googlecode',
+            stylesdir: 'css/',
+            stylesheet: 'stylesheet.css',
+            'spring-version': project.version,
+            'project-version': project.version,
+            'java-examples': 'io/twdps/starter/boot/jdocs',
+            'kotlin-examples': 'io/twdps/starter/boot/kdocs'
+    ])
+}
+
+asciidoctor {
+    dependsOn asciidoctorPdf
+    baseDirFollowsSourceFile()
+    configurations 'asciidoctorExt'
+    sourceDir = file("$buildDir/asciidoc")
+    sources {
+        include '*.adoc'
+    }
+    resources {
+        from(sourceDir) {
+            include 'images/*', 'css/**', 'js/**'
+        }
+    }
+
+}
+
+tasks.register('reference', dependsOn: asciidoctor) {
+    group = 'Documentation'
+    description = 'Generate the reference documentation'
+}
+```
+
 ## starter.java.doc-markdown-conventions.gradle
 
 ```groovy
@@ -504,6 +771,7 @@ plugins {
     id 'base'
 }
 // Requires
+// id 'starter.java.build-utils-git-conventions'
 // id 'starter.java.build-utils-fileset-conventions'
 
 
@@ -646,8 +914,8 @@ shellcheck {
     sources = files(".")
     ignoreFailures = true
     showViolations = true
-    shellcheckVersion = "v0.7.1"
-    useDocker = false
+    shellcheckVersion = "${shellcheck_version}"
+    useDocker = true
     shellcheckBinary = "/usr/local/bin/shellcheck"
     severity = "style" // "error"
 }
@@ -677,8 +945,69 @@ plugins {
 }
 
 spotless {
+//    ratchetFrom getPropertyOrDefault('spotless_ratchet_branch', 'origin/main') // only format files which have changed since origin/main
+}
+```
+
+## starter.java.lint-spotless-groovy-conventions.gradle
+
+```groovy
+/**
+ * Configuration for spotless code formatting
+ */
+
+plugins {
+    id "com.diffplug.spotless"
+}
+
+spotless {
+    groovy {
+        importOrder('', 'java', 'javax')
+        excludeJava()
+    }
+    groovyGradle {
+        target '*.gradle'
+    }
+}
+```
+
+## starter.java.lint-spotless-java-conventions.gradle
+
+```groovy
+/**
+ * Configuration for spotless code formatting
+ */
+
+plugins {
+    id "com.diffplug.spotless"
+}
+
+spotless {
     java {
-        googleJavaFormat()
+        googleJavaFormat("${google_java_format_version:'1.10.0'}")
+        toggleOffOn()
+        importOrder('', 'java', 'javax')
+    }
+}
+```
+
+## starter.java.lint-spotless-kotlin-conventions.gradle
+
+```groovy
+/**
+ * Configuration for spotless code formatting
+ */
+
+plugins {
+    id "com.diffplug.spotless"
+}
+
+spotless {
+    kotlin {
+        ktfmt("${ktfmt_format_version:'0.25'}")
+    }
+    kotlinGradle {
+        target '*.gradle.kts'
     }
 }
 ```
@@ -802,7 +1131,8 @@ scmVersion {
     ignoreUncommittedChanges = false // should uncommitted changes force version bump
 
     // doc: Version / Tag with highest version
-    useHighestVersion = true // Defaults as false, setting to true will find the highest visible version in the commit tree
+    useHighestVersion = true
+    // Defaults as false, setting to true will find the highest visible version in the commit tree
 
     // doc: Version / Sanitization
     sanitizeVersion = true // should created version be sanitized, true by default
@@ -1351,6 +1681,9 @@ plugins {
     id 'starter.java.build-javatarget-conventions'
     id 'starter.java.build-springboot-conventions'
     id 'starter.java.deps-build-conventions'
+    id 'starter.java.deps-openapi-conventions'
+    id 'starter.java.deps-spring-config-conventions'
+    id 'starter.java.deps-springdoc-conventions'
     id 'starter.java.container-conventions'
     id 'starter.java.container-spring-conventions'
     id 'starter.java.lint-checkstyle-conventions'
@@ -1364,6 +1697,8 @@ plugins {
     id 'starter.java.publish-repo-conventions'
     id 'starter.java.publish-bootjar-conventions'
     id 'starter.java.versions-conventions'
+    id 'starter.java.lint-spotless-conventions'
+    id 'starter.java.lint-spotless-java-conventions'
 }
 
 dependencies {
@@ -1416,6 +1751,8 @@ plugins {
     id 'starter.java.publish-repo-conventions'
     id 'starter.java.publish-jar-conventions'
     id 'starter.java.versions-conventions'
+    id 'starter.java.lint-spotless-conventions'
+    id 'starter.java.lint-spotless-java-conventions'
 }
 
 ```
@@ -1445,6 +1782,8 @@ plugins {
     id 'starter.java.publish-repo-conventions'
     id 'starter.java.publish-jar-conventions'
     id 'starter.java.versions-conventions'
+    id 'starter.java.lint-spotless-conventions'
+    id 'starter.java.lint-spotless-java-conventions'
 }
 
 ```
@@ -1457,9 +1796,8 @@ plugins {
  */
 
 plugins {
-    id 'starter.java.build-utils-property-conventions'
-    id 'starter.java.build-javatarget-conventions'
     id 'starter.std.java.library-conventions'
+    id 'starter.java.deps-spring-config-conventions'
     id 'starter.java.config-conventions'
     id 'starter.java.build-utils-conventions'
 }
@@ -1481,6 +1819,7 @@ plugins {
     id 'java-gradle-plugin'
     id "org.ajoberstar.grgit"
     id 'starter.java.build-utils-property-conventions'
+    id 'starter.java.build-javatarget-conventions'
     id 'starter.java.config-conventions'
     id 'starter.java.lint-checkstyle-conventions'
     id 'starter.java.test-jacoco-conventions'
@@ -1489,6 +1828,9 @@ plugins {
     id 'starter.java.deps-test-conventions'
     id 'starter.java.publish-repo-conventions'
     id 'starter.java.versions-conventions'
+    id 'starter.java.lint-spotless-conventions'
+    id 'starter.java.lint-spotless-java-conventions'
+    id 'starter.java.lint-spotless-groovy-conventions'
 }
 
 ```

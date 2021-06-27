@@ -7,7 +7,5 @@ plugins {
 }
 
 spotless {
-    java {
-        googleJavaFormat()
-    }
+//    ratchetFrom getPropertyOrDefault('spotless_ratchet_branch', 'origin/main') // only format files which have changed since origin/main
 }

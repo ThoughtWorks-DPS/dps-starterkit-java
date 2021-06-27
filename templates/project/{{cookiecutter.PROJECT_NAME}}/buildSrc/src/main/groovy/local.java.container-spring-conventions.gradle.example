@@ -14,7 +14,7 @@ docker {
 }
 
 dockerRun {
-    env 'SECRET_HELLO': getEnvOrDefault('SECRET_HELLO', 'override-me'),
+    env 'SECRETHUB_HELLO': getEnvOrDefault('SECRETHUB_HELLO', 'override-me'),
             'JAVA_PROFILE': '-Dspring.profiles.include=docker'
 }
 

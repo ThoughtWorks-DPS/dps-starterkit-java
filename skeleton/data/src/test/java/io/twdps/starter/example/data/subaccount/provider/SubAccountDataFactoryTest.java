@@ -29,7 +29,7 @@ public class SubAccountDataFactoryTest {
   @Test
   public void dataDefaultRecordPopulated() {
     SubAccountData control = subAccountDataProperties.loadData().get("default");
-    SubAccountData data = subAccountDataFactory.getData();
+    SubAccountData data = subAccountDataFactory.create();
 
     assertThat(data.getFirstName()).isNotNull();
     assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
@@ -40,7 +40,7 @@ public class SubAccountDataFactoryTest {
   @Test
   public void dataNamedRecordPopulated() {
     SubAccountData control = subAccountDataProperties.loadData().get("raiders");
-    SubAccountData data = subAccountDataFactory.getNamedData("raiders");
+    SubAccountData data = subAccountDataFactory.createBySpec("raiders");
 
     assertThat(data.getFirstName()).isNotNull();
     assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
@@ -54,7 +54,7 @@ public class SubAccountDataFactoryTest {
     assertThrows(
         DataNotFoundException.class,
         () -> {
-          SubAccountData response = subAccountDataFactory.getNamedData(NOT_FOUND);
+          SubAccountData response = subAccountDataFactory.createBySpec(NOT_FOUND);
         });
   }
 
@@ -62,7 +62,7 @@ public class SubAccountDataFactoryTest {
   public void collectionDefaultCollectionPopulated() {
     List<SubAccountData> controlCollection =
         subAccountDataProperties.loadCollections().get("default");
-    List<SubAccountData> collection = subAccountDataFactory.getDataCollection();
+    List<SubAccountData> collection = subAccountDataFactory.createCollection();
 
     assertThat(collection.size()).isEqualTo(controlCollection.size());
     SubAccountData data = collection.get(0);
@@ -78,7 +78,7 @@ public class SubAccountDataFactoryTest {
   public void collectionNamedCollectionPopulated() {
     List<SubAccountData> controlCollection =
         subAccountDataProperties.loadCollections().get("starwars");
-    List<SubAccountData> collection = subAccountDataFactory.getNamedDataCollection("starwars");
+    List<SubAccountData> collection = subAccountDataFactory.createCollectionBySpec("starwars");
 
     assertThat(collection.size()).isEqualTo(controlCollection.size());
     SubAccountData data = collection.get(0);
@@ -96,7 +96,7 @@ public class SubAccountDataFactoryTest {
     assertThrows(
         DataNotFoundException.class,
         () -> {
-          List<SubAccountData> response = subAccountDataFactory.getNamedDataCollection(NOT_FOUND);
+          List<SubAccountData> response = subAccountDataFactory.createCollectionBySpec(NOT_FOUND);
         });
   }
 }

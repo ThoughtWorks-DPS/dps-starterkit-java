@@ -1,6 +1,6 @@
 package io.twdps.starter.example.service.provider.account;
 
-import io.twdps.starter.boot.test.data.spi.DataFactory;
+import io.twdps.starter.boot.test.data.provider.NamedDataFactory;
 import io.twdps.starter.example.data.account.model.AccountData;
 import io.twdps.starter.example.data.account.provider.AccountDataFactory;
 import io.twdps.starter.example.data.account.provider.AccountTestData;
@@ -95,10 +95,10 @@ public class AccountServiceImplTest {
 
     manager = new AccountServiceImpl(repository, mapper, subResourceRepository);
 
-    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
-    bogus = resourceTestData.getNamedData("bogus");
-    subReference = subResourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
-    subBogus = subResourceTestData.getNamedData("bogus");
+    reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    bogus = resourceTestData.createBySpec("bogus");
+    subReference = subResourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    subBogus = subResourceTestData.createBySpec("bogus");
 
     // use the real mapper to generate consistent objects to use in mapper stubs
     AccountEntityMapper real = Mappers.getMapper(AccountEntityMapper.class);

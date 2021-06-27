@@ -1,6 +1,6 @@
 package io.twdps.starter.example.service.provider.subaccount;
 
-import io.twdps.starter.boot.test.data.spi.DataFactory;
+import io.twdps.starter.boot.test.data.provider.NamedDataFactory;
 import io.twdps.starter.example.data.subaccount.model.SubAccountData;
 import io.twdps.starter.example.data.subaccount.provider.SubAccountDataFactory;
 import io.twdps.starter.example.data.subaccount.provider.SubAccountTestData;
@@ -66,8 +66,8 @@ public class SubAccountServiceImplTest {
 
     manager = new SubAccountServiceImpl(repository, mapper);
 
-    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
-    bogus = resourceTestData.getNamedData("bogus");
+    reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    bogus = resourceTestData.createBySpec("bogus");
 
     // use the real mapper to generate consistent objects to use in mapper stubs
     SubAccountEntityMapper real = Mappers.getMapper(SubAccountEntityMapper.class);

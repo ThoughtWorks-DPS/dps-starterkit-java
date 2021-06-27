@@ -2,7 +2,7 @@ package io.twdps.starter.example.data.subaccount.provider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.twdps.starter.boot.test.data.spi.DataFactory;
+import io.twdps.starter.boot.test.data.provider.NamedDataFactory;
 import io.twdps.starter.example.data.subaccount.model.SubAccountData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,7 @@ public class SubAccountDataPropertiesTest {
 
   @Test
   public void dataPropertiesPopulated() {
-    SubAccountData data = testData.loadData().get(DataFactory.DEFAULT_NAME);
+    SubAccountData data = testData.loadData().get(NamedDataFactory.DEFAULT_SPEC);
     assertThat(data.getFirstName()).isNotNull();
     assertThat(data.getFirstName()).isEqualTo(firstName);
     assertThat(data.getLastName()).isEqualTo(lastName);
@@ -39,7 +39,7 @@ public class SubAccountDataPropertiesTest {
 
   @Test
   public void collectionPropertiesPopulated() {
-    List<SubAccountData> collection = testData.loadCollections().get(DataFactory.DEFAULT_NAME);
+    List<SubAccountData> collection = testData.loadCollections().get(NamedDataFactory.DEFAULT_SPEC);
     assertThat(collection.size()).isEqualTo(2);
     SubAccountData data = collection.get(0);
     assertThat(data.getFirstName()).isNotNull();

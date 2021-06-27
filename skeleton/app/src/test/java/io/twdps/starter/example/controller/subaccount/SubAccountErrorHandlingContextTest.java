@@ -10,7 +10,7 @@ import io.twdps.starter.boot.errorhandling.config.ErrorHandlerConfig;
 import io.twdps.starter.boot.exception.RequestValidationException;
 import io.twdps.starter.boot.exception.ResourceNotFoundException;
 import io.twdps.starter.boot.openapi.config.OpenApiConfiguration;
-import io.twdps.starter.boot.test.data.spi.DataFactory;
+import io.twdps.starter.boot.test.data.provider.NamedDataFactory;
 import io.twdps.starter.example.SecurityAllowConfig;
 import io.twdps.starter.example.api.subaccount.requests.SubAccountRequest;
 import io.twdps.starter.example.api.subaccount.resources.SubAccountResource;
@@ -83,8 +83,8 @@ class SubAccountErrorHandlingContextTest {
   /** Setup mapper and test data factory before each test. */
   @BeforeEach
   public void setup() {
-    reference = testData.getNamedData(DataFactory.DEFAULT_NAME);
-    bogus = testData.getNamedData("bogus");
+    reference = testData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    bogus = testData.createBySpec("bogus");
 
     request =
         new SubAccountRequest(

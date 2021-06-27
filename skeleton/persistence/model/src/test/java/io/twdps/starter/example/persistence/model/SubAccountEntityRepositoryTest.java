@@ -2,7 +2,7 @@ package io.twdps.starter.example.persistence.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.twdps.starter.boot.test.data.spi.DataFactory;
+import io.twdps.starter.boot.test.data.provider.NamedDataFactory;
 import io.twdps.starter.example.data.subaccount.model.SubAccountData;
 import io.twdps.starter.example.data.subaccount.provider.SubAccountDataFactory;
 import io.twdps.starter.example.data.subaccount.provider.SubAccountDataProperties;
@@ -41,8 +41,8 @@ public class SubAccountEntityRepositoryTest {
   /** Setup test data. */
   @BeforeEach
   public void setup() {
-    reference = testData.getNamedData(DataFactory.DEFAULT_NAME);
-    bogus = testData.getNamedData("bogus");
+    reference = testData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    bogus = testData.createBySpec("bogus");
 
     entity =
         new SubAccountEntity(
@@ -59,7 +59,7 @@ public class SubAccountEntityRepositoryTest {
    */
   public SubAccountEntity populate() {
     SubAccountEntity result = modelEntityRepository.save(entity);
-    testData.getNamedDataCollection(DataFactory.DEFAULT_NAME).stream()
+    testData.createCollectionBySpec(NamedDataFactory.DEFAULT_SPEC).stream()
         .forEach(
             d -> {
               SubAccountEntity ref =

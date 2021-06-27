@@ -2,7 +2,7 @@ package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutte
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.spi.DataFactory;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.provider.NamedDataFactory;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.RESOURCE_NAME}}Response;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.responses.PagedResponse;
@@ -54,9 +54,9 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
   public void setup() {
     mapper = Mappers.getMapper({{cookiecutter.RESOURCE_NAME}}RequestMapper.class);
 
-    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
+    reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-    subReference = subResourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
+    subReference = subResourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
 {%- endif %}
   }
 

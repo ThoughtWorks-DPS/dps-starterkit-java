@@ -7,7 +7,7 @@ import io.twdps.starter.boot.exception.ResourceNotFoundException;
 import io.twdps.starter.boot.notifier.lifecycle.entity.provider.MemoizedTimestampProvider;
 import io.twdps.starter.boot.notifier.lifecycle.entity.provider.NoopEntityLifecycleNotifier;
 import io.twdps.starter.boot.notifier.lifecycle.entity.spi.EntityLifecycleNotifier;
-import io.twdps.starter.boot.test.data.spi.DataFactory;
+import io.twdps.starter.boot.test.data.provider.NamedDataFactory;
 import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.api.subaccount.requests.SubAccountRequest;
 import io.twdps.starter.example.api.subaccount.responses.SubAccountResponse;
@@ -78,8 +78,8 @@ public class SubAccountControllerTest {
 
     controller = new SubAccountController(manager, mapper, notifier);
 
-    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
-    bogus = resourceTestData.getNamedData("bogus");
+    reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    bogus = resourceTestData.createBySpec("bogus");
 
     // use the real mapper to generate consistent objects to use in mapper stubs
     SubAccountRequestMapper real = Mappers.getMapper(SubAccountRequestMapper.class);

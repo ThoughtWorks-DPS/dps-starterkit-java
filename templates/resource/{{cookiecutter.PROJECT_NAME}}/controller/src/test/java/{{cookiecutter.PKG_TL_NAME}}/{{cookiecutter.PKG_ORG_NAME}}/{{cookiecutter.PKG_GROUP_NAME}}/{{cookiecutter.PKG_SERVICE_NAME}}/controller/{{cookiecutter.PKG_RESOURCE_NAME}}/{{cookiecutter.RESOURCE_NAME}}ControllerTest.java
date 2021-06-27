@@ -7,7 +7,7 @@ import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.e
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.lifecycle.entity.provider.MemoizedTimestampProvider;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.lifecycle.entity.provider.NoopEntityLifecycleNotifier;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.notifier.lifecycle.entity.spi.EntityLifecycleNotifier;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.spi.DataFactory;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.provider.NamedDataFactory;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.requests.{{cookiecutter.RESOURCE_NAME}}Request;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.{{cookiecutter.PKG_RESOURCE_NAME}}.responses.{{cookiecutter.RESOURCE_NAME}}Response;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.api.responses.PagedResponse;
@@ -116,11 +116,11 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
 
     controller = new {{cookiecutter.RESOURCE_NAME}}Controller(manager, mapper, notifier);
 
-    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
-    bogus = resourceTestData.getNamedData("bogus");
+    reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    bogus = resourceTestData.createBySpec("bogus");
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-    subReference = subResourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
-    subBogus = subResourceTestData.getNamedData("bogus");
+    subReference = subResourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    subBogus = subResourceTestData.createBySpec("bogus");
 {%- endif %}
 
     // use the real mapper to generate consistent objects to use in mapper stubs

@@ -1,6 +1,6 @@
 package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.provider.{{cookiecutter.PKG_RESOURCE_NAME}};
 
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.spi.DataFactory;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.test.data.provider.NamedDataFactory;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}}Data;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataFactory;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}DataProperties;
@@ -110,11 +110,11 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}, subResourceRepository{%- endif -%}
     );
 
-    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
-    bogus = resourceTestData.getNamedData("bogus");
+    reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    bogus = resourceTestData.createBySpec("bogus");
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-    subReference = subResourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
-    subBogus = subResourceTestData.getNamedData("bogus");
+    subReference = subResourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    subBogus = subResourceTestData.createBySpec("bogus");
 {%- endif %}
 
     // use the real mapper to generate consistent objects to use in mapper stubs

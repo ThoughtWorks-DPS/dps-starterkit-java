@@ -2,7 +2,7 @@ package io.twdps.starter.example.service.provider.account.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.twdps.starter.boot.test.data.spi.DataFactory;
+import io.twdps.starter.boot.test.data.provider.NamedDataFactory;
 import io.twdps.starter.example.data.account.model.AccountData;
 import io.twdps.starter.example.data.account.provider.AccountDataFactory;
 import io.twdps.starter.example.data.account.provider.AccountTestData;
@@ -34,7 +34,7 @@ public class AccountEntityMapperTest {
   public void setup() {
     mapper = Mappers.getMapper(AccountEntityMapper.class);
 
-    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
+    reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
   }
 
   @Test

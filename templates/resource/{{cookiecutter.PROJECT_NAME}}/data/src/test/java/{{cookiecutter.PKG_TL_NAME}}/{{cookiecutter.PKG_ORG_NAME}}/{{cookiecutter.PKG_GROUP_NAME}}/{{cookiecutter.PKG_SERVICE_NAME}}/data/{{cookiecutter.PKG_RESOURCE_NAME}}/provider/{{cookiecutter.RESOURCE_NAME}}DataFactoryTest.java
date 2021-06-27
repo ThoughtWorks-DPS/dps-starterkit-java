@@ -29,7 +29,7 @@ public class {{cookiecutter.RESOURCE_NAME}}DataFactoryTest {
   @Test
   public void dataDefaultRecordPopulated() {
     {{cookiecutter.RESOURCE_NAME}}Data control = {{cookiecutter.RESOURCE_VAR_NAME}}DataProperties.loadData().get("default");
-    {{cookiecutter.RESOURCE_NAME}}Data data = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.getData();
+    {{cookiecutter.RESOURCE_NAME}}Data data = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.create();
 
     assertThat(data.getFirstName()).isNotNull();
     assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
@@ -40,7 +40,7 @@ public class {{cookiecutter.RESOURCE_NAME}}DataFactoryTest {
   @Test
   public void dataNamedRecordPopulated() {
     {{cookiecutter.RESOURCE_NAME}}Data control = {{cookiecutter.RESOURCE_VAR_NAME}}DataProperties.loadData().get("raiders");
-    {{cookiecutter.RESOURCE_NAME}}Data data = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.getNamedData("raiders");
+    {{cookiecutter.RESOURCE_NAME}}Data data = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.createBySpec("raiders");
 
     assertThat(data.getFirstName()).isNotNull();
     assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
@@ -54,14 +54,14 @@ public class {{cookiecutter.RESOURCE_NAME}}DataFactoryTest {
     assertThrows(
         DataNotFoundException.class,
         () -> {
-          {{cookiecutter.RESOURCE_NAME}}Data response = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.getNamedData(NOT_FOUND);
+          {{cookiecutter.RESOURCE_NAME}}Data response = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.createBySpec(NOT_FOUND);
         });
   }
 
   @Test
   public void collectionDefaultCollectionPopulated() {
     List<{{cookiecutter.RESOURCE_NAME}}Data> controlCollection = {{cookiecutter.RESOURCE_VAR_NAME}}DataProperties.loadCollections().get("default");
-    List<{{cookiecutter.RESOURCE_NAME}}Data> collection = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.getDataCollection();
+    List<{{cookiecutter.RESOURCE_NAME}}Data> collection = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.createCollection();
 
     assertThat(collection.size()).isEqualTo(controlCollection.size());
     {{cookiecutter.RESOURCE_NAME}}Data data = collection.get(0);
@@ -76,7 +76,7 @@ public class {{cookiecutter.RESOURCE_NAME}}DataFactoryTest {
   @Test
   public void collectionNamedCollectionPopulated() {
     List<{{cookiecutter.RESOURCE_NAME}}Data> controlCollection = {{cookiecutter.RESOURCE_VAR_NAME}}DataProperties.loadCollections().get("starwars");
-    List<{{cookiecutter.RESOURCE_NAME}}Data> collection = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.getNamedDataCollection("starwars");
+    List<{{cookiecutter.RESOURCE_NAME}}Data> collection = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.createCollectionBySpec("starwars");
 
     assertThat(collection.size()).isEqualTo(controlCollection.size());
     {{cookiecutter.RESOURCE_NAME}}Data data = collection.get(0);
@@ -94,7 +94,7 @@ public class {{cookiecutter.RESOURCE_NAME}}DataFactoryTest {
     assertThrows(
         DataNotFoundException.class,
         () -> {
-          List<{{cookiecutter.RESOURCE_NAME}}Data> response = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.getNamedDataCollection(NOT_FOUND);
+          List<{{cookiecutter.RESOURCE_NAME}}Data> response = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.createCollectionBySpec(NOT_FOUND);
         });
   }
 }

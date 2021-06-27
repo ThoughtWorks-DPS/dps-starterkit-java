@@ -2,7 +2,7 @@ package io.twdps.starter.example.controller.account.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.twdps.starter.boot.test.data.spi.DataFactory;
+import io.twdps.starter.boot.test.data.provider.NamedDataFactory;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
 import io.twdps.starter.example.api.account.requests.SubAccountRequest;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
@@ -46,8 +46,8 @@ public class AccountRequestMapperTest {
   public void setup() {
     mapper = Mappers.getMapper(AccountRequestMapper.class);
 
-    reference = resourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
-    subReference = subResourceTestData.getNamedData(DataFactory.DEFAULT_NAME);
+    reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
+    subReference = subResourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
   }
 
   @Test
