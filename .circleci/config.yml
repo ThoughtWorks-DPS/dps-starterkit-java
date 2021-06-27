@@ -43,7 +43,7 @@ jobs:
       - secrethub/exec:
           step-name: Run tests
           command: |
-            ./gradlew check -x shellcheck -x lintDockerfile
+            ./gradlew check -x shellcheck -x:skeleton:{ap,opa-init,flyway,init-container}:lintDockerfile
 
   publish:
     executor: build-agent
@@ -77,7 +77,7 @@ jobs:
       - secrethub/exec:
           step-name: Build jar
           command: |
-            ./gradlew build -x check -x lintDockerfile
+            ./gradlew build -x check
 
       - run:
           name: Build Images
