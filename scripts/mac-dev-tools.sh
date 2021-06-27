@@ -13,4 +13,9 @@ brew bundle -v
 echo "Installing pre-commit modules"
 pre-commit install --hook-type pre-push
 pre-commit install --hook-type commit-msg
+
+echo "Installing npm packages"
+npm install markdownlint --save-dev
+npm install markdownlint-cli --save-dev
+
 echo "All done!"

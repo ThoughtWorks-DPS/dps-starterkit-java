@@ -16,7 +16,7 @@ For local development, developers will need to install and setup their workstati
 
 - If you ran the `mac-dev-tools.sh` script, `secrethub-cli` should be installed.
   Otherwise, run `brew install secrethub/tools/secrethub-cli`.
-- Sign up for a SecretHub account through [https://signup.secrethub.io/signup].
+- Sign up for a SecretHub account through [https://signup.secrethub.io/signup](https://signup.secrethub.io/signup).
 - After signing up, select `MacOS` and you should see code for installation.
   Copy the setup code and run `secrethub init --setup-code <SETUP_CODE>`.
 - SecretHub recommends after setting up your account, generating a backup code in case you need to set up your credentials again (on current or other machine) [https://secrethub.io/docs/reference/cli/credential/#backup].
@@ -37,7 +37,7 @@ These dependencies are published to the Github packages site, and require the ap
 
 To facilitate the development process, the project directory structure separates the application code from the template code.
 
-```
+```text
 project
 │ .pre-commit-config.yaml
 │ README.md
@@ -87,9 +87,10 @@ To make changes to the generic Java Spring Boot application, we follow a general
 In order to support this flow, the build.gradle files have many convenience tasks which consolidate multiple steps.  
 Here are some specific instructions to help you along this developer workflow:
 
-1.  Pull latest `git pull --rebase origin main`  
-2.  Implement changes in the `skeleton/` directory
-3.  Build and test skeleton (from `skeleton/` directory)
+1. Pull latest `git pull --rebase origin main`  
+1. Implement changes in the `skeleton/` directory
+1. Build and test skeleton (from `skeleton/` directory)
+
     ```bash
     gradlew spotlessApply
     gradlew devloop
@@ -97,15 +98,17 @@ Here are some specific instructions to help you along this developer workflow:
     ## in separate terminal
     scripts/consume-kafka.sh 
     ```
-4.  Generate, build, and diff the project skeleton from the template (from project root directory)
+
+1. Generate, build, and diff the project skeleton from the template (from project root directory)
+
     ```bash
     gradlew ccloop
     ```
-5.  Compare the changes that have been made between skeleton and template
-6.  Copy (or update) the relevant changes from the `skeleton/` to `templates/project/{{cookiecutter.PROJECT_NAME}}/` or `templates/resources/{{cookiecutter.PROJECT_NAME}}/`
-7.  Repeat from step #4 until no diffs remain
-8.  Validate the template by [starting the service](docs/tutorial.md#Starting-service), ensuring that the service works and the changes have been implemented as expected.
 
+1. Compare the changes that have been made between skeleton and template
+1. Copy (or update) the relevant changes from the `skeleton/` to `templates/project/{{cookiecutter.PROJECT_NAME}}/` or `templates/resources/{{cookiecutter.PROJECT_NAME}}/`
+1. Repeat from step #4 until no diffs remain
+1. Validate the template by [starting the service](docs/tutorial.md#Starting-service), ensuring that the service works and the changes have been implemented as expected.
 
 > Note: You may run into issues with the availability of dependencies provided by the `dps-starter-boot` project.
 > Set up `secrethub` so that you can access the Github Packages artifact repository.
@@ -114,7 +117,7 @@ Here are some specific instructions to help you along this developer workflow:
 
 ### Adding to Architecture Decision Record (ADR)
 
-- First, install adr-tools: https://github.com/npryce/adr-tools/blob/master/INSTALL.md
+- First, install adr-tools: [https://github.com/npryce/adr-tools/blob/master/INSTALL.md](https://github.com/npryce/adr-tools/blob/master/INSTALL.md)
 - ADR has already been initialized on the template project.
   You can see an example of it in the initial ADR record in `<root>/docs/architecture-decisions/template/0001-record-architecture-decisions.md`
 - To add a record, run `adr new <description-of-adr-record-to-add>`
@@ -126,8 +129,8 @@ Linting via Spotless is set to execute automatically prior to committing via pre
 
 - Linting using spotless locally
     - Allows autocorrection of lint offenders
-    - https://github.com/diffplug/spotless/tree/master/plugin-gradle#java
-    - https://github.com/google/google-java-format
+    - [https://github.com/diffplug/spotless/tree/master/plugin-gradle#java](https://github.com/diffplug/spotless/tree/master/plugin-gradle#java)
+    - [https://github.com/google/google-java-format](https://github.com/google/google-java-format)
 - Run: `./gradlew spotlessCheck` in the `skeleton/` directory to execute linting checks
 - Run: `./gradlew spotlessApply` in the `skeleton/` directory to attempt to auto-format and correct linting errors
 - Reports for test coverage: `./build/jacoco/test/index.html`
@@ -143,20 +146,21 @@ Linting via Spotless is set to execute automatically prior to committing via pre
 
 The `buildSrc` directory normally holds plugins for common gradle functionality.
 Copies of the plugins published in the `io.twdps.starter:plugins` package are renamed as `local.*.example` files (at whatever version existed when the project was created from the starter template).
-These files are included both to show what the starter plugins are doing, and to provide an easy way to customize small parts of the build functionality while still allowing the project to rely as much as possible on the published standards.
+These files are included both to show what the starter plugins are doing.
+They also provide an easy way to customize small parts of the build functionality while still allowing the project to rely as much as possible on the published standards.
 
 ### Updates to example scripts
 
 There exists a script `./scripts/copy-plugin-examples.sh` that will the `local.*.example` from the `io.twdps.starter:plugins` project.
 It assumes that the project source exists in a sibling directory path, although that can be specified as a command line parameter.
 
-## Project Structure
+## Skeleton Project Structure
 
 The project skeleton is organized into three tiers of functionality, API, Service (business logic), and Persistence.
 Each tier should define interfaces for the functionality, with implementations of the interfaces as separate packages.
 This maximized long-term maintainability and promotes the ability to migrate each of the levels independently.
 
-```
+```text
 project
 └─skeleton/
    │ .pre-commit-config.yaml

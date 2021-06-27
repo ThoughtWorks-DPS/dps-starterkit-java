@@ -1,12 +1,12 @@
-[![Maintainability](https://api.codeclimate.com/v1/badges/<fixme>>/maintainability)](https://codeclimate.com/repos/<fixme>>/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/<fixme>>/test_coverage)](https://codeclimate.com/repos/<fixme>>/test_coverage)
-[![CircleCI](https://circleci.com/gh/ThoughtWorks-DPS/dps-multi-module-starterkit-java.svg?style=shield&circle-token=<fixme>)](https://app.circleci.com/pipelines/github/ThoughtWorks-DPS/dps-multi-modules-starterkit-java?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/FIXME_TOKEN/maintainability)](https://codeclimate.com/repos/FIXME_TOKEN/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/FIXME_TOKEN/test_coverage)](https://codeclimate.com/repos/FIXME_TOKEN/test_coverage)
+[![CircleCI](https://circleci.com/gh/ThoughtWorks-DPS/dps-multi-module-starterkit-java.svg?style=shield&circle-token=FIXME_TOKEN)](https://app.circleci.com/pipelines/github/ThoughtWorks-DPS/dps-multi-modules-starterkit-java?branch=master)
 
 # dps-multi-module-starterkit-java
 
 An opinionated starter skeleton which is capable of building a service and deploying it into production.
 
-As a developer, I would like to be able to create a new service quickly, and have all the common bits already done (for some definition of "common bits"). 
+As a developer, I would like to be able to create a new service quickly, and have all the common bits already done (for some definition of "common bits").
 The purpose of this tool is to provide lift to the development process, where developers don't need to build their services from scratch.
 Rather, this tool generates a generic project which can be customized based on the needs of the development team.
 
@@ -42,7 +42,6 @@ Rather, this tool generates a generic project which can be customized based on t
     * Docker-Compose definition for running service and dependencies
     * Support for Postgres, Kafka, Jaeger, OPA, Spring-Boot app
 
-
 ## Getting Started
 
 Check the [Getting Started Guide](docs/getting-started.md) to see how to generate a generic Java Spring Boot API
@@ -53,16 +52,17 @@ The developer workflow describes the development process, as well as how to navi
 
 ### Dev Tools Setup
 
-- `cd scripts`
-- Run `sh mac-dev-tools.sh`
+* `cd scripts`
+* Run `sh mac-dev-tools.sh`
 
 ### Development Process
 
 To make changes to the generic Java Spring Boot application, perform the following from the root of the project:
 
-1.  Pull latest
-2.  Implement changes in the `skeleton/` directory
-3.  Build and test skeleton (from `skeleton/` directory)
+1. Pull latest
+1. Implement changes in the `skeleton/` directory
+1. Build and test skeleton (from `skeleton/` directory)
+
     ```bash
     gradlew spotlessApply
     gradlew devloop
@@ -70,15 +70,17 @@ To make changes to the generic Java Spring Boot application, perform the followi
     ## in separate terminal
     scripts/consume-kafka.sh 
     ```
-4.  Generate, build, and diff the project skeleton from the template (from project root directory)
+
+1. Generate, build, and diff the project skeleton from the template (from project root directory)
+
     ```bash
     gradlew ccloop
     ```
-5.  Compare the changes that have been made between skeleton and template
-6.  Copy (or update) the relevant changes from the `skeleton/` to `templates/project/{{cookiecutter.PROJECT_NAME}}/` or `templates/resources/{{cookiecutter.PROJECT_NAME}}/`
-7.  Repeat from step #4 until no diffs remain
-8.  Validate the template by [starting the service](docs/tutorial.md#Starting-service), ensuring that the service works and the changes have been implemented as expected.
 
+1. Compare the changes that have been made between skeleton and template
+1. Copy (or update) the relevant changes from the `skeleton/` to `templates/project/{{cookiecutter.PROJECT_NAME}}/` or `templates/resources/{{cookiecutter.PROJECT_NAME}}/`
+1. Repeat from step #4 until no diffs remain
+1. Validate the template by [starting the service](docs/tutorial.md#Starting-service), ensuring that the service works and the changes have been implemented as expected.
 
 > Note: You may run into issues with the availability of dependencies provided by the `dps-starter-boot` project.
 > Set up `secrethub` so that you can access the Github Packages artifact repository.

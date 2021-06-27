@@ -45,8 +45,8 @@ At the current stage of development, the "common bits" are:
 ## Dependencies
 
 1. Refer to build requirements in the README.md of the root of this repo
-2. Install CookieCutter as per: https://cookiecutter.readthedocs.io/en/1.7.3/installation.html
-3. Install shellcheck as per: https://github.com/koalaman/shellcheck#installing
+2. Install CookieCutter as per: [https://cookiecutter.readthedocs.io/en/1.7.3/installation.html](https://cookiecutter.readthedocs.io/en/1.7.3/installation.html)
+3. Install shellcheck as per: [https://github.com/koalaman/shellcheck#installing](https://github.com/koalaman/shellcheck#installing)
 4. Clone the Starter Boot repo
 5. In the Starter Boot repo, execute: `./gradlew publishToMavenLocal`
 
@@ -86,21 +86,22 @@ gradlew clean build check docker
 gradlew :app:dockerComposeDown :app:dcPrune :app:dockerComposeUp # (3)
 ```
 
-> Note:
 > 1. If testing locally, set this to the path to your local repo
 > 2. RESOURCE_VAR_NAME is the name of the entity under management
 > 3. If there are issues with flyway migrations, pruning the docker volumes may resolve them: `./gradlew :app:dcPruneVolume`
-
+>
 > Note: Any time you are pulling artifacts from the Github packages repository, it is likely that you will need to specify your authorizations.
-> Typically, we run the build behind `secrethub` to obtain the necessary credentials for Github Packages. 
+> Typically, we run the build behind `secrethub` to obtain the necessary credentials for Github Packages.
+>
 > ```bash
 > secrethub run -- gradlew clean build check docker
 > ```
+>
 > You may also be required to use a Personal Access Token in lieu of your password.
 
 ## Verify the app is running
 
-```
+```bash
 curl localhost:8081/actuator/health
 curl localhost:8081/actuator/info
 ```
@@ -168,7 +169,7 @@ gradlew :app:gatlingRun
 
 The console output of the Gatling tests will provide a link to a browser view with details on the tests, e.g.
 
-```
+```text
 Reports generated in 0s.
 Please open the following file: /<path>/<to>/<project>/app/build/reports/gatling/<api-name>simulation-<timestamp>/index.html
 == CSV Build Time Summary ==
@@ -179,7 +180,7 @@ Total build time: 6:50.347
 
 ## OpenAPI Spec
 
-View the OpenAPI documentation for your service by navigating to http://localhost:8080/swagger in your browser.
+View the OpenAPI documentation for your service by navigating to [http://localhost:8080/swagger](http://localhost:8080/swagger) in your browser.
 
 The links in the header section can be configured using the `starter.openapi` properties located in `/app/src/main/resources/application.yml`.
 
@@ -196,4 +197,3 @@ View the Jaeger monitoring system
 ```bash
 chrome http://localhost:16686/
 ```
-

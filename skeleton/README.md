@@ -1,18 +1,18 @@
-[![Maintainability](https://api.codeclimate.com/v1/badges/<fixme>>/maintainability)](https://codeclimate.com/repos/<fixme>>/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/<fixme>>/test_coverage)](https://codeclimate.com/repos/<fixme>>/test_coverage)
-[![CircleCI](https://circleci.com/gh/ThoughtWorks-DPS/dps-multi-modules-starterkit-java.svg?style=shield&circle-token=<fixme>)](https://app.circleci.com/pipelines/github/ThoughtWorks-DPS/dps-multi-modules-starterkit-java?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/FIXME_TOKEN/maintainability)](https://codeclimate.com/repos/FIXME_TOKEN/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/FIXME_TOKEN/test_coverage)](https://codeclimate.com/repos/FIXME_TOKEN/test_coverage)
+[![CircleCI](https://circleci.com/gh/ThoughtWorks-DPS/dps-multi-modules-starterkit-java.svg?style=shield&circle-token=FIXME_TOKEN)](https://app.circleci.com/pipelines/github/ThoughtWorks-DPS/dps-multi-modules-starterkit-java?branch=master)
 
 # dps-multi-module-starterkit-java
 
 This is the repository for the Java API Starter from Template.
 
-## Developer environment 
+## Developer environment
 
 ### Build requirements
 
 - Java 11
 
-Mac users can execute the following command to install the latest version of Java: 
+Mac users can execute the following command to install the latest version of Java:
 
 ```bash
 brew install java
@@ -24,7 +24,7 @@ Verify that the correct Java version is being used by running:
 java -version
 ```
 
-If needed, set your machine to use the correct version of Java (JAVA_VERSION in the command below) that was installed by 
+If needed, set your machine to use the correct version of Java (JAVA_VERSION in the command below) that was installed by
 adding the following line to your .bashrc or .zshrc:
 
 ```bash
@@ -91,7 +91,7 @@ For local development, developers will need to install and setup their workstati
 
 - If you ran the `mac-dev-tools.sh` script, `secrethub-cli` should be installed.
 Otherwise, run `brew install secrethub/tools/secrethub-cli`.
-- Sign up for a SecretHub account through [https://signup.secrethub.io/signup].
+- Sign up for a SecretHub account through [https://signup.secrethub.io/signup](https://signup.secrethub.io/signup).
 - After signing up, select `MacOS` and you should see code for installation.
 Copy the setup code and run `secrethub init --setup-code <SETUP_CODE>`.
 - SecretHub recommends after setting up your account, generating a backup code in case you need to set up your credentials again (on current or other machine) [https://secrethub.io/docs/reference/cli/credential/#backup].
@@ -101,7 +101,7 @@ Keep this secret, keep it safe (don't commit nor share)!
 
 ### Adding to Architecture Decision Record (ADR)
 
-- First, install adr-tools: https://github.com/npryce/adr-tools/blob/master/INSTALL.md
+- First, install adr-tools: [https://github.com/npryce/adr-tools/blob/master/INSTALL.md](https://github.com/npryce/adr-tools/blob/master/INSTALL.md)
 - ADR has already been initialized on the template project.
 You can see an example of it in the initial ADR record in `<root>/docs/architecture-decisions/template/0001-record-architecture-decisions.md`
 - To add a record, run `adr new <description-of-adr-record-to-add>`
@@ -113,8 +113,8 @@ Linting via Spotless is set to execute automatically prior to committing via pre
 
 - Linting using spotless locally
     - Allows autocorrection of lint offenders
-    - https://github.com/diffplug/spotless/tree/master/plugin-gradle#java
-    - https://github.com/google/google-java-format
+    - [https://github.com/diffplug/spotless/tree/master/plugin-gradle#java](https://github.com/diffplug/spotless/tree/master/plugin-gradle#java)
+    - [https://github.com/google/google-java-format](https://github.com/google/google-java-format)
 - Run: `./gradlew spotlessCheck` to execute linting checks
 - Run: `./gradlew spotlessApply` to attempt to auto-format and correct linting errors
 - Reports for test coverage: `/build/jacoco/test/index.html`
@@ -130,7 +130,8 @@ Linting via Spotless is set to execute automatically prior to committing via pre
 
 The `buildSrc` directory normally holds plugins for common gradle functionality.
 Copies of the plugins published in the `io.twdps.starter:plugins` package are renamed as `local.*.example` files (at whatever version existed when the project was created from the starter template).
-These files are included both to show what the starter plugins are doing, and to provide an easy way to customize small parts of the build functionality while still allowing the project to rely as much as possible on the published standards.
+These files are included both to show what the starter plugins are doing.
+They also provide an easy way to customize small parts of the build functionality while still allowing the project to rely as much as possible on the published standards.
 
 ### Updates to example scripts
 
@@ -194,12 +195,10 @@ Keeping with the interface-first design pattern preserves optionality and promot
 
 The persistence model objects also live here in the persistence/api package.
 
-
 ### persistence/impl
 
 Depending on the choice on the persistence/api side (i.e. Spring JPA), we may or may not need to provide any implementations.
 However, it's still useful to have in cases where custom queries need to be implemented.
-
 
 ### app
 
