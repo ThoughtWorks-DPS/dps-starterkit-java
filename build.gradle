@@ -54,6 +54,7 @@ ext {
                   ':controller',
                   ':data',
                   ':service:spi',
+                  ':service:activator',
                   ':service:provider',
                   ':persistence:impl',
                   ':persistence:model',

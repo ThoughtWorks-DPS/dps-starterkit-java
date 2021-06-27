@@ -12,6 +12,7 @@ dependencies {
     implementation project(':controller')
     implementation project(':persistence:model')
     implementation project(':persistence:impl')
+    implementation project(':service:activator')
     implementation project(':service:provider')
     implementation project(':service:spi')
     implementation '{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter:tracing'
