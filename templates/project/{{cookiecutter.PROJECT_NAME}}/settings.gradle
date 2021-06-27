@@ -14,17 +14,19 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
         jcenter()
-        maven { url "http://palantir.bintray.com/releases" }
+        maven { url "https://palantir.bintray.com/releases" }
         maven { url  "https://dl.bintray.com/adesso/junit-insights" }
         maven {
             name = "starterBootPkgs"
             url = uri("https://maven.pkg.github.com/ThoughtWorks-DPS/dps-starter-boot")
-            credentials {
-                String result = "unknown"
-                result = System.getenv("STARTERBOOTPKGS_USERNAME")
-                username = !result ? "STARTERBOOTPKGS_USERNAME_FIXME" : result;
-                result = System.getenv("STARTERBOOTPKGS_TOKEN")
-                password = !result ? "STARTERBOOTPKGS_TOKEN_FIXME" : result;
+            credentials(HttpHeaderCredentials) {
+                name = "Authorization"
+                def result = System.getenv("GITHUB_ACCESS_TOKEN")
+                def token = !result ? "GITHUB_ACCESS_TOKEN_FIXME" : result;
+                value = "Bearer " + token
+            }
+            authentication {
+                register("header", HttpHeaderAuthentication)
             }
         }
     }
@@ -39,12 +41,14 @@ dependencyResolutionManagement {
         maven {
             name = "starterBootPkgs"
             url = uri("https://maven.pkg.github.com/ThoughtWorks-DPS/dps-starter-boot")
-            credentials {
-                String result = "unknown"
-                result = System.getenv("STARTERBOOTPKGS_USERNAME")
-                username = !result ? "STARTERBOOTPKGS_USERNAME_FIXME" : result;
-                result = System.getenv("STARTERBOOTPKGS_TOKEN")
-                password = !result ? "STARTERBOOTPKGS_TOKEN_FIXME" : result;
+            credentials(HttpHeaderCredentials) {
+                name = "Authorization"
+                def result = System.getenv("GITHUB_ACCESS_TOKEN")
+                def token = !result ? "GITHUB_ACCESS_TOKEN_FIXME" : result;
+                value = "Bearer " + token
+            }
+            authentication {
+                register("header", HttpHeaderAuthentication)
             }
         }
     }
@@ -58,6 +62,7 @@ include ':controller'
 include ':data'
 include ':flyway'
 include ':opa-init'
+include ':init-container'
 include ':persistence:impl'
 include ':persistence:model'
 include ':scripts'

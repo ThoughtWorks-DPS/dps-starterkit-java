@@ -182,6 +182,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
   ResponseEntity<PagedResponse<{{cookiecutter.RESOURCE_NAME}}Response>> findEntities(
       @Parameter(
               description = "Paging specification for retrieving a subset of the full list.",
+              example = "{\"page\": 0, \"size\": 10, \"sort\":[\"id\"]}",
               required = false)
           Pageable pageable);
 

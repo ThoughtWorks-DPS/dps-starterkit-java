@@ -1,6 +1,6 @@
 FROM alpine:3.7
 
-RUN apk --no-cache add curl
+RUN apk --no-cache add curl=.61.1-r3
 ENTRYPOINT [ "/usr/local/bin/install-policy.sh" ]
 CMD [ "--file", "/policy-header.rego", "--glob", "/*.policy.rego" ]
 COPY install-policy.sh /usr/local/bin

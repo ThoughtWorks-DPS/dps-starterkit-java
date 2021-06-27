@@ -26,7 +26,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-{% raw %}{{ checksum "build.gradle" }}{% endraw %}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
@@ -38,7 +38,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
+          key: v1-dependencies-{% raw %}{{ checksum "build.gradle" }}{% endraw %}
 
       - secrethub/exec:
           step-name: Run tests
@@ -59,7 +59,7 @@ jobs:
       - secrethub/install
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-{% raw %}{{ checksum "build.gradle" }}{% endraw %}
             - v1-dependencies-
 
       - run:
@@ -72,7 +72,7 @@ jobs:
 
       - run:
           name: Tag init container
-          ∫command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:latest {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:$CIRCLE_BUILD_NUM
+          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:latest {{cookiecutter.PKG_ORG_NAME}}/dps-psql-init:$CIRCLE_BUILD_NUM
 
       - secrethub/exec:
           step-name: Build jar
@@ -169,7 +169,7 @@ jobs:
   #                        -f helm/api-2-dev.yaml \
   #                        -n api-2-dev \
   #                        --set tag="latest" \
-  #                        --set env.name.SECRETHUB_HELLO="$SECRETHUB_HELLO"
+  #                        --set env.name.SECRET_HELLO="$SECRET_HELLO"
 
 workflows:
   version: 2

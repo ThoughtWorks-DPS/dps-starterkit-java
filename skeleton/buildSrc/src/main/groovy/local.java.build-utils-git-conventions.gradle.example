@@ -1,0 +1,16 @@
+/**
+ * Git convenience helpers
+ * - gitPresent  determines if there is a .git repository present in the project
+ * - modifiedFiles   set to a collection of the files which are currently modified since last comit
+ */
+plugins {
+    id 'org.ajoberstar.grgit'
+}
+
+ext {
+    gitPresent = new File('.git').exists()
+    if (gitPresent) {
+        modifiedFiles = files(grgit.status().unstaged.modified)
+    }
+}
+

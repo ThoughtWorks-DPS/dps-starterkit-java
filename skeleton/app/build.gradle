@@ -1,0 +1,64 @@
+plugins {
+    id 'starter.std.java.application-conventions'
+    id 'starter.java.config-conventions'
+    id 'starter.java.build-utils-conventions'
+}
+
+dependencies {
+    annotationBom platform("io.twdps.starter:starter-bom:${starter_boot_version}")
+    checkstyleRules platform("io.twdps.starter:checkstyle-bom:${starter_boot_version}")
+
+    implementation project(':api')
+    implementation project(':controller')
+    implementation project(':persistence:model')
+    implementation project(':persistence:impl')
+    implementation project(':service:provider')
+    implementation project(':service:spi')
+    implementation 'io.twdps.starter:tracing'
+    implementation 'io.twdps.starter:error-handling'
+    implementation 'io.twdps.starter:exceptions'
+    implementation 'io.twdps.starter:open-api'
+    implementation 'io.twdps.starter:kafka-entity-lifecycle-notifier'
+    implementation 'io.twdps.starter:open-policy-agent-config'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'com.bisnode.opa:opa-filter-spring-boot-starter'
+
+    testImplementation project(':data')
+    testImplementation 'io.twdps.starter:test-data'
+    testImplementation 'com.h2database:h2'
+    integrationTestImplementation 'com.h2database:h2'
+    //runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    docker project(':flyway')
+    docker project(':opa-init')
+    docker project(':init-container')
+}
+
+
+application {
+    // Define the main class for the application.
+    mainClass = 'io.twdps.starter.example.ExampleApplication'
+}
+
+bootJar {
+    manifest {
+        attributes(
+                'Application-Version': "${project.version}",
+                'Start-Class': 'io.twdps.starter.example.ExampleApplication',
+//                "Application-Git-Commit": "${gitRevision}",
+//                "Application-Git-Branch-Name": "${gitBranchName}",
+                'Application-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date())
+        )
+    }
+}
+
+tasks.named('dockerComposeUp').configure {
+    dependsOn ':flyway:docker'
+    dependsOn ':opa-init:docker'
+    dependsOn ':init-container:docker'
+}

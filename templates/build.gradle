@@ -11,7 +11,7 @@ cookiecutter {
 
 cookiecutterVerify {
     generatedProjectName = 'dps-multi-module-starterkit-java'
-    sourcePath = '..'
+    sourcePath = '../skeleton'
 }
 
 cookiecutterBuild {
@@ -24,3 +24,23 @@ cookiecutterFormat {
     args = ['spotlessApply']
 }
 
+tasks.named('buildTemplate').configure {
+    dependsOn tasks.named('formatTemplate')
+    mustRunAfter tasks.named('clean')
+    mustRunAfter tasks.named('generateTemplate')
+}
+
+tasks.named('compareTemplate').configure {
+    dependsOn tasks.named('formatTemplate')
+    mustRunAfter tasks.named('clean')
+    mustRunAfter tasks.named('generateTemplate')
+}
+
+tasks.named('generateTemplate').configure {
+    mustRunAfter tasks.named('clean')
+}
+
+tasks.named('formatTemplate').configure {
+    mustRunAfter tasks.named('generateTemplate')
+    mustRunAfter tasks.named('clean')
+}

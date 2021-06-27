@@ -31,8 +31,12 @@ dependencies {
     testImplementation 'io.twdps.starter:test-data'
     testImplementation 'com.h2database:h2'
     integrationTestImplementation 'com.h2database:h2'
-    //runtime 'com.h2database:h2'
-    runtime 'org.postgresql:postgresql'
+    //runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    docker project(':flyway')
+    docker project(':opa-init')
+    docker project(':init-container')
 }
 
 
@@ -53,3 +57,8 @@ bootJar {
     }
 }
 
+tasks.named('dockerComposeUp').configure {
+    dependsOn ':flyway:docker'
+    dependsOn ':opa-init:docker'
+    dependsOn ':init-container:docker'
+}

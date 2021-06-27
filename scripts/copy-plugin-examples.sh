@@ -2,7 +2,7 @@
 
 
 src=${1:-../dps-starter-boot/plugins}
-dst=./buildSrc
+dst=./skeleton/buildSrc
 groovyPath='src/main/groovy'
 
 if [ ! -d "${dst}" ]

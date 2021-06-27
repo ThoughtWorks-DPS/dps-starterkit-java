@@ -1,5 +1,5 @@
-site_name: '{{cookiecutter.PROJECT_NAME}}'
-site_description: '{{cookiecutter.PROJECT_DESCRIPTION}}'
+site_name: {{cookiecutter.PROJECT_NAME}}
+site_description: {{cookiecutter.PROJECT_DESCRIPTION}}
 
 nav:
   - 'Overview': index.md

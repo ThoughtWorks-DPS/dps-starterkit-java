@@ -32,5 +32,4 @@ public class PagedResponse<T> {
   @NonNull
   @Schema(description = "Current page size", example = "10")
   private final Integer pageSize;
-
 }

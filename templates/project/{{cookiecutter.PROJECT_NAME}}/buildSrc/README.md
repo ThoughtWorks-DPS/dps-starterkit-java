@@ -281,7 +281,7 @@ dockerRun {
     name project.name
     image "${dockerRegistry}/${rootProject.name}"
     ports '8080:8080'
-    env 'SECRETHUB_HELLO': getEnvOrDefault('SECRETHUB_HELLO', 'override-me')
+    env 'SECRET_HELLO': getEnvOrDefault('SECRET_HELLO', 'override-me')
 }
 
 dockerCompose {
@@ -354,7 +354,7 @@ docker {
 }
 
 dockerRun {
-    env 'SECRETHUB_HELLO': getEnvOrDefault('SECRETHUB_HELLO', 'override-me'),
+    env 'SECRET_HELLO': getEnvOrDefault('SECRET_HELLO', 'override-me'),
             'JAVA_PROFILE': '-Dspring.profiles.include=docker'
 }
 

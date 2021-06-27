@@ -49,5 +49,82 @@ plugins {
 ext {
     jacoco_enforce_violations = true
     jacoco_minimum_coverage = 0.8
+    subModules = [':app',
+                  ':api',
+                  ':controller',
+                  ':data',
+                  ':service:spi',
+                  ':service:provider',
+                  ':persistence:impl',
+                  ':persistence:model',
+                  ':flyway',
+                  ':init-container',
+                  ':opa-init']
+    dockerModules = [':app',
+                     ':flyway',
+                     ':init-container',
+                     ':opa-init']
 }
+
+tasks.named('clean').configure {
+    subModules.each {
+        dependsOn gradle.includedBuild('skeleton').task("${it}:clean")
+    }
+    dependsOn ':templates:clean'
+}
+
+tasks.named('build').configure {
+    mustRunAfter tasks.named('clean')
+    subModules.each {
+        dependsOn gradle.includedBuild('skeleton').task("${it}:build")
+    }
+}
+
+tasks.named('check').configure {
+    //mustRunAfter tasks.named('build')
+    subModules.each {
+        dependsOn gradle.includedBuild('skeleton').task("${it}:check")
+    }
+    dockerModules.each {
+        dependsOn gradle.includedBuild('skeleton').task("${it}:check")
+    }
+}
+
+def dockerTask = tasks.register('docker') {
+    mustRunAfter tasks.named('clean')
+    mustRunAfter tasks.named('build')
+    dockerModules.each {
+        dependsOn gradle.includedBuild('skeleton').task("${it}:docker")
+    }
+}
+
+def devloop = tasks.register('devloop') {
+    group = "Workflow"
+    description = "Rebuild code, docker images, and restart docker-compose"
+    dependsOn gradle.includedBuild('skeleton').task(":devloop")
+}
+
+
+def restartloop = tasks.register('restartloop') {
+    group = "Workflow"
+    description = "Stop docker-compose, delete unused images, continue with devloop task"
+    dependsOn gradle.includedBuild('skeleton').task(":restartloop")
+}
+
+def resetloop = tasks.register('resetloop') {
+    group = "Workflow"
+    description = "Clean code, remove docker volumes, continue with restartloop task"
+    dependsOn gradle.includedBuild('skeleton').task(":resetloop")
+}
+
+def ccloop = tasks.register('ccloop') {
+    group = "Workflow"
+    description = "From template, generate, format, compare, and build/test skeleton code"
+    dependsOn ':templates:clean'
+    dependsOn ':templates:generateTemplate'
+    dependsOn ':templates:formatTemplate'
+    dependsOn ':templates:compareTemplate'
+    dependsOn ':templates:buildTemplate'
+}
+
 

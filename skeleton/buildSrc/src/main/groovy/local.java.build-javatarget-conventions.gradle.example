@@ -1,0 +1,4 @@
+plugins {
+}
+
+sourceCompatibility = getPropertyOrDefault('java_version', '11')
