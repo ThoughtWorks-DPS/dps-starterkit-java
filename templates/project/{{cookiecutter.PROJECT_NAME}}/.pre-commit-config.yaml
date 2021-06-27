@@ -1,6 +1,5 @@
 exclude: >
   (?x)^(
-      template/* |
       helm/templates/*
   )
 repos:
@@ -17,7 +16,6 @@ repos:
         stages: *commit-stage
       - id: check-yaml
         stages: *commit-stage
-        exclude: ^templates/project/{{cookiecutter.PROJECT_NAME}}/.circleci/config.yml
       - id: check-xml
         stages: *commit-stage
       - id: forbid-new-submodules
