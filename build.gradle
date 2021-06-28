@@ -49,26 +49,35 @@ plugins {
 ext {
     jacoco_enforce_violations = true
     jacoco_minimum_coverage = 0.8
-    subModules = [':app',
-                  ':api',
-                  ':container-init',
-                  ':controller',
-                  ':data',
-                  ':db-init',
-                  ':opa-init',
-                  ':persistence:impl',
-                  ':persistence:model',
-                  ':service:activator',
-                  ':service:provider',
-                  ':service:spi']
+    codeModules = [':app',
+                   ':api',
+                   ':controller',
+                   ':data',
+                   ':persistence:impl',
+                   ':persistence:model',
+                   ':service:activator',
+                   ':service:provider',
+                   ':service:spi']
     dockerModules = [':app',
                      ':container-init',
                      ':db-init',
                      ':opa-init']
 }
 
+// Support pre-commit hooks, need spotlessCheck and spotlessApply
+def spotlessCheck = tasks.register('spotlessCheck') {
+    dependsOn gradle.includedBuild('skeleton').task(":spotlessCheck")
+}
+
+def spotlessApply = tasks.register('spotlessApply') {
+    dependsOn gradle.includedBuild('skeleton').task(":spotlessApply")
+}
+
 tasks.named('clean').configure {
-    subModules.each {
+    codeModules.each {
+        dependsOn gradle.includedBuild('skeleton').task("${it}:clean")
+    }
+    dockerModules.each {
         dependsOn gradle.includedBuild('skeleton').task("${it}:clean")
     }
     dependsOn ':templates:clean'
@@ -76,28 +85,21 @@ tasks.named('clean').configure {
 
 tasks.named('build').configure {
     mustRunAfter tasks.named('clean')
-    subModules.each {
+    codeModules.each {
+        dependsOn gradle.includedBuild('skeleton').task("${it}:build")
+    }
+    dockerModules.each {
         dependsOn gradle.includedBuild('skeleton').task("${it}:build")
     }
 }
 
 tasks.named('check').configure {
     //mustRunAfter tasks.named('build')
-    subModules.each {
+    codeModules.each {
         dependsOn gradle.includedBuild('skeleton').task("${it}:check")
     }
-}
-
-// Support pre-commit hooks, need spotlessCheck and spotlessApply
-def spotlessCheck = tasks.register('spotlessCheck') {
-    subModules.each {
-        dependsOn gradle.includedBuild('skeleton').task("${it}:spotlessCheck")
-    }
-}
-
-def spotlessApply = tasks.register('spotlessApply') {
-    subModules.each {
-        dependsOn gradle.includedBuild('skeleton').task("${it}:spotlessApply")
+    dockerModules.each {
+        dependsOn gradle.includedBuild('skeleton').task("${it}:check")
     }
 }
 

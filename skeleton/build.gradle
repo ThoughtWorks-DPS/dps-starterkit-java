@@ -50,30 +50,39 @@ plugins {
 ext {
     jacoco_enforce_violations = true
     jacoco_minimum_coverage = 0.8
-    subModules = [':app',
-                  ':api',
-                  ':container-init',
-                  ':controller',
-                  ':data',
-                  ':db-init',
-                  ':opa-init',
-                  ':persistence:impl',
-                  ':persistence:model',
-                  ':service:activator',
-                  ':service:provider',
-                  ':service:spi']
+    codeModules = [':app',
+                   ':api',
+                   ':controller',
+                   ':data',
+                   ':persistence:impl',
+                   ':persistence:model',
+                   ':service:activator',
+                   ':service:provider',
+                   ':service:spi']
     dockerModules = [':app',
                      ':container-init',
                      ':db-init',
                      ':opa-init']
 }
 
+// Support pre-commit hooks, need spotlessCheck and spotlessApply
+def spotlessCheck = tasks.register('spotlessCheck') {
+    def tb = taskBuilder('spotlessCheck')
+    codeModules.each { dependsOn tb(it) }
+}
+
+def spotlessApply = tasks.register('spotlessApply') {
+    def tb = taskBuilder('spotlessApply')
+    codeModules.each { dependsOn tb(it) }
+}
+
 def maintainerclean = tasks.register('maintainerclean') {
     group = "Workflow"
     description = "clean all submodules"
     def tb = taskBuilder('clean')
-    subModules.each { dependsOn tb(it) }
-    //depender subModules, taskBuilder('clean')
+    codeModules.each { dependsOn tb(it) }
+    dockerModules.each { dependsOn tb(it) }
+    //depender codeModules, taskBuilder('clean')
     //depender dockerModules, taskBuilder('clean')
 }
 
