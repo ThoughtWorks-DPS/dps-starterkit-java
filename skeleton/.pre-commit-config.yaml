@@ -3,6 +3,12 @@ exclude: >
       helm/templates/*
   )
 repos:
+  - repo: https://github.com/thoughtworks/talisman
+    rev: v1.11.0
+    hooks:
+      - id: talisman-commit
+        stages: &commit-stage [commit]
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.5.0
     hooks:
@@ -41,18 +47,12 @@ repos:
         args: ['test','-w','-o']
         stages: [push]
 
-  - repo: https://github.com/thoughtworks/talisman
-    rev: v1.11.0
-    hooks:
-      - id: talisman-commit
-        stages: &commit-stage [commit]
-
-  - repo: https://github.com/punitlad/commiterator.git
-    rev: v0.3.0
-    hooks:
-      - id: check-commit-message
-        # args: [ "[#[0-9]{4,}]" ]
-        stages: [commit-msg]
+#  - repo: https://github.com/punitlad/commiterator.git
+#    rev: v0.3.0
+#    hooks:
+#      - id: check-commit-message
+#        # args: [ "[#[0-9]{4,}]" ]
+#        stages: [commit-msg]
 
   - repo: https://github.com/punitlad/git-mob
     rev: f111493

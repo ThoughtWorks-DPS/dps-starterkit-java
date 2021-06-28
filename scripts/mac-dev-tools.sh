@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+pwd=$(pwd)
+path=$(dirname $0)
+cd "${path}"
+
 if ! command -v brew &> /dev/null
 then
     echo "Installing homebrew"
@@ -14,8 +18,5 @@ echo "Installing pre-commit modules"
 pre-commit install --hook-type pre-push
 pre-commit install --hook-type commit-msg
 
-echo "Installing npm packages"
-npm install markdownlint --save-dev
-npm install markdownlint-cli --save-dev
-
+cd "${pwd}"
 echo "All done!"
