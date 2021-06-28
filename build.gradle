@@ -88,9 +88,16 @@ tasks.named('check').configure {
     }
 }
 
+// Support pre-commit hooks, need spotlessCheck and spotlessApply
 def spotlessCheck = tasks.register('spotlessCheck') {
     subModules.each {
         dependsOn gradle.includedBuild('skeleton').task("${it}:spotlessCheck")
+    }
+}
+
+def spotlessApply = tasks.register('spotlessApply') {
+    subModules.each {
+        dependsOn gradle.includedBuild('skeleton').task("${it}:spotlessApply")
     }
 }
 
