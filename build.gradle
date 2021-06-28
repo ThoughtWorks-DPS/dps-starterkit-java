@@ -88,6 +88,12 @@ tasks.named('check').configure {
     }
 }
 
+def spotlessCheck = tasks.register('spotlessCheck') {
+    subModules.each {
+        dependsOn gradle.includedBuild('skeleton').task("${it}:spotlessCheck")
+    }
+}
+
 def dockerTask = tasks.register('docker') {
     mustRunAfter tasks.named('clean')
     mustRunAfter tasks.named('build')
