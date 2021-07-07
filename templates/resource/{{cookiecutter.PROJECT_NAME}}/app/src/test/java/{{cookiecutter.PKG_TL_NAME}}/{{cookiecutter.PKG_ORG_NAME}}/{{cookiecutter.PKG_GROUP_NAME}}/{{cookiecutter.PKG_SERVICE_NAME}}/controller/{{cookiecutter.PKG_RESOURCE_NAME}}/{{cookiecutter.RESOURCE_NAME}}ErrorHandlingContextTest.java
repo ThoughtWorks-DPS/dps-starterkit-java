@@ -34,6 +34,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.zalando.problem.Problem;
@@ -51,6 +52,7 @@ import org.zalando.problem.Problem;
       {{cookiecutter.RESOURCE_NAME}}DataFactory.class,
       {{cookiecutter.RESOURCE_NAME}}DataProperties.class
     })
+@TestPropertySource(properties = {"spring.config.location=classpath:application-{{cookiecutter.PKG_RESOURCE_NAME}}.yml,classpath:application.yml"})
 class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
   @Autowired private MockMvc mockMvc;
 

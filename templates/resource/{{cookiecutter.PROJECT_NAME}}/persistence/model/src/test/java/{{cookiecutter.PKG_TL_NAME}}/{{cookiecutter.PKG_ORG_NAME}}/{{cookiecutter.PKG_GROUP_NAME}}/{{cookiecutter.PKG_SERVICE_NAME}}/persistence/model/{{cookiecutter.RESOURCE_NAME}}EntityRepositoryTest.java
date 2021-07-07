@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -27,6 +28,10 @@ import java.util.Optional;
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @ContextConfiguration(classes = { {{cookiecutter.RESOURCE_NAME}}DataFactory.class, {{cookiecutter.RESOURCE_NAME}}DataProperties.class })
+@TestPropertySource(
+    properties = {
+        "spring.config.location=classpath:application-{{cookiecutter.PKG_RESOURCE_NAME}}.yml,classpath:application.yml"
+    })
 public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
 
   @Autowired private {{cookiecutter.RESOURCE_NAME}}EntityRepository modelEntityRepository;

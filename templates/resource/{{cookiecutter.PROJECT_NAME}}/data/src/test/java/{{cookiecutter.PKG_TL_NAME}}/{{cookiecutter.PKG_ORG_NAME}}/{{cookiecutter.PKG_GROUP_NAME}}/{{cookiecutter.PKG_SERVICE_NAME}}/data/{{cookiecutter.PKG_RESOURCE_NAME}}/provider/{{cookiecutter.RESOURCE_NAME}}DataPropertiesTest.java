@@ -27,9 +27,7 @@ public class {{cookiecutter.RESOURCE_NAME}}DataPropertiesTest {
   private final String pii = "eigenvalue";
   private final String userName = "asmith";
 
-  @Test
-  public void dataPropertiesPopulated() {
-    {{cookiecutter.RESOURCE_NAME}}Data data = testData.loadData().get(NamedDataFactory.DEFAULT_SPEC);
+  private void validate({{cookiecutter.RESOURCE_NAME}}Data data) {
     assertThat(data.getFirstName()).isNotNull();
     assertThat(data.getFirstName()).isEqualTo(firstName);
     assertThat(data.getLastName()).isEqualTo(lastName);
@@ -38,14 +36,18 @@ public class {{cookiecutter.RESOURCE_NAME}}DataPropertiesTest {
   }
 
   @Test
+  public void dataPropertiesPopulated() {
+    {{cookiecutter.RESOURCE_NAME}}Data data = testData.loadData().get(NamedDataFactory.DEFAULT_SPEC);
+
+    validate(data);
+  }
+
+  @Test
   public void collectionPropertiesPopulated() {
     List<{{cookiecutter.RESOURCE_NAME}}Data> collection = testData.loadCollections().get(NamedDataFactory.DEFAULT_SPEC);
     assertThat(collection.size()).isEqualTo(2);
     {{cookiecutter.RESOURCE_NAME}}Data data = collection.get(0);
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(firstName);
-    assertThat(data.getLastName()).isEqualTo(lastName);
-    assertThat(data.getPii()).isEqualTo(pii);
-    assertThat(data.getUserName()).isEqualTo(userName);
+
+    validate(data);
   }
 }

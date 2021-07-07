@@ -26,15 +26,20 @@ public class {{cookiecutter.RESOURCE_NAME}}DataFactoryTest {
   @Autowired private {{cookiecutter.RESOURCE_NAME}}DataFactory {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory;
   @Autowired private {{cookiecutter.RESOURCE_NAME}}DataProperties {{cookiecutter.RESOURCE_VAR_NAME}}DataProperties;
 
+  private void validate({{cookiecutter.RESOURCE_NAME}}Data data, {{cookiecutter.RESOURCE_NAME}}Data control) {
+    assertThat(data.getFirstName()).isNotNull();
+    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
+    assertThat(data.getLastName()).isEqualTo(control.getLastName());
+    assertThat(data.getPii()).isEqualTo(control.getPii());
+    assertThat(data.getUserName()).isEqualTo(control.getUserName());
+  }
+
   @Test
   public void dataDefaultRecordPopulated() {
     {{cookiecutter.RESOURCE_NAME}}Data control = {{cookiecutter.RESOURCE_VAR_NAME}}DataProperties.loadData().get("default");
     {{cookiecutter.RESOURCE_NAME}}Data data = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.create();
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test
@@ -42,10 +47,7 @@ public class {{cookiecutter.RESOURCE_NAME}}DataFactoryTest {
     {{cookiecutter.RESOURCE_NAME}}Data control = {{cookiecutter.RESOURCE_VAR_NAME}}DataProperties.loadData().get("raiders");
     {{cookiecutter.RESOURCE_NAME}}Data data = {{cookiecutter.RESOURCE_VAR_NAME}}DataFactory.createBySpec("raiders");
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test
@@ -67,10 +69,7 @@ public class {{cookiecutter.RESOURCE_NAME}}DataFactoryTest {
     {{cookiecutter.RESOURCE_NAME}}Data data = collection.get(0);
     {{cookiecutter.RESOURCE_NAME}}Data control = controlCollection.get(0);
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test
@@ -82,10 +81,7 @@ public class {{cookiecutter.RESOURCE_NAME}}DataFactoryTest {
     {{cookiecutter.RESOURCE_NAME}}Data data = collection.get(0);
     {{cookiecutter.RESOURCE_NAME}}Data control = controlCollection.get(0);
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test

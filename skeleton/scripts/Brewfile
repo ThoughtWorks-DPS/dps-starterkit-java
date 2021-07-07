@@ -11,6 +11,7 @@ brew "codeclimate/formulae/codeclimate"
 brew "shellcheck"
 brew "mkdocs"
 brew "markdownlint-cli"
+brew "jq"
 
 tap "adoptopenjdk/openjdk" || true
 cask "adoptopenjdk11"

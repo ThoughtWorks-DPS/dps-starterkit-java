@@ -1,11 +1,12 @@
 # dps-multi-module-starterkit-java
 
-Java API Starter from Template
+This project provides a Java Spring-Boot API Starter from cookiecutter templates.
+This tutorial walks through the developer workflow from the perspective of the user.
 
 ## Getting started
 
-Suppose we need a new service to support a new business line.
-As a developer, I would like to be able to create a new service quickly, and have all of the common bits already done (for some definition of "common bits").
+Suppose our team needs a new service to support a new business line.
+As a developer, I would like to be able to create a new service quickly, and have all the common bits already done (for some definition of "common bits").
 
 This is essentially what the starter kit provides: an opinionated starter skeleton which is capable of building a service and deploying it into production.
 
@@ -42,20 +43,34 @@ At the current stage of development, the "common bits" are:
     * Docker-Compose definition for running service and dependencies
     * Supporting Postgres, Kafka, Jaeger, OPA, Spring-Boot app
 
+### Future Roadmap
+
+* Feature flag management
+* A/B Testing
+* OAS API Linting
+* Security/Compliance testing (NIST, PCI, CIS, AWSpec)
+* Pitest testing
+* Gatling SaaS
+* OPA Unit testing
+* Build performance monitoring
+* DORA Metric tracking
+* Local K8s execution
+
 ## Dependencies
 
 1. Refer to build requirements in the README.md of the root of this repo
 1. Install CookieCutter as per: [https://cookiecutter.readthedocs.io/en/1.7.3/installation.html](https://cookiecutter.readthedocs.io/en/1.7.3/installation.html)
-1. Install shellcheck as per: [https://github.com/koalaman/shellcheck#installing](https://github.com/koalaman/shellcheck#installing)
-1. Clone the Starter Boot repo
-1. In the Starter Boot repo, execute: `./gradlew publishToMavenLocal`
+1. If you don't have access to the Githup Packages repo via `secrethub`, then:
+    1. clone the Starter Boot repo [https://github.com/ThoughtWorks-DPS/dps-starter-boot](https://github.com/ThoughtWorks-DPS/dps-starter-boot)
+    1. In the Starter Boot repo, execute: `./gradlew publishToMavenLocal`
 
 ## Generating a new API service
 
 Here is a walk-through of the process for creating a new service skeleton, using a project called bookbinder as an example.
+The first step is to generate the new project skelton:
 
 ```bash
-scripts/generate-resource.sh \
+scripts/generate-skeleton.sh \
   --repo git+ssh://git@github.com/thoughtworks-dps/dps-multi-module-starterkit-java.git \
   --project bookbinder-api \
   --service bookbinder \
@@ -63,6 +78,7 @@ scripts/generate-resource.sh \
   --resource book \
   --gen-skeleton \
   --gen-resource
+cd bookbinder-api
 ```
 
 Or using cookiecutter directly:
@@ -81,16 +97,49 @@ projectDir="${CC_PROJECT}" \
 --no-input # (2)
 
 cd "${PROJECT_NAME}"
+```
 
-gradlew clean build check docker
+Once the skeleton has been generated, install development tools
+
+```bash
+./scripts/mac-dev-tools.sh
+```
+
+Add and commit files:
+
+```bash
+gradlew spotlessApply
+git add .
+git commit -m "initial version"
+```
+
+To build the application:
+
+```bash
+gradlew build check docker
+```
+
+To run the application locally:
+
+```bash
 gradlew :app:dockerComposeDown :app:dcPrune :app:dockerComposeUp # (3)
 ```
 
+Or to build and run locally via docker-compose in one step:
+
+```bash
+gradlew devloop
+```
+
+For any types of clean tasks, always run them as a separate `gradlew` command.
+It is important because of the way gradle computes the dependency graph for task execution.
+
+> NOTES:
+>
 > 1. If testing locally, set this to the path to your local repo
 > 1. RESOURCE_VAR_NAME is the name of the entity under management
 > 1. If there are issues with flyway migrations, pruning the docker volumes may resolve them: `./gradlew :app:dcPruneVolume`
 >
-> Note:
 > Any time you are pulling artifacts from the Github packages repository, it is likely that you will need to specify your authorizations.
 > Typically, we run the build behind `secrethub` to obtain the necessary credentials for Github Packages.
 >
@@ -110,7 +159,8 @@ curl localhost:8081/actuator/info
 ## Example endpoints
 
 When the app starts, the database is created (migrated via Flyway) but not seeded - meaning the tables are set up, but not populated with data.
-Running the Gatling load tests populates data in the table(s) by making POST requests to Create endpoints.
+Running the Gatling load tests will have the side-effect of populating data in the table(s) by making POST requests to Create endpoints.
+Note, this data will all be identical records, based on the initial implementation of the Gatling tests.
 
 ### Create a resource
 
@@ -125,6 +175,10 @@ curl -i -d '{
        -X POST \
        localhost:8080/v1/example/facilityvisits
 ```
+
+The response object should include the id of the newly created record.
+
+> TIP: append `| jq .` to the `curl` command to have the JSON response object pretty-printed (and colorized).
 
 ### Fetch a resource
 
@@ -172,7 +226,7 @@ The console output of the Gatling tests will provide a link to a browser view wi
 
 ```text
 Reports generated in 0s.
-Please open the following file: /<path>/<to>/<project>/app/build/reports/gatling/<api-name>simulation-<timestamp>/index.html
+Please open the following file: /<path>/<to>/<project>/app/build/reports/gatling/<api-name>-simulation-<timestamp>/index.html
 == CSV Build Time Summary ==
 Build time today: 6:50.347
 Total build time: 6:50.347
@@ -183,7 +237,7 @@ Total build time: 6:50.347
 
 View the OpenAPI documentation for your service by navigating to [http://localhost:8080/swagger](http://localhost:8080/swagger) in your browser.
 
-The links in the header section can be configured using the `starter.openapi` properties located in `/app/src/main/resources/application.yml`.
+The links in the header section can be configured using the `starter.openapi` properties located in `./app/src/main/resources/application.yml`.
 
 ![Swagger UI Header Data](./images/swagger-ui-header-data.png "Swagger UI Header Data")
 
@@ -193,7 +247,7 @@ chrome http://localhost:8080/swagger
 
 ## Tracing
 
-View the Jaeger monitoring system
+View the Jaeger monitoring system at [http://localhost:16686/](http://localhost:16686/) in your browser.
 
 ```bash
 chrome http://localhost:16686/

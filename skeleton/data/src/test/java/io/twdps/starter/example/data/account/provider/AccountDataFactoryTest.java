@@ -26,15 +26,20 @@ public class AccountDataFactoryTest {
   @Autowired private AccountDataFactory accountDataFactory;
   @Autowired private AccountDataProperties accountDataProperties;
 
+  private void validate(AccountData data, AccountData control) {
+    assertThat(data.getFirstName()).isNotNull();
+    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
+    assertThat(data.getLastName()).isEqualTo(control.getLastName());
+    assertThat(data.getPii()).isEqualTo(control.getPii());
+    assertThat(data.getUserName()).isEqualTo(control.getUserName());
+  }
+
   @Test
   public void dataDefaultRecordPopulated() {
     AccountData control = accountDataProperties.loadData().get("default");
     AccountData data = accountDataFactory.create();
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test
@@ -42,10 +47,7 @@ public class AccountDataFactoryTest {
     AccountData control = accountDataProperties.loadData().get("raiders");
     AccountData data = accountDataFactory.createBySpec("raiders");
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test
@@ -67,10 +69,7 @@ public class AccountDataFactoryTest {
     AccountData data = collection.get(0);
     AccountData control = controlCollection.get(0);
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test
@@ -82,10 +81,7 @@ public class AccountDataFactoryTest {
     AccountData data = collection.get(0);
     AccountData control = controlCollection.get(0);
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test

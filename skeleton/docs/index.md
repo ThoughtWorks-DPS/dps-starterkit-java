@@ -19,7 +19,7 @@ Alternatively, if there is no `nav` section in `mkdocs.yml`, a navigation sectio
 However, you will not be able to use alternate titles for pages, or include links to other sites.
 
 Note that MkDocs uses `mkdocs.yml`, not `mkdocs.yaml`, although both appear to work.
-See also <https://www.mkdocs.org/user-guide/configuration/>.
+See also [https://www.mkdocs.org/user-guide/configuration/](https://www.mkdocs.org/user-guide/configuration/).
 
 ## Authoring Tips
 

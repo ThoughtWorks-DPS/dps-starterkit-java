@@ -42,6 +42,19 @@ Rather, this tool generates a generic project which can be customized based on t
     * Docker-Compose definition for running service and dependencies
     * Support for Postgres, Kafka, Jaeger, OPA, Spring-Boot app
 
+### Future Roadmap
+
+* Feature flag management
+* A/B Testing
+* OAS API Linting
+* Security/Compliance testing (NIST, PCI, CIS, AWSpec)
+* Pitest testing
+* Gatling SaaS
+* OPA Unit testing
+* Build performance monitoring
+* DORA Metric tracking
+* Local K8s execution
+
 ## Getting Started
 
 Check the [Getting Started Guide](docs/getting-started.md) to see how to generate a generic Java Spring Boot API
@@ -84,5 +97,5 @@ To make changes to the generic Java Spring Boot application, perform the followi
 
 > Note: You may run into issues with the availability of dependencies provided by the `dps-starter-boot` project.
 > Set up `secrethub` so that you can access the Github Packages artifact repository.
-> As an alternative, you can just clone that repo and run `gradlew clean build check publishToMavenLocal`.
-> Don't forget to run `gradlew cV` to determine the current version of the starter-boot and update `gradle.propertes` files in the starterkit-java appropriately.
+> As an alternative, you can just clone the `dps-starter-boot` repo and run `gradlew clean build check publishToMavenLocal`.
+> Don't forget to run `gradlew cV` to determine the current version of the starter-boot and update `gradle.propertes` in the starterkit-java appropriately.

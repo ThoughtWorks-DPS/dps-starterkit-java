@@ -26,15 +26,20 @@ public class SubAccountDataFactoryTest {
   @Autowired private SubAccountDataFactory subAccountDataFactory;
   @Autowired private SubAccountDataProperties subAccountDataProperties;
 
+  private void validate(SubAccountData data, SubAccountData control) {
+    assertThat(data.getFirstName()).isNotNull();
+    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
+    assertThat(data.getLastName()).isEqualTo(control.getLastName());
+    assertThat(data.getPii()).isEqualTo(control.getPii());
+    assertThat(data.getUserName()).isEqualTo(control.getUserName());
+  }
+
   @Test
   public void dataDefaultRecordPopulated() {
     SubAccountData control = subAccountDataProperties.loadData().get("default");
     SubAccountData data = subAccountDataFactory.create();
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test
@@ -42,10 +47,7 @@ public class SubAccountDataFactoryTest {
     SubAccountData control = subAccountDataProperties.loadData().get("raiders");
     SubAccountData data = subAccountDataFactory.createBySpec("raiders");
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test
@@ -68,10 +70,7 @@ public class SubAccountDataFactoryTest {
     SubAccountData data = collection.get(0);
     SubAccountData control = controlCollection.get(0);
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test
@@ -84,10 +83,7 @@ public class SubAccountDataFactoryTest {
     SubAccountData data = collection.get(0);
     SubAccountData control = controlCollection.get(0);
 
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(control.getFirstName());
-    assertThat(data.getLastName()).isEqualTo(control.getLastName());
-    assertThat(data.getPii()).isEqualTo(control.getPii());
+    validate(data, control);
   }
 
   @Test

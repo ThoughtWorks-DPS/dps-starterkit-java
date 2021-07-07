@@ -15,14 +15,21 @@ public class AccountTestDataTest {
   private final String firstName = "Agent";
   private final String lastName = "Smith";
   private final String pii = "eigenvalue";
+  private final String userName = "asmith";
 
-  @Test
-  public void dataPropertiesPopulated() {
-    AccountData data = testData.loadData().get(NamedDataFactory.DEFAULT_SPEC);
+  private void validate(AccountData data) {
     assertThat(data.getFirstName()).isNotNull();
     assertThat(data.getFirstName()).isEqualTo(firstName);
     assertThat(data.getLastName()).isEqualTo(lastName);
     assertThat(data.getPii()).isEqualTo(pii);
+    assertThat(data.getUserName()).isEqualTo(userName);
+  }
+
+  @Test
+  public void dataPropertiesPopulated() {
+    AccountData data = testData.loadData().get(NamedDataFactory.DEFAULT_SPEC);
+
+    validate(data);
   }
 
   @Test
@@ -30,9 +37,7 @@ public class AccountTestDataTest {
     List<AccountData> collection = testData.loadCollections().get(NamedDataFactory.DEFAULT_SPEC);
     assertThat(collection.size()).isEqualTo(2);
     AccountData data = collection.get(0);
-    assertThat(data.getFirstName()).isNotNull();
-    assertThat(data.getFirstName()).isEqualTo(firstName);
-    assertThat(data.getLastName()).isEqualTo(lastName);
-    assertThat(data.getPii()).isEqualTo(pii);
+
+    validate(data);
   }
 }

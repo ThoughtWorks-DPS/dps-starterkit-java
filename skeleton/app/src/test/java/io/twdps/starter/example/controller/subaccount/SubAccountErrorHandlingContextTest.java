@@ -34,6 +34,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.zalando.problem.Problem;
@@ -50,6 +51,10 @@ import org.zalando.problem.Problem;
       ErrorHandlerConfig.class,
       SubAccountDataFactory.class,
       SubAccountDataProperties.class
+    })
+@TestPropertySource(
+    properties = {
+      "spring.config.location=classpath:application-subaccount.yml,classpath:application.yml"
     })
 class SubAccountErrorHandlingContextTest {
   @Autowired private MockMvc mockMvc;

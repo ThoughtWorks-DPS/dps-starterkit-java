@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -27,6 +28,10 @@ import java.util.Optional;
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @ContextConfiguration(classes = {SubAccountDataFactory.class, SubAccountDataProperties.class})
+@TestPropertySource(
+    properties = {
+      "spring.config.location=classpath:application-subaccount.yml,classpath:application.yml"
+    })
 public class SubAccountEntityRepositoryTest {
 
   @Autowired private SubAccountEntityRepository modelEntityRepository;
