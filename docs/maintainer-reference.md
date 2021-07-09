@@ -73,8 +73,10 @@ The root `build.gradle` file provides a few convenience tasks that help with the
   Once the `diff` is clean, we can be assured that the templates are accurately generating identical to the `skeleton/` source.
 - ccloop - runs ccdiff task, then build/test the generated project.
 
-The `devloop`, `restartloop`, and `resetloop` tasks are also available in the `skeleton/` tree .
+The `devloop`, `restartloop`, and `resetloop` tasks are also available in the `skeleton/` tree.
 These tasks are also part of the generated skeleton, and help the development teams as they extend the skeleton to build the services.
+
+See the docs on [Project Structure](project-structure.md) for details on the structure of the `skeleton/` tree.
 
 ### Development Process
 
@@ -116,24 +118,145 @@ Here are some specific instructions to help you along this developer workflow:
 > As an alternative, you can just clone that repo and run `gradlew clean build check publishToMavenLocal`.
 > Don't forget to run `gradlew cV` to determine the current version of the starter-boot and update `gradle.propertes` files in the starterkit-java appropriately.
 
-### Adding to Architecture Decision Record (ADR)
+### Adding to the Architecture Decision Record (ADR)
 
-- First, install adr-tools: [https://github.com/npryce/adr-tools/blob/master/INSTALL.md](https://github.com/npryce/adr-tools/blob/master/INSTALL.md)
-- ADR has already been initialized on the template project.
-  You can see an example of it in the initial ADR record in `<root>/docs/architecture-decisions/template/0001-record-architecture-decisions.md`
-- To add a record, run `adr new <description-of-adr-record-to-add>`
-- To see additional commands, run `adr help`
+We recommend that you use [Architecture Decision Records](https://adr.github.io/) to keep a record of significant decisions that impact the architecture of your application.
+Using [adr-tools](https://github.com/npryce/adr-tools#adr-tools) makes this even simpler to do.
+
+The generated project comes with a directory and template for ADRs already included.
+You can view the example decision by going to:
+`<project-root>/docs/architecture-decisions/template/0001-record-architecture-decisions.md`
+
+To add additional architecture decision records, do the following:
+
+1. Make sure you already have [adr-tools](https://github.com/npryce/adr-tools/blob/master/INSTALL.md) installed
+1. Add a record by running:
+
+   ```bash
+   adr new <description-of-adr-record-to-add>
+   ```
+
+1. View additional commands by running: `adr help`
 
 ### Linting
 
-Linting via Spotless is set to execute automatically prior to committing via pre-commit.
+Multiple types of linting are integrated into the build.
 
-- Linting using spotless locally
-    - Allows autocorrection of lint offenders
-    - [https://github.com/diffplug/spotless/tree/master/plugin-gradle#java](https://github.com/diffplug/spotless/tree/master/plugin-gradle#java)
-    - [https://github.com/google/google-java-format](https://github.com/google/google-java-format)
-- Run: `./gradlew spotlessCheck` in the `skeleton/` directory to execute linting checks
-- Run: `./gradlew spotlessApply` in the `skeleton/` directory to attempt to auto-format and correct linting errors
+#### Spotless
+
+Linting via [Spotless](https://github.com/diffplug/spotless) is set to execute automatically prior to committing via pre-commit.
+Using spotless locally allows autocorrection of lint offenders.
+
+Spotless is currently set up to enforce the [google-java-format](https://github.com/google/google-java-format).
+
+To execute the Spotless linting checks, run:
+
+```bash
+./gradlew spotlessCheck
+```
+
+To attempt to auto-format and correct linting errors, run:
+
+```bash
+./gradlew spotlessApply
+```
+
+#### Hadolint
+
+Linting of Dockerfiles is currently being enforced through the use of [Hadolint](https://github.com/hadolint/hadolint).
+This ensures that the images that are built are following [these Docker best practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/).
+To initiate the Dockerfile check, run the following command:
+
+```bash
+./gradlew lintDockerFile
+```
+
+This will automatically run hadolint in any sub-module which imports the appropriate docker plugin.
+
+If the Dockerfile linting task fails, an error indicating the affected file and the rule that was violated will be presented in the output (see example below):
+
+```text
+== BUILD FAILED ==
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+  Could not determine the dependencies of task ':app:check'.
+> Could not create task ':app:lintDockerFile'.
+> src/docker/DockerFile:5 DL3045 warning: `COPY` to a relative destination without `WORKDIR` set.
+src/docker/DockerFile:7 DL3045 warning: `COPY` to a relative destination without `WORKDIR` set.
+```
+
+In this case, the rule that was violated is [DL3045](https://github.com/hadolint/hadolint/wiki/DL3045).
+To see the complete set of rules, go to [https://github.com/hadolint/hadolint#rules](https://github.com/hadolint/hadolint#rules)
+
+> **Note:** By default, the Dockerfile(s) that are linted are located in the general path of: `src/docker/DockerFile` in a given submodule.
+> This path can easily be customized in the `build.gradle` of any submodule by modifying the `ext.targets` field:
+>
+> ```groovy
+> tasks.named('lintDockerFile').configure {
+>   ext.targets = [ "src/docker/DockerFile" ]
+> }
+> ```
+
+#### Shellcheck
+
+Linting via [Shellcheck](https://github.com/koalaman/shellcheck) is set to execute as part of the `check` task in the gradle build.
+Shellcheck will run lint against bash scripts.
+The task is activated via `build.gradle` plugin in the `./scripts` directory.
+
+- Run: `./gradlew shellcheck` in the root directory to execute linting checks.
+  Note: there are no automatic corrections, although the error messages generally suggest a solution.
+
+#### Spectral
+
+The Spectral linter will apply a set of rules to the OASv3.0 API specification document.
+
+#### Markdownlint
+
+Linting via [Markdownlint](https://github.com/DavidAnson/markdownlint) is set to execute automatically prior to committing via pre-commit.
+Configuration for the markdown linting process is located in `.markdownlint.yaml`
+
+### Setting up and running Docker CIS Benchmark tests locally
+
+The [CIS Docker Benchmark](https://www.cisecurity.org/benchmark/docker/) is a set of guidelines describing common best-practices around deploying docker containers in production.
+You can run a full suite of automated tests based on this Benchmark for your application's docker image using the [Docker Bench Security](https://github.com/docker/docker-bench-security) tool.
+This runs against your prebuilt local Docker images and any running containers that you specify.
+
+To run the tests, do the following:
+
+1. Make sure you have already built docker images for your application by running the following command.
+   This will build new images for your application if there aren't any, or rebuild any existing ones.
+
+    ```bash
+    % ./gradlew clean build check docker
+    ```
+
+1. Clone the docker-bench-security repo and run the tests, replacing _<PROJECT_NAME>_ with the name of your generated application:
+
+    ```bash
+    % git clone https://github.com/docker/docker-bench-security.git
+    % cd docker-bench-security
+    % sudo sh docker-bench-security.sh -c container_images -i <PROJECT_NAME>
+    ```
+
+1. Explore the results presented.
+   The results will show a list of tests that were run and their status, using one of the following labels:
+
+- **Warn** - Test failed and should be fixed
+- **Pass** - Test passed, no need to do anything
+- **Info** - Information to pay attention to
+- **Note** - Are things that should be fixed
+
+The results will be presented as Automated or Manual:
+
+- **Automated** - Represents recommendations that can be fully automated and validated to a pass/fail state.
+- **Manual** - Represents recommendations that cannot be full automated and requires all or some manual steps to validate that the configured state is set as expected.
+  The expected state can vary depending on the environment.
+
+The full suite of tests covers [several sections](https://github.com/docker/docker-bench-security/tree/master/tests).
+The steps above only focus on the **[Container Images and Build File](https://github.com/docker/docker-bench-security/blob/master/tests/4_container_images.sh)** section.
+
 - Reports for test coverage: `./build/jacoco/test/index.html`
 - Run: `codeclimate -f html > codeClimateReport.html` to execute Code Climate scanning locally and generate a html report# Starter Structure
 
@@ -154,100 +277,3 @@ They also provide an easy way to customize small parts of the build functionalit
 
 There exists a script `./scripts/copy-plugin-examples.sh` that will the `local.*.example` from the `io.twdps.starter:plugins` project.
 It assumes that the project source exists in a sibling directory path, although that can be specified as a command line parameter.
-
-## Skeleton Project Structure
-
-The project skeleton is organized into three tiers of functionality, API, Service (business logic), and Persistence.
-Each tier should define interfaces for the functionality, with implementations of the interfaces as separate packages.
-This maximized long-term maintainability and promotes the ability to migrate each of the levels independently.
-
-```text
-project
-└─skeleton/
-   │ .pre-commit-config.yaml
-   │ README.md
-   │ build.gradle    
-   │ gradle.properties
-   │ settings.gradle
-   └─api/
-   └─app/
-   └─buildSrc/
-   └─controller/
-   └─data/
-   └─docs/
-   └─flyway/
-   └─helmchart/
-   └─init-container/
-   └─opa-init/
-   └─persistence/
-      └─impl/
-      └─model/
-   └─scripts/
-   └─docs/
-   └─service/
-      └─provider/
-      └─spi/
-```
-
-### api
-
-This is the interface for the service, which should include the Request and Response payload objects.
-
-We are currently using Lombok to minimize the boilerplate code necessary for the payload objects.
-There exist arguments in favor of the use of Immutables, which provides much the same benefits of Lombok without such invasive implementation requirements.
-
-### controller
-
-The implementation of the API interface, should only depend on the service SPI.
-This has responsibility for transforming the SPI model to the API model.
-
-### service/spi Service Provider Interface
-
-This is an optional component, depending on the structure and domain of what is being built.
-Assume you should have it, you should be able to justify why you don't.
-This pattern forces you to think in terms of interfaces for the various components of your service.
-
-An example may help.
-Take Notifications as an example.
-At a high level, as a consumer of this API, I just want to notify someone.
-At the lower level, there may be different ways of notifying someone, configurable by the person, including email or SMS.
-Email and SMS would be individual SPI implementations, because at the higher level of the service, I just want to track that the notification was sent out.
-
-Further, there may be a future mechanism for notifications, which would only require a configuration capability for the user to select the new method, and a new SPI implementation registered with the service.
-
-It also helps a lot with testability, and migrating underlying services in the future.
-
-### service/provider
-
-This is the main implementation package, which implements the service.
-Ideally, it is a thin glue layer between the REST API and the SPI implementations.
-Data validation, security (if not already delegated out to Service Mesh), logging and metrics capture should happen here.
-
-Business logic should primarily reside behind the SPI interface(s), and the specific implementations which execute the business logic.
-This pattern easily accommodates plugin architectures at the SPI level, supported by factory objects.
-
-This has responsibility for translating from the SPI model to the Persistence model.
-
-This should only depend on the Persistence model, and perhaps other services SPIs.
-
-### persistence/model
-
-Explicitly separating persistence into model and impl may seem like a bit of overkill to some.
-Many prefer just using Spring JPA interfaces for the repositories.
-
-That's fine as far as it goes, but occasionally we may have need for implementing other capabilities (e.g. C*).
-Keeping with the interface-first design pattern preserves optionality and promotes testability.
-
-The persistence model objects also live here in the persistence/model package.
-
-### persistence/impl
-
-Depending on the choice on the persistence/api side (i.e. Spring JPA), we may or may not need to provide any implementations.
-However, it's still useful to have in cases where custom queries need to be implemented.
-
-### app
-
-The main Spring Boot Application, which contains whatever specific configuration classes and includes the components which make up the application (persistence, api, spi, spi-implementation).
-
-SPI Implementations may be either internal or external.
-Spring affords an easy way of dynamically constructing the Factory by auto-registering implementations of an interface via configuration beans based on packages included on the classpath.
