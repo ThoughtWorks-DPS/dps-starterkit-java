@@ -1,0 +1,7 @@
+fileignoreconfig:
+- filename: templates/project/{{cookiecutter.PROJECT_NAME}}/docs/tutorial.md
+  checksum: 5a32ee03ca06659bf63b9fccea7397a90ab04349203991fc4be4df725adea434
+- filename: skeleton/docs/tutorial.md
+  checksum: 60283e26b2291b03cd5fcd4eb7fa64e5e8b3183429799d3f1e2bdc2a9961449e
+- filename: docs/tutorial.md
+  checksum: b7c23848c8a6c5f9be58b968b9fcc55dc870f0e14fc27efe28cb817ee755bf6e

@@ -1,6 +1,6 @@
 info:
   app:
-    name: dps-multi-module-starterkit-java
+    name: dps-starterkit-java
     description: Java API Starter from Template
 
 management:
@@ -141,7 +141,7 @@ starter:
     title: Example service
     description: Example service providing Account info
     version: v1
-    licenseUrl: https://github.com/thoughtworks-dps/dps-multi-module-starterkit-java/blob/master/LICENSE
+    licenseUrl: https://github.com/thoughtworks-dps/dps-starterkit-java/blob/master/LICENSE
     contactEmail: starter-java@example.com
     contactUrl: https://example.twdps.io/
     contactName: Example

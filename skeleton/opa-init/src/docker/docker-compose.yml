@@ -23,7 +23,7 @@ services:
 
 
   opa-init:
-    image: twdps/dps-multi-module-starterkit-java-opa-init:latest
+    image: twdps/dps-starterkit-java-opa-init:latest
     depends_on:
       - opa
     networks:

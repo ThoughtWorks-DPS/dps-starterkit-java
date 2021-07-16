@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 template="resource"
-url="gh:thoughtworks-dps/dps-multi-module-starterkit-java.git"
+url="gh:thoughtworks-dps/dps-starterkit-java.git"
 path="."
 tag="release-0.1.11"
 

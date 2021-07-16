@@ -1,4 +1,4 @@
-name: dps-multi-module-starterkit-java
+name: dps-starterkit-java
 owner: Example
 environment:
 namespace: example-local
@@ -9,19 +9,19 @@ replicaCount: 1
 podDisruptionBudget: 20%
 
 labels:
-  app: dps-multi-module-starterkit-java
+  app: dps-starterkit-java
   deployment: green
 
 blueVersion: false
 
 styraLabels:
   styra.io/opa-injection: disabled
-  styra.io/system: dps-multi-module-starterkit-java
+  styra.io/system: dps-starterkit-java
 
 initContainerName: twdps/dps-psql-init:latest
 
 image:
-  repository: twdps/dps-multi-module-starterkit-java
+  repository: twdps/dps-starterkit-java
   imagePullPolicy: IfNotPresent
   tag: "latest"
 
@@ -43,8 +43,8 @@ service:
 ingress:
   pathPrefix: "/v1/example"
   hosts:
-    - dps-multi-module-starterkit-java.{{ .Values.namespace }}.{{ .Values.cluster }}.twdps.io
-    - dps-multi-module-starterkit-java.{{ .Values.namespace }}.svc.cluster.local
+    - dps-starterkit-java.{{ .Values.namespace }}.{{ .Values.cluster }}.twdps.io
+    - dps-starterkit-java.{{ .Values.namespace }}.svc.cluster.local
   gateways:
     - istio-system/api-gateway-{{ .Values.environment }}
     - mesh

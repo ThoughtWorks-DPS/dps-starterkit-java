@@ -55,7 +55,7 @@ dependencyResolutionManagement {
 }
 
 
-rootProject.name = 'dps-multi-module-starterkit-java-root'
+rootProject.name = 'dps-starterkit-java-root'
 includeBuild 'skeleton'
 include ':templates'
 include ':scripts'

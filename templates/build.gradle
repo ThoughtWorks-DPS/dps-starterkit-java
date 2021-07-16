@@ -10,17 +10,17 @@ cookiecutter {
 }
 
 cookiecutterVerify {
-    generatedProjectName = 'dps-multi-module-starterkit-java'
+    generatedProjectName = 'dps-starterkit-java'
     sourcePath = '../skeleton'
 }
 
 cookiecutterBuild {
-    generatedProjectName = 'dps-multi-module-starterkit-java'
+    generatedProjectName = 'dps-starterkit-java'
     args = ['clean', 'build', 'test']
 }
 
 cookiecutterFormat {
-    generatedProjectName = 'dps-multi-module-starterkit-java'
+    generatedProjectName = 'dps-starterkit-java'
     args = ['spotlessApply']
 }
 

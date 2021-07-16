@@ -85,15 +85,15 @@ jobs:
 
       - run:
           name: Tag Flyway Image
-          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-flyway:latest {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-flyway:$CIRCLE_BUILD_NUM
+          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-starterkit-java-flyway:latest {{cookiecutter.PKG_ORG_NAME}}/dps-starterkit-java-flyway:$CIRCLE_BUILD_NUM
 
       - run:
           name: Tag OPA Init Image
-          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-opa-init:latest {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-opa-init:$CIRCLE_BUILD_NUM
+          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-starterkit-java-opa-init:latest {{cookiecutter.PKG_ORG_NAME}}/dps-starterkit-java-opa-init:$CIRCLE_BUILD_NUM
 
       - run:
           name: Tag Main Image
-          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-app:latest {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-app:$CIRCLE_BUILD_NUM
+          command: docker tag {{cookiecutter.PKG_ORG_NAME}}/dps-starterkit-java-app:latest {{cookiecutter.PKG_ORG_NAME}}/dps-starterkit-java-app:$CIRCLE_BUILD_NUM
 
       - run:
           name: Docker authentication
@@ -107,15 +107,15 @@ jobs:
 
       - run:
           name: Publish Flyway Image
-          command: docker push {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-flyway
+          command: docker push {{cookiecutter.PKG_ORG_NAME}}/dps-starterkit-java-flyway
 
       - run:
           name: Publish OPA Init Image
-          command: docker push {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-opa-init
+          command: docker push {{cookiecutter.PKG_ORG_NAME}}/dps-starterkit-java-opa-init
 
       - run:
           name: Publish Main Image
-          command: docker push {{cookiecutter.PKG_ORG_NAME}}/dps-multi-module-starterkit-java-app
+          command: docker push {{cookiecutter.PKG_ORG_NAME}}/dps-starterkit-java-app
 
   dev-deploy:
     executor: deploy-agent

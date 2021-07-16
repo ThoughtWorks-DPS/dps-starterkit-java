@@ -1,4 +1,4 @@
-# dps-multi-module-starterkit-java
+# dps-starterkit-java
 
 Java API Starter from Template
 
@@ -56,7 +56,7 @@ Here is a walk-through of the process for creating a new service skeleton, using
 
 ```bash
 scripts/generate-resource.sh \
-  --repo git+ssh://git@github.com/{{cookiecutter.GITHUB_ORG_NAME}}/dps-multi-module-starterkit-java.git \
+  --repo git+ssh://git@github.com/{{cookiecutter.GITHUB_ORG_NAME}}/dps-starterkit-java.git \
   --project bookbinder-api \
   --service bookbinder \
   --output bookbinder-api \
@@ -68,9 +68,9 @@ scripts/generate-resource.sh \
 Or using cookiecutter directly:
 
 ```bash
-export CC_PROJECT=https://github.com/{{cookiecutter.GITHUB_ORG_NAME}}/dps-multi-module-starterkit-java # (1)
+export CC_PROJECT=https://github.com/{{cookiecutter.GITHUB_ORG_NAME}}/dps-starterkit-java # (1)
 # To build from a local version of the starter kit, replace this value with an absolute path
-# e.g. export CC_PROJECT=$PWD/<path>/<to>/dps-multi-module-starterkit-java
+# e.g. export CC_PROJECT=$PWD/<path>/<to>/dps-starterkit-java
 export PROJECT_NAME=bookbinder
 cookiecutter "${CC_PROJECT}" \
 --directory templates/project \

@@ -85,15 +85,15 @@ jobs:
 
       - run:
           name: Tag Flyway Image
-          command: docker tag twdps/dps-multi-module-starterkit-java-flyway:latest twdps/dps-multi-module-starterkit-java-flyway:$CIRCLE_BUILD_NUM
+          command: docker tag twdps/dps-starterkit-java-flyway:latest twdps/dps-starterkit-java-flyway:$CIRCLE_BUILD_NUM
 
       - run:
           name: Tag OPA Init Image
-          command: docker tag twdps/dps-multi-module-starterkit-java-opa-init:latest twdps/dps-multi-module-starterkit-java-opa-init:$CIRCLE_BUILD_NUM
+          command: docker tag twdps/dps-starterkit-java-opa-init:latest twdps/dps-starterkit-java-opa-init:$CIRCLE_BUILD_NUM
 
       - run:
           name: Tag Main Image
-          command: docker tag twdps/dps-multi-module-starterkit-java-app:latest twdps/dps-multi-module-starterkit-java-app:$CIRCLE_BUILD_NUM
+          command: docker tag twdps/dps-starterkit-java-app:latest twdps/dps-starterkit-java-app:$CIRCLE_BUILD_NUM
 
       - run:
           name: Docker authentication
@@ -107,15 +107,15 @@ jobs:
 
       - run:
           name: Publish Flyway Image
-          command: docker push twdps/dps-multi-module-starterkit-java-flyway
+          command: docker push twdps/dps-starterkit-java-flyway
 
       - run:
           name: Publish OPA Init Image
-          command: docker push twdps/dps-multi-module-starterkit-java-opa-init
+          command: docker push twdps/dps-starterkit-java-opa-init
 
       - run:
           name: Publish Main Image
-          command: docker push twdps/dps-multi-module-starterkit-java-app
+          command: docker push twdps/dps-starterkit-java-app
 
   dev-deploy:
     executor: deploy-agent
@@ -163,7 +163,7 @@ jobs:
   #        name: run helm chart
   #        shell: secrethub run -- /bin/sh -eo pipefail
   #        command: |
-  #          helm upgrade dps-multi-module-starterkit-java helm \
+  #          helm upgrade dps-starterkit-java helm \
   #                        --install \
   #                        --wait \
   #                        -f helm/api-2-dev.yaml \

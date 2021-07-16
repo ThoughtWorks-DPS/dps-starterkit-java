@@ -26,7 +26,7 @@ services:
       - external
 
   db-init:
-    image: twdps/dps-multi-module-starterkit-java-flyway:latest
+    image: twdps/dps-starterkit-java-flyway:latest
 # NOTE: These are the defaults from the flyway.conf   uncomment to override, esp for secrethub passwords
 #    environment:
 #      FLYWAY_URL: jdbc:postgresql://postgres1:5432/{{cookiecutter.PKG_SERVICE_NAME}}?user={{cookiecutter.PKG_SERVICE_NAME}}_flyway&password=not-the-password

@@ -1,4 +1,4 @@
-# dps-multi-module-starterkit-java
+# dps-starterkit-java
 
 This project provides a Java Spring-Boot API Starter from cookiecutter templates.
 This tutorial walks through the developer workflow from the perspective of the user.
@@ -71,7 +71,7 @@ The first step is to generate the new project skelton:
 
 ```bash
 scripts/generate-skeleton.sh \
-  --repo git+ssh://git@github.com/thoughtworks-dps/dps-multi-module-starterkit-java.git \
+  --repo git+ssh://git@github.com/thoughtworks-dps/dps-starterkit-java.git \
   --project bookbinder-api \
   --service bookbinder \
   --output bookbinder-api \
@@ -84,9 +84,9 @@ cd bookbinder-api
 Or using cookiecutter directly:
 
 ```bash
-export CC_PROJECT=https://github.com/thoughtworks-dps/dps-multi-module-starterkit-java # (1)
+export CC_PROJECT=https://github.com/thoughtworks-dps/dps-starterkit-java # (1)
 # To build from a local version of the starter kit, replace this value with an absolute path
-# e.g. export CC_PROJECT=$PWD/<path>/<to>/dps-multi-module-starterkit-java
+# e.g. export CC_PROJECT=$PWD/<path>/<to>/dps-starterkit-java
 export PROJECT_NAME=bookbinder
 cookiecutter "${CC_PROJECT}" \
 --directory templates/project \

@@ -1,4 +1,4 @@
-# [dps-multi-module-starterkit-java] Architecture Decision Record (ADR)
+# [dps-starterkit-java] Architecture Decision Record (ADR)
 
 ## 1. Record the architecture decision
 

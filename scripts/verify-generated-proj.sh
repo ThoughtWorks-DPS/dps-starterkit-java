@@ -2,7 +2,7 @@
 
 checkDirDiffs() {
   randomDir=$1
-  diff -r . ./out/"$randomDir"/dps-multi-modules-starterkit-java \
+  diff -r . ./out/"$randomDir"/dps-starterkit-java \
     -x .git \
     -x .idea \
     -x .gradle \

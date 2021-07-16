@@ -1,5 +1,5 @@
 {
-  "PROJECT_NAME" : "dps-multi-module-starterkit-java",
+  "PROJECT_NAME" : "dps-starterkit-java",
   "GITHUB_ORG_NAME": "thoughtworks-dps",
   "PACKAGE_NAME": "{{cookiecutter.PROJECT_NAME|lower|replace(' ', '-')|replace('_', '-')}}",
   "PROJECT_DESCRIPTION": "Java API Starter from Template",

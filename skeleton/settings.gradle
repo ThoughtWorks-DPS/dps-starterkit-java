@@ -55,7 +55,7 @@ dependencyResolutionManagement {
 }
 
 
-rootProject.name = 'dps-multi-module-starterkit-java'
+rootProject.name = 'dps-starterkit-java'
 include ':api'
 include ':app'
 include ':container-init'

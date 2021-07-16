@@ -39,7 +39,7 @@ For local testing, make sure its pointing to a local cluster!
 ## Istio
 
 Istio is a [service mesh](https://istio.io/latest/docs/concepts/what-is-istio/) that provides a number of utilities for interacting with the Kubernetes cluster.
-`dps-multi-module-starterkit-java` uses Istio in its Kubernetes config, so we will need to set it up on our local cluster as well.
+`dps-starterkit-java` uses Istio in its Kubernetes config, so we will need to set it up on our local cluster as well.
 
 `% brew install istioctl` to install Istio CLI tool.
 
@@ -54,5 +54,5 @@ Helm is used as a templating tool for templating Kubernetes configuration.
 
 Use the listed commands to do the following:
 
-- `% helm template --output-dir=output/ helm` - Generate the Kubernetes config from the helm template directory in `dps-multi-module-starterkit-java`
-- `% helm upgrade --install dps-multi-module-starterkit-java helm --set tag=latest -f helm/api-2-dev.yaml -n api-2-dev` - Run latest docker image build and push to registry within local K8s cluster.
+- `% helm template --output-dir=output/ helm` - Generate the Kubernetes config from the helm template directory in `dps-starterkit-java`
+- `% helm upgrade --install dps-starterkit-java helm --set tag=latest -f helm/api-2-dev.yaml -n api-2-dev` - Run latest docker image build and push to registry within local K8s cluster.

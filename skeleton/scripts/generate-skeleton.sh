@@ -1,11 +1,11 @@
 #!/bin/bash
 
-repo=git+ssh://git@github.com/thoughtworks-dps/dps-multi-module-starterkit-java.git
+repo=git+ssh://git@github.com/thoughtworks-dps/dps-starterkit-java.git
 parent="fixmeParent"
 child="fixmeChild"
 resource="fixmeResource"
 outputPath="."
-projectName="dps-multi-module-starterkit-java"
+projectName="dps-starterkit-java"
 serviceName="Example"
 binary="cookiecutter"
 tag=""

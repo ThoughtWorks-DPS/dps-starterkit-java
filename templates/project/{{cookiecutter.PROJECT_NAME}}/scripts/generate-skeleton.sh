@@ -1,6 +1,6 @@
 #!/bin/bash
 
-repo=git+ssh://git@github.com/{{cookiecutter.GITHUB_ORG_NAME}}/dps-multi-module-starterkit-java.git
+repo=git+ssh://git@github.com/{{cookiecutter.GITHUB_ORG_NAME}}/dps-starterkit-java.git
 parent="fixmeParent"
 child="fixmeChild"
 resource="fixmeResource"
