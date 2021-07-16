@@ -141,7 +141,7 @@ starter:
     title: Example service
     description: Example service providing Account info
     version: v1
-    licenseUrl: https://github.com/thoughtworks-dps/dps-starterkit-java/blob/master/LICENSE
+    licenseUrl: https://github.com/thoughtworks-dps/dps-starterkit-java/blob/main/LICENSE
     contactEmail: starter-java@example.com
     contactUrl: https://example.twdps.io/
     contactName: Example

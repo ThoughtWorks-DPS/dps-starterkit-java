@@ -129,7 +129,7 @@ You can view the example decision by going to:
 
 To add additional architecture decision records, do the following:
 
-1. Make sure you already have [adr-tools](https://github.com/npryce/adr-tools/blob/master/INSTALL.md) installed
+1. Make sure you already have [adr-tools](https://github.com/npryce/adr-tools/blob/main/INSTALL.md) installed
 1. Add a record by running:
 
    ```bash
@@ -254,8 +254,8 @@ The results will be presented as Automated or Manual:
 - **Manual** - Represents recommendations that cannot be full automated and requires all or some manual steps to validate that the configured state is set as expected.
   The expected state can vary depending on the environment.
 
-The full suite of tests covers [several sections](https://github.com/docker/docker-bench-security/tree/master/tests).
-The steps above only focus on the **[Container Images and Build File](https://github.com/docker/docker-bench-security/blob/master/tests/4_container_images.sh)** section.
+The full suite of tests covers [several sections](https://github.com/docker/docker-bench-security/tree/main/tests).
+The steps above only focus on the **[Container Images and Build File](https://github.com/docker/docker-bench-security/blob/main/tests/4_container_images.sh)** section.
 
 - Reports for test coverage: `./build/jacoco/test/index.html`
 - Run: `codeclimate -f html > codeClimateReport.html` to execute Code Climate scanning locally and generate a html report# Starter Structure

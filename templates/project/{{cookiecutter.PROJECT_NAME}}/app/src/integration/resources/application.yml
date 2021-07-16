@@ -130,7 +130,7 @@ starter:
     title: {{cookiecutter.SERVICE_NAME}} service
     description: {{cookiecutter.SERVICE_NAME}} service providing {{cookiecutter.RESOURCE_NAME}} info
     version: v1
-    licenseUrl: https://github.com/{{cookiecutter.GITHUB_ORG_NAME}}/{{cookiecutter.PROJECT_NAME}}/blob/master/LICENSE
+    licenseUrl: https://github.com/{{cookiecutter.GITHUB_ORG_NAME}}/{{cookiecutter.PROJECT_NAME}}/blob/main/LICENSE
     contactEmail: {{cookiecutter.PROJECT_OWNER}}
     contactUrl: https://{{cookiecutter.PKG_SERVICE_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_TL_NAME}}/
     contactName: {{cookiecutter.SERVICE_NAME}}
