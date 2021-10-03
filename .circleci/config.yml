@@ -43,7 +43,7 @@ jobs:
       - secrethub/exec:
           step-name: Run tests
           command: |
-            ./gradlew check -x shellcheck -x:skeleton:{ap,opa-init,flyway,init-container}:lintDockerfile
+            ./gradlew check -x shellcheck -x:skeleton:{app,opa-init,db-init,container-init}:lintDockerfile
 
   publish:
     executor: build-agent
@@ -68,11 +68,11 @@ jobs:
 
       - run:
           name: Build init container
-          command: docker build init-container -t twdps/dps-psql-init:latest
+          command: docker build container-init -t twdps/dps-starterkit-java-container-init:latest
 
       - run:
           name: Tag init container
-          command: docker tag twdps/dps-psql-init:latest twdps/dps-psql-init:$CIRCLE_BUILD_NUM
+          command: docker tag twdps/dps-starterkit-java-container-init:latest twdps/dps-starterkit-java-container-init:$CIRCLE_BUILD_NUM
 
       - secrethub/exec:
           step-name: Build jar
@@ -85,7 +85,7 @@ jobs:
 
       - run:
           name: Tag Flyway Image
-          command: docker tag twdps/dps-starterkit-java-flyway:latest twdps/dps-starterkit-java-flyway:$CIRCLE_BUILD_NUM
+          command: docker tag twdps/dps-starterkit-java-db-init:latest twdps/dps-starterkit-java-db-init:$CIRCLE_BUILD_NUM
 
       - run:
           name: Tag OPA Init Image
@@ -103,11 +103,11 @@ jobs:
 
       - run:
           name: Push init container
-          command: docker push twdps/dps-psql-init:latest
+          command: docker push twdps/dps-starterkit-java-container-init:latest
 
       - run:
           name: Publish Flyway Image
-          command: docker push twdps/dps-starterkit-java-flyway
+          command: docker push twdps/dps-starterkit-java-db-init
 
       - run:
           name: Publish OPA Init Image
