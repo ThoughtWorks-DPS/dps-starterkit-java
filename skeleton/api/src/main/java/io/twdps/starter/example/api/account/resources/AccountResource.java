@@ -388,7 +388,7 @@ public interface AccountResource {
                     mediaType = "application/json",
                     schema = @Schema(implementation = Problem.class)))
       })
-  @GetMapping("/{id}/subaccounts/{ subaccountsId}")
+  @GetMapping("/{id}/subaccounts/{subResourceId}")
   @ResponseStatus(HttpStatus.OK)
   @Timed(value = "example.accounts.subaccounts.findById")
   ResponseEntity<SubAccountResponse> getSubAccount(
@@ -404,8 +404,8 @@ public interface AccountResource {
               example = "uuid",
               required = true)
           @NotNull
-          @PathVariable(value = "subaccountsId")
-          String subaccountsId)
+          @PathVariable(value = "subResourceId")
+          String subResourceId)
       throws ResourceNotFoundException;
 
   @Operation(summary = "Get all SubAccounts related to a specific Account")
@@ -497,7 +497,7 @@ public interface AccountResource {
                     mediaType = "application/json",
                     schema = @Schema(implementation = Problem.class)))
       })
-  @PutMapping("/{id}/subaccounts/{ subaccountsId}")
+  @PutMapping("/{id}/subaccounts/{subResourceId}")
   @ResponseStatus(HttpStatus.OK)
   @Timed(value = "example.accounts.subaccounts.update")
   ResponseEntity<SubAccountResponse> updateSubAccount(
@@ -513,8 +513,8 @@ public interface AccountResource {
               example = "uuid",
               required = true)
           @NotNull
-          @PathVariable(value = "subaccountsId")
-          String subaccountsId,
+          @PathVariable(value = "subResourceId")
+          String subResourceId,
       @Parameter(
               description = "metadata for new SubAccount resource. Cannot null or empty.",
               required = true,
@@ -564,7 +564,7 @@ public interface AccountResource {
                     mediaType = "application/json",
                     schema = @Schema(implementation = Problem.class)))
       })
-  @DeleteMapping("/{id}/subaccounts/{ subaccountsId}")
+  @DeleteMapping("/{id}/subaccounts/{subResourceId}")
   @ResponseStatus(HttpStatus.OK)
   @Timed(value = "example.accounts.subaccounts.delete")
   ResponseEntity<SubAccountResponse> deleteSubAccount(
@@ -580,7 +580,7 @@ public interface AccountResource {
               example = "uuid",
               required = true)
           @NotNull
-          @PathVariable(value = "subaccountsId")
-          String subaccountsId)
+          @PathVariable(value = "subResourceId")
+          String subResourceId)
       throws ResourceNotFoundException;
 }

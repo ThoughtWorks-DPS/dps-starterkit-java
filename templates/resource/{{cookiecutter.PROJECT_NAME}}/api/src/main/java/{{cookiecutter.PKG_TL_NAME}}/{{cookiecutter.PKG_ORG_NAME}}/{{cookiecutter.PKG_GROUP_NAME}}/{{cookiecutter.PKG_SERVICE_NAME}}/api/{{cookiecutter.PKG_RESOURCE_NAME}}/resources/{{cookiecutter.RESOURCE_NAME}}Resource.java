@@ -394,7 +394,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
                     mediaType = "application/json",
                     schema = @Schema(implementation = Problem.class)))
       })
-  @GetMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}/{ {{cookiecutter.SUB_RESOURCE_URL}}Id}")
+  @GetMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}/{subResourceId}")
   @ResponseStatus(HttpStatus.OK)
   @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.{{cookiecutter.SUB_RESOURCE_URL}}.findById")
   ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> get{{cookiecutter.SUB_RESOURCE_NAME}}(
@@ -410,8 +410,8 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
               example = "uuid",
               required = true)
           @NotNull
-          @PathVariable(value = "{{cookiecutter.SUB_RESOURCE_URL}}Id")
-          String {{cookiecutter.SUB_RESOURCE_URL}}Id)
+          @PathVariable(value = "subResourceId")
+          String subResourceId)
       throws ResourceNotFoundException;
 
   @Operation(summary = "Get all {{cookiecutter.SUB_RESOURCE_NAME}}s related to a specific {{cookiecutter.RESOURCE_NAME}}")
@@ -504,7 +504,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
                     mediaType = "application/json",
                     schema = @Schema(implementation = Problem.class)))
       })
-  @PutMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}/{ {{cookiecutter.SUB_RESOURCE_URL}}Id}")
+  @PutMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}/{subResourceId}")
   @ResponseStatus(HttpStatus.OK)
   @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.{{cookiecutter.SUB_RESOURCE_URL}}.update")
   ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> update{{cookiecutter.SUB_RESOURCE_NAME}}(
@@ -520,8 +520,8 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
               example = "uuid",
               required = true)
           @NotNull
-          @PathVariable(value = "{{cookiecutter.SUB_RESOURCE_URL}}Id")
-          String {{cookiecutter.SUB_RESOURCE_URL}}Id,
+          @PathVariable(value = "subResourceId")
+          String subResourceId,
       @Parameter(
               description = "metadata for new {{cookiecutter.SUB_RESOURCE_NAME}} resource. Cannot null or empty.",
               required = true,
@@ -571,7 +571,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
                     mediaType = "application/json",
                     schema = @Schema(implementation = Problem.class)))
       })
-  @DeleteMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}/{ {{cookiecutter.SUB_RESOURCE_URL}}Id}")
+  @DeleteMapping("/{id}/{{cookiecutter.SUB_RESOURCE_URL}}/{subResourceId}")
   @ResponseStatus(HttpStatus.OK)
   @Timed(value = "{{cookiecutter.SERVICE_URL}}.{{cookiecutter.RESOURCE_URL}}.{{cookiecutter.SUB_RESOURCE_URL}}.delete")
   ResponseEntity<{{cookiecutter.SUB_RESOURCE_NAME}}Response> delete{{cookiecutter.SUB_RESOURCE_NAME}}(
@@ -587,8 +587,8 @@ public interface {{cookiecutter.RESOURCE_NAME}}Resource {
               example = "uuid",
               required = true)
           @NotNull
-          @PathVariable(value = "{{cookiecutter.SUB_RESOURCE_URL}}Id")
-          String {{cookiecutter.SUB_RESOURCE_URL}}Id)
+          @PathVariable(value = "subResourceId")
+          String subResourceId)
       throws ResourceNotFoundException;
 {%- endif %}
 }
