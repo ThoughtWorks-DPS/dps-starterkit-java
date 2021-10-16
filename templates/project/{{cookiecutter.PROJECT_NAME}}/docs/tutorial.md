@@ -1,4 +1,4 @@
-# dps-starterkit-java
+# {{cookiecutter.PROJECT_TITLE}}
 
 Java API Starter from Template
 
@@ -71,16 +71,15 @@ Or using cookiecutter directly:
 export CC_PROJECT=https://github.com/{{cookiecutter.GITHUB_ORG_NAME}}/dps-starterkit-java # (1)
 # To build from a local version of the starter kit, replace this value with an absolute path
 # e.g. export CC_PROJECT=$PWD/<path>/<to>/dps-starterkit-java
-export PROJECT_NAME=bookbinder
+export PROJECT_TITLE=bookbinder
 cookiecutter "${CC_PROJECT}" \
 --directory templates/project \
-PROJECT_NAME="${PROJECT_NAME}" \
-PACKAGE_NAME="${PROJECT_NAME}" \
+PROJECT_TITLE="${PROJECT_TITLE}" \
 RESOURCE_VAR_NAME=bindingContract \
 projectDir="${CC_PROJECT}" \
 --no-input # (2)
 
-cd "${PROJECT_NAME}"
+cd "${PROJECT_TITLE}"
 
 gradlew clean build check docker
 gradlew :app:dockerComposeDown :app:dcPrune :app:dockerComposeUp # (3)

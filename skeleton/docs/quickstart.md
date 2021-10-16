@@ -1,4 +1,4 @@
-# dps-starterkit-java
+# DPS StarterKit Java
 
 Java API Starter from Template
 

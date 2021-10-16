@@ -2,7 +2,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/FIXME_TOKEN/test_coverage)](https://codeclimate.com/repos/FIXME_TOKEN/test_coverage)
 [![CircleCI](https://circleci.com/gh/ThoughtWorks-DPS/dps-starterkit-java.svg?style=shield&circle-token=FIXME_TOKEN)](https://app.circleci.com/pipelines/github/ThoughtWorks-DPS/dps-starterkit-java?branch=main)
 
-# DPS StarterKit - Java
+# DPS StarterKit Java
 
 - [About](#about)
 - [Getting Started](#getting-started)

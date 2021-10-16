@@ -50,7 +50,7 @@ function get_baseline {
   baseline="${baseline} ${repo}"
   [ -z "${path}" ] || baseline="${baseline} --directory ${path}"
   [ -z "${tag}" ] || baseline="${baseline} --checkout ${tag}"
-  baseline="${baseline} PROJECT_NAME=${projectName}"
+  baseline="${baseline} PROJECT_TITLE=${projectName}"
   baseline="${baseline} SERVICE_NAME=${serviceName}"
 
   echo "${baseline}"

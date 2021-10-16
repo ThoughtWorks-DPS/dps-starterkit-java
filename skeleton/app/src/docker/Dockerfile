@@ -1,4 +1,4 @@
-FROM openjdk:16
+FROM openjdk:17
 ARG JAR_FILE
 ARG ENTRYPOINT_FILE
 COPY ${ENTRYPOINT_FILE} /usr/local/bin/entrypoint.sh
