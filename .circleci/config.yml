@@ -6,7 +6,7 @@ executors:
   build-agent:
     docker:
 #        - image: circleci/openjdk:11-jdk
-        - image: twdps/circleci-executor-java17:alpine-stable
+        - image: twdps/circleci-executor-java17:slim-stable
   deploy-agent:
     docker:
       - image: twdps/di-circleci-infra-image:stable
