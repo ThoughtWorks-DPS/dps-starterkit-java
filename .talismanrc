@@ -5,3 +5,5 @@ fileignoreconfig:
   checksum: 60283e26b2291b03cd5fcd4eb7fa64e5e8b3183429799d3f1e2bdc2a9961449e
 - filename: docs/tutorial.md
   checksum: b7c23848c8a6c5f9be58b968b9fcc55dc870f0e14fc27efe28cb817ee755bf6e
+- filename: .circleci/config.yml
+  checksum: 15b9837ae42c755691aed78d0cdad83a65fe7fb17908173af7665c13eb6a9db4

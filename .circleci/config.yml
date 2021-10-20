@@ -139,7 +139,7 @@ jobs:
           shell: secrethub run -- /bin/sh -e
           command: |
             mkdir ~/.kube
-            SECRETHUB_VAR_ENV=sandbox secrethub inject -i tpl/kubeconfig.tpl -o ~/.kube/config
+            SECRETHUB_VAR_ENV=sandbox secrethub inject -i skeleton/tpl/kubeconfig.tpl -o ~/.kube/config
       - run:
           name: Create registry secrets
           shell: secrethub run -- /bin/sh -e
