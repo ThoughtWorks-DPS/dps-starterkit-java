@@ -1,7 +1,7 @@
 exclude: >
   (?x)^(
-      template/* |
-      helm/templates/*
+      template/.* |
+      helm/templates/.*
   )
 repos:
   - repo: https://github.com/thoughtworks/talisman
