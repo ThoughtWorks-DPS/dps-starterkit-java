@@ -64,6 +64,18 @@ spec:
                   key: {{ .Values.secrets.psql.psql_root_password_key }}
             - name: POSTGRES_DBNAME
               value: {{ .Values.rds.dbName }}
+            - name: FLYWAY_URL
+              value: {{ .Values.rds.url }}
+            - name: FLYWAY_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_username_key }}
+            - name: FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.psql.name }}
+                  key: {{ .Values.secrets.psql.psql_password_key }}
       {{ end }}
       containers:
         - name: {{ .Chart.Name }}

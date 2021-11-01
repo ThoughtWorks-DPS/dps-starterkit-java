@@ -7,3 +7,19 @@ fileignoreconfig:
   checksum: b7c23848c8a6c5f9be58b968b9fcc55dc870f0e14fc27efe28cb817ee755bf6e
 - filename: .circleci/config.yml
   checksum: 15b9837ae42c755691aed78d0cdad83a65fe7fb17908173af7665c13eb6a9db4
+- filename: templates/project/{{cookiecutter.PROJECT_NAME}}/app/src/docker/docker-compose.yml
+  checksum: 894b5d7773abf065cacbbae4d7cc8ca5d9a636c91452b7722f944394cbaee329
+- filename: skeleton/db-init/src/docker/docker-compose.yml
+  checksum: f0e283cb28deec49852afe83004bf47167d583e2696f550410083daa6f8525f2
+- filename: skeleton/app/src/docker/docker-compose.yml
+  checksum: dc49e141af3e9c57da740a04f31c98a70d01ba9ce0f30c4be124104a4d931d5c
+- filename: skeleton/helmchart/templates/deployment.yaml
+  checksum: d2bf41b3348d5ac7bbfaca046aafc77a531109c2eca06f3548daad7de843782d
+- filename: templates/project/{{cookiecutter.PROJECT_NAME}}/db-init/src/docker/docker-compose.yml
+  checksum: a257f491e14a8745942ed4848de60b8a1a3e8ac45926f1e0603a3f150fc95410
+- filename: templates/project/{{cookiecutter.PROJECT_NAME}}/helmchart/templates/deployment.yaml
+  checksum: cdd8961e716c510d4a2a89c3aeab5784839d1f0bcf55b73995fa35aa1fceb072
+- filename: skeleton/app/src/main/resources/application-aws.yml
+  checksum: da38824a5d5a03c2423c2d0e33a0e78d2e3b5541bed5d90677663819ec464981
+- filename: templates/project/{{cookiecutter.PROJECT_NAME}}/app/src/main/resources/application-aws.yml
+  checksum: 7678a1a8f00dc97b80e5939688f0e60ae2c55b35da597511ed1fad1415373aec

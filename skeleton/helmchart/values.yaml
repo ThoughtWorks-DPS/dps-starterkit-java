@@ -1,8 +1,10 @@
 name: dps-starterkit-java
 owner: Example
-environment:
+environment: twdps-dev
 namespace: example-local
 cluster: sandbox
+instance: awsinstance
+region: awsregion
 version: 0.1
 replicaCount: 1
 #TUNE as required for application
@@ -18,7 +20,7 @@ styraLabels:
   styra.io/opa-injection: disabled
   styra.io/system: dps-starterkit-java
 
-initContainerName: twdps/dps-psql-init:latest
+initContainerName: twdps/dps-starterkit-java-db-init:latest
 
 image:
   repository: twdps/dps-starterkit-java
@@ -52,7 +54,9 @@ ingress:
 rds:
   migration: false
   initContainer: false
-  dbName: skdb
+  dbName: example
+  port: 5432
+  url: jdbc:postgresql://{{ .Values.instance }}.{{ .Values.region }}.rds.amazonaws.com:{{ .Values.rds.port }}/{{ .Values.rds.dbName }}
 
 ports:
   - name: http

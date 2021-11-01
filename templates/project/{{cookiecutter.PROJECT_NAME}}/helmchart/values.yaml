@@ -1,8 +1,10 @@
 name: {{cookiecutter.PACKAGE_NAME}}
 owner: {{cookiecutter.SERVICE_NAME}}
-environment:
+environment: twdps-dev
 namespace: {{cookiecutter.PKG_SERVICE_NAME}}-local
 cluster: sandbox
+instance: awsinstance
+region: awsregion
 version: 0.1
 replicaCount: 1
 #TUNE as required for application
@@ -18,7 +20,7 @@ styraLabels:
   styra.io/opa-injection: disabled
   styra.io/system: {{cookiecutter.PACKAGE_NAME}}
 
-initContainerName: twdps/dps-psql-init:latest
+initContainerName: twdps/dps-starterkit-java-db-init:latest
 
 image:
   repository: {{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PROJECT_NAME}}
@@ -52,7 +54,9 @@ ingress:
 rds:
   migration: false
   initContainer: false
-  dbName: skdb
+  dbName: example
+  port: 5432
+  url: jdbc:postgresql://{% raw %}{{ .Values.instance }}.{{ .Values.region }}.rds.amazonaws.com:{{ .Values.rds.port }}/{{ .Values.rds.dbName }}{% endraw %}
 
 ports:
   - name: http

@@ -29,7 +29,9 @@ services:
     image: twdps/dps-starterkit-java-flyway:latest
 # NOTE: These are the defaults from the flyway.conf   uncomment to override, esp for secrethub passwords
 #    environment:
-#      FLYWAY_URL: jdbc:postgresql://postgres1:5432/{{cookiecutter.PKG_SERVICE_NAME}}?user={{cookiecutter.PKG_SERVICE_NAME}}_flyway&password=not-the-password
+#      FLYWAY_URL: jdbc:postgresql://postgres1:5432/{{cookiecutter.PKG_SERVICE_NAME}}
+#      FLYWAY_USER: {{cookiecutter.PKG_SERVICE_NAME}}_flyway
+#      FLYWAY_PASSWORD: not-the-password
 #      FLYWAY_PLACEHOLDERS_USERNAME: {{cookiecutter.PKG_SERVICE_NAME}}_user
 #      FLYWAY_PLACEHOLDERS_SERVICENAME: {{cookiecutter.PKG_SERVICE_NAME}}_service
 #      FLYWAY_PLACEHOLDERS_ADMINNAME: {{cookiecutter.PKG_SERVICE_NAME}}_admin
