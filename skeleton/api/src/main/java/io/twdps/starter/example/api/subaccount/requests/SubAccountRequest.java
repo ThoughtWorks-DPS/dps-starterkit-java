@@ -2,7 +2,7 @@ package io.twdps.starter.example.api.subaccount.requests;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.NonNull;
 
 @Builder
 @Getter
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema(name = "SubAccountRequest", description = "Metadata describing an SubAccount resource")
 public class SubAccountRequest {
 

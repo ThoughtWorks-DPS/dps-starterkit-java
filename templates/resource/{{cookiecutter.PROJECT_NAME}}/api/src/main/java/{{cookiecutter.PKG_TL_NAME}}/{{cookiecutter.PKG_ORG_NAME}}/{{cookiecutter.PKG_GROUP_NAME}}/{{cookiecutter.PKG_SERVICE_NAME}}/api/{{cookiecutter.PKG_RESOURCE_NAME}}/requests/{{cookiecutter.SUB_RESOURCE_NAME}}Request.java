@@ -2,7 +2,7 @@ package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutte
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.NonNull;
 
 @Builder
 @Getter
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema(name = "{{cookiecutter.SUB_RESOURCE_NAME}}Request", description = "Metadata describing an {{cookiecutter.SUB_RESOURCE_NAME}} resource")
 public class {{cookiecutter.SUB_RESOURCE_NAME}}Request {
 
