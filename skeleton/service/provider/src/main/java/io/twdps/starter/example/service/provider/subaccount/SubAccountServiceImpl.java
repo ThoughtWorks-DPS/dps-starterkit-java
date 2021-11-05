@@ -77,6 +77,12 @@ public class SubAccountServiceImpl implements SubAccountService {
   }
 
   @Override
+  public Page<SubAccount> findAllByAccountId(String id, Pageable pageable) {
+    Page<SubAccount> resource = mapper.toModelPage(repository.findAllByAccountId(id, pageable));
+    return resource;
+  }
+
+  @Override
   // CSOFF: LineLength
   public Optional<SubAccount> updateById(String id, SubAccount record)
       // CSON: LineLength

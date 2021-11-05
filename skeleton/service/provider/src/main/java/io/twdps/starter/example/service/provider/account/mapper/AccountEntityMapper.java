@@ -64,4 +64,22 @@ public interface AccountEntityMapper {
   @Mapping(target = "pii", ignore = true)
   @Mapping(target = "accountId", ignore = true)
   SubAccountEntity updateSubAccountMetadata(SubAccount src, @MappingTarget SubAccountEntity dst);
+
+  @Mapping(target = "accountId", source = "accountId")
+  @Mapping(target = "pii", constant = "FIXME")
+  io.twdps.starter.example.service.spi.subaccount.model.SubAccount toServiceSubAccount(
+      SubAccount src, String accountId);
+
+  SubAccount fromServiceSubAccount(
+      io.twdps.starter.example.service.spi.subaccount.model.SubAccount src);
+
+  default Optional<SubAccount> fromServiceSubAccount(
+      Optional<io.twdps.starter.example.service.spi.subaccount.model.SubAccount> src) {
+    return Optional.ofNullable(fromServiceSubAccount(src.orElse(null)));
+  }
+
+  default Page<SubAccount> fromServiceSubAccountPage(
+      Page<io.twdps.starter.example.service.spi.subaccount.model.SubAccount> src) {
+    return src.map(this::fromServiceSubAccount);
+  }
 }

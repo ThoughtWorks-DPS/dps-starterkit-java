@@ -17,6 +17,7 @@ import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.SUB_RESOURCE_NAME}}Entity;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.SUB_RESOURCE_NAME}}EntityRepository;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}};
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.{{cookiecutter.SUB_RESOURCE_NAME}}Service;
 {%- endif %}
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -44,7 +45,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   @Mock private {{cookiecutter.RESOURCE_NAME}}EntityRepository repository;
   @Mock private {{cookiecutter.RESOURCE_NAME}}EntityMapper mapper;
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-  @Mock private {{cookiecutter.SUB_RESOURCE_NAME}}EntityRepository subResourceRepository;
+  @Mock private {{cookiecutter.SUB_RESOURCE_NAME}}Service subResourceService;
 {%- endif %}
 
   private {{cookiecutter.RESOURCE_NAME}}TestData resourceTestDataLoader = new {{cookiecutter.RESOURCE_NAME}}TestData();
@@ -83,22 +84,29 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
 
   {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
 
+  private io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} serviceSubResource;
+  private io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} serviceSubOutput;
+  private Optional<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+      optionalServiceSubResource;
+  private List<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+      serviceSubOutputList;
+  private List<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+      emptyServiceSubOutputList = Arrays.asList();
+  private Page<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+      serviceSubOutputPage;
+  private Page<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+      emptyServiceSubOutputPage;
+  private Optional<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+      optionalServiceSubOutput;
+  private Optional<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+      emptyServiceSubOutput = Optional.empty();
   private {{cookiecutter.SUB_RESOURCE_NAME}} subResource;
   private {{cookiecutter.SUB_RESOURCE_NAME}} subOutput;
-  private {{cookiecutter.SUB_RESOURCE_NAME}}Entity subEntity;
-  private {{cookiecutter.SUB_RESOURCE_NAME}}Entity subAdded;
-  private Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> empty{{cookiecutter.SUB_RESOURCE_NAME}} = Optional.empty();
-  private Optional<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> emptySubEntity = Optional.empty();
-  private Optional<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> optionalSubEntity;
-  private Optional<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> optionalSubAdded;
+  private Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> emptySubResource = Optional.empty();
   private Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> optionalSubOutput;
-  private List<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> subEntityList;
   private List<{{cookiecutter.SUB_RESOURCE_NAME}}> subOutputList;
-  private List<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> emptySubEntityList = Arrays.asList();
   private List<{{cookiecutter.SUB_RESOURCE_NAME}}> emptySubOutputList = Arrays.asList();
-  private Page<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> subEntityPage;
   private Page<{{cookiecutter.SUB_RESOURCE_NAME}}> subOutputPage;
-  private Page<{{cookiecutter.SUB_RESOURCE_NAME}}Entity> emptySubEntityPage;
   private Page<{{cookiecutter.SUB_RESOURCE_NAME}}> emptySubOutputPage;
 {%- endif %}
 
@@ -107,7 +115,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void setup() {
 
     manager = new {{cookiecutter.RESOURCE_NAME}}ServiceImpl(repository, mapper
-{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}, subResourceRepository{%- endif -%}
+{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}, subResourceService{%- endif -%}
     );
 
     reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
@@ -158,24 +166,34 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
             .firstName(subReference.getFirstName())
             .lastName(subReference.getLastName())
             .build();
-    subEntity = real.to{{cookiecutter.SUB_RESOURCE_NAME}}Entity(subResource);
-    subAdded =
-        new {{cookiecutter.SUB_RESOURCE_NAME}}Entity(
-            subReference.getId(),
-            subEntity.getUserName(),
-            subEntity.getPii(),
-            subEntity.getFirstName(),
-            subEntity.getLastName(),
-            reference.getId());
-    subOutput = real.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(subAdded);
-    optionalSubEntity = Optional.of(subEntity);
-    optionalSubAdded = Optional.of(subAdded);
+    serviceSubResource =
+        io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}.builder()
+            .userName(subReference.getUserName())
+            .firstName(subReference.getFirstName())
+            .lastName(subReference.getLastName())
+            .pii(subReference.getPii())
+            .build();
+    serviceSubOutput =
+        io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}.builder()
+            .id(subReference.getId())
+            .userName(subReference.getUserName())
+            .firstName(subReference.getFirstName())
+            .lastName(subReference.getLastName())
+            .pii(subReference.getPii())
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+            .{{cookiecutter.PARENT_RESOURCE_VAR_NAME}}(reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id())
+{%- endif %}
+            .accountId(reference.getId())
+            .build();
+    optionalServiceSubResource = Optional.of(serviceSubResource);
+    optionalServiceSubOutput = Optional.of(serviceSubOutput);
+    serviceSubOutputList = Arrays.asList(serviceSubOutput, serviceSubOutput);
+    serviceSubOutputPage = new PageImpl<>(serviceSubOutputList);
+    emptyServiceSubOutputPage = new PageImpl<>(emptyServiceSubOutputList);
+    subOutput = real.fromService{{cookiecutter.SUB_RESOURCE_NAME}}(serviceSubOutput);
     optionalSubOutput = Optional.of(subOutput);
-    subEntityList = Arrays.asList(subAdded, subAdded);
     subOutputList = Arrays.asList(subOutput, subOutput);
-    subEntityPage = new PageImpl<>(subEntityList);
     subOutputPage = new PageImpl<>(subOutputList);
-    emptySubEntityPage = new PageImpl<>(emptySubEntityList);
     emptySubOutputPage = new PageImpl<>(emptySubOutputList);
 {%- endif %}
   }
@@ -204,24 +222,27 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
 
   private void create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs() {
-    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Entity(subResource)).thenReturn(subEntity);
-    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(subAdded)).thenReturn(subOutput);
+    Mockito.when(mapper.toService{{cookiecutter.SUB_RESOURCE_NAME}}(subResource, reference.getId())).thenReturn(serviceSubResource);
+  }
+
+  private void createReverse{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs() {
+    Mockito.when(mapper.fromService{{cookiecutter.SUB_RESOURCE_NAME}}(serviceSubOutput)).thenReturn(subOutput);
   }
 
   private void createOptional{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs() {
-    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(optionalSubAdded)).thenReturn(optionalSubOutput);
+    Mockito.when(mapper.fromService{{cookiecutter.SUB_RESOURCE_NAME}}(optionalServiceSubOutput)).thenReturn(optionalSubOutput);
   }
 
   private void createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs() {
-    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(emptySubEntity)).thenReturn(empty{{cookiecutter.SUB_RESOURCE_NAME}});
+    Mockito.when(mapper.fromService{{cookiecutter.SUB_RESOURCE_NAME}}(emptyServiceSubOutput)).thenReturn(emptySubResource);
   }
 
   private void create{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs() {
-    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ModelPage(subEntityPage)).thenReturn(subOutputPage);
+    Mockito.when(mapper.fromService{{cookiecutter.SUB_RESOURCE_NAME}}Page(serviceSubOutputPage)).thenReturn(subOutputPage);
   }
 
   private void createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs() {
-    Mockito.when(mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ModelPage(emptySubEntityPage)).thenReturn(emptySubOutputPage);
+    Mockito.when(mapper.fromService{{cookiecutter.SUB_RESOURCE_NAME}}Page(emptyServiceSubOutputPage)).thenReturn(emptySubOutputPage);
   }
 {%- endif %}
 
@@ -398,7 +419,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void findBy{{cookiecutter.SUB_RESOURCE_NAME}}IdFailTest() {
 
     createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
-    Mockito.when(subResourceRepository.findById(Mockito.any())).thenReturn(emptySubEntity);
+    Mockito.when(subResourceService.findById(Mockito.any())).thenReturn(emptyServiceSubOutput);
 
     Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> result = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), bogus.getId());
     Assertions.assertThat(!result.isPresent()).isTrue();
@@ -408,12 +429,12 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void add{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
-    Mockito.when(subResourceRepository.save(subEntity)).thenReturn(subAdded);
+    createReverse{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
+    Mockito.when(subResourceService.add(serviceSubResource)).thenReturn(serviceSubOutput);
 
     {{cookiecutter.SUB_RESOURCE_NAME}} response = manager.add{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subResource);
 
     Assertions.assertThat(response.getFirstName()).isEqualTo(subResource.getFirstName());
-    Assertions.assertThat(response.getId()).isEqualTo(subAdded.getId());
     Assertions.assertThat(response.getId()).isEqualTo(subReference.getId());
   }
 
@@ -421,20 +442,20 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void find{{cookiecutter.SUB_RESOURCE_NAME}}ByIdTest() {
 
     createOptional{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
-    Mockito.when(subResourceRepository.findById(subReference.getId())).thenReturn(optionalSubAdded);
+    Mockito.when(subResourceService.findById(subReference.getId())).thenReturn(optionalServiceSubOutput);
 
     Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subReference.getId());
 
     Assertions.assertThat(response.isPresent()).isTrue();
-    Assertions.assertThat(response.get().getFirstName()).isEqualTo(subAdded.getFirstName());
-    Assertions.assertThat(response.get().getId()).isEqualTo(subAdded.getId());
+    Assertions.assertThat(response.get().getFirstName()).isEqualTo(subOutput.getFirstName());
+    Assertions.assertThat(response.get().getId()).isEqualTo(subOutput.getId());
   }
 
   @Test
   public void find{{cookiecutter.SUB_RESOURCE_NAME}}ByIdFailedTest() {
 
     createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
-    Mockito.when(subResourceRepository.findById(bogus.getId())).thenReturn(emptySubEntity);
+    Mockito.when(subResourceService.findById(bogus.getId())).thenReturn(emptyServiceSubOutput);
 
     Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), bogus.getId());
 
@@ -445,8 +466,8 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void findAll{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
 
     create{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs();
-    Mockito.when(subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(reference.getId(), pageable))
-        .thenReturn(subEntityPage);
+    Mockito.when(subResourceService.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(reference.getId(), pageable))
+        .thenReturn(serviceSubOutputPage);
 
     Page<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(reference.getId(), pageable);
 
@@ -457,8 +478,8 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void findAll{{cookiecutter.SUB_RESOURCE_NAME}}EmptyTest() {
 
     createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}ListMapperStubs();
-    Mockito.when(subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(reference.getId(), pageable))
-        .thenReturn(emptySubEntityPage);
+    Mockito.when(subResourceService.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(reference.getId(), pageable))
+        .thenReturn(emptyServiceSubOutputPage);
 
     Page<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.get{{cookiecutter.SUB_RESOURCE_NAME}}s(reference.getId(), pageable);
 
@@ -468,10 +489,9 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   @Test
   public void update{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
 
+    create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
     createOptional{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
-    Mockito.when(mapper.update{{cookiecutter.SUB_RESOURCE_NAME}}Metadata(subResource, subAdded)).thenReturn(subAdded);
-    Mockito.when(subResourceRepository.findById(subReference.getId())).thenReturn(optionalSubAdded);
-    Mockito.when(subResourceRepository.save(subAdded)).thenReturn(subAdded);
+    Mockito.when(subResourceService.updateById(subReference.getId(), serviceSubResource)).thenReturn(optionalServiceSubOutput);
 
     Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
         manager.update{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subReference.getId(), subResource);
@@ -484,8 +504,10 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   @Test
   public void update{{cookiecutter.SUB_RESOURCE_NAME}}FailedTest() {
 
+    create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
     createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
-    Mockito.when(subResourceRepository.findById(subReference.getId())).thenReturn(emptySubEntity);
+    Mockito.when(subResourceService.updateById(subReference.getId(), serviceSubResource))
+        .thenReturn(emptyServiceSubOutput);
 
     Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response =
         manager.update{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subReference.getId(), subResource);
@@ -497,20 +519,20 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
   public void delete{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
 
     createOptional{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
-    Mockito.when(subResourceRepository.findById(subReference.getId())).thenReturn(optionalSubAdded);
+    Mockito.when(subResourceService.deleteById(subReference.getId())).thenReturn(optionalServiceSubOutput);
 
     Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), subReference.getId());
 
     Assertions.assertThat(response.isPresent()).isTrue();
-    Assertions.assertThat(response.get().getFirstName()).isEqualTo(subAdded.getFirstName());
-    Assertions.assertThat(response.get().getId()).isEqualTo(subAdded.getId());
+    Assertions.assertThat(response.get().getFirstName()).isEqualTo(subOutput.getFirstName());
+    Assertions.assertThat(response.get().getId()).isEqualTo(subOutput.getId());
   }
 
   @Test
   public void delete{{cookiecutter.SUB_RESOURCE_NAME}}FailedTest() {
 
     createEmpty{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs();
-    Mockito.when(subResourceRepository.findById(bogus.getId())).thenReturn(emptySubEntity);
+    Mockito.when(subResourceService.deleteById(bogus.getId())).thenReturn(emptyServiceSubOutput);
 
     Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> response = manager.delete{{cookiecutter.SUB_RESOURCE_NAME}}(reference.getId(), bogus.getId());
 

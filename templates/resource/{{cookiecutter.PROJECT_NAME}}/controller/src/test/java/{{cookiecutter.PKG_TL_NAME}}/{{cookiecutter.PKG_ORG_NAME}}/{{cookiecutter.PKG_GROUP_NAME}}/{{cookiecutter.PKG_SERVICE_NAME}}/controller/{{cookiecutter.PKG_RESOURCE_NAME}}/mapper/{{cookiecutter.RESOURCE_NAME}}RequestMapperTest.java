@@ -204,7 +204,10 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
         reference.getUserName(),
         reference.getPii(),
         reference.getFirstName(),
-        reference.getLastName());
+        reference.getLastName()
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+        reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
+{%- endif %});
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
@@ -232,7 +235,10 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
     return new {{cookiecutter.RESOURCE_NAME}}Request(reference.getUserName(),
         reference.getPii(),
         reference.getFirstName(),
-        reference.getLastName());
+        reference.getLastName()
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+        reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
+{%- endif %});
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
@@ -255,11 +261,14 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @param resource the object to validate
    */
   protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(reference.getUserName()));
-    assertThat(resource.getPii().equals(reference.getPii()));
-    assertThat(resource.getFirstName().equals(reference.getFirstName()));
-    assertThat(resource.getLastName().equals(reference.getLastName()));
+    assertThat(resource.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(resource.getPii()).isEqualTo(reference.getPii());
+    assertThat(resource.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(resource.getLastName()).isEqualTo(reference.getLastName());
     assertThat(resource.getId()).isNotEqualTo(reference.getId());
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+    assertThat(resource.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isEqualTo(reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id());
+{%- endif %}
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
@@ -270,9 +279,9 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @param resource the object to validate
    */
   protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}({{cookiecutter.SUB_RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(subReference.getUserName()));
-    assertThat(resource.getFirstName().equals(subReference.getFirstName()));
-    assertThat(resource.getLastName().equals(subReference.getLastName()));
+    assertThat(resource.getUserName()).isEqualTo(subReference.getUserName());
+    assertThat(resource.getFirstName()).isEqualTo(subReference.getFirstName());
+    assertThat(resource.getLastName()).isEqualTo(subReference.getLastName());
     assertThat(resource.getId()).isNotEqualTo(subReference.getId());
   }
 {%- endif %}
@@ -283,10 +292,13 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * @param response the object to validate
    */
   private void verify{{cookiecutter.RESOURCE_NAME}}Response({{cookiecutter.RESOURCE_NAME}}Response response) {
-    assertThat(response.getUserName().equals(reference.getUserName()));
-    assertThat(response.getPii().equals(reference.getPii()));
-    assertThat(response.getFullName().equals(reference.getFullName()));
+    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(response.getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getFullName()).isEqualTo(reference.getFullName());
     assertThat(response.getId()).isEqualTo(reference.getId());
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+    assertThat(response.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isEqualTo(reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id());
+{%- endif %}
   }
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}

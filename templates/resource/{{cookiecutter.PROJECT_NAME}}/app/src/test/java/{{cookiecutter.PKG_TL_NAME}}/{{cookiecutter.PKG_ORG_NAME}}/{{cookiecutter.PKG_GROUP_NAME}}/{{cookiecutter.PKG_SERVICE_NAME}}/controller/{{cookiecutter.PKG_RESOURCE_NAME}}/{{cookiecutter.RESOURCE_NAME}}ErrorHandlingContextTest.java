@@ -93,7 +93,10 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
            reference.getUserName(),
            reference.getPii(),
            reference.getFirstName(),
-           reference.getLastName());
+           reference.getLastName()
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+          reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
+{%- endif %});
     model =
        new {{cookiecutter.RESOURCE_NAME}}(
            reference.getUserName(),

@@ -19,6 +19,7 @@ public class SubAccountTestData extends GenericDataLoader<SubAccountData> {
                 .fullName("Agent Smith")
                 .pii("eigenvalue")
                 .id("uuid-unit-vector")
+                .accountId("uuid-123456789-abcdef")
                 .build());
     getData()
         .put(
@@ -30,6 +31,7 @@ public class SubAccountTestData extends GenericDataLoader<SubAccountData> {
                 .fullName("Ted Logan")
                 .pii("wyldstallyns")
                 .id("Reeves")
+                .accountId("uuid-123456789-abcdef")
                 .build());
     getCollections()
         .put(
@@ -42,6 +44,7 @@ public class SubAccountTestData extends GenericDataLoader<SubAccountData> {
                     .fullName("Agent Smith")
                     .pii("eigenvalue")
                     .id("uuid-unit-vector")
+                    .accountId("uuid-123456789-abcdef")
                     .build(),
                 SubAccountData.builder()
                     .firstName("Neo")
@@ -50,6 +53,7 @@ public class SubAccountTestData extends GenericDataLoader<SubAccountData> {
                     .fullName("Neo None")
                     .pii("sunglasses")
                     .id("Reeves")
+                    .accountId("uuid-123456789-abcdef")
                     .build()));
   }
 }

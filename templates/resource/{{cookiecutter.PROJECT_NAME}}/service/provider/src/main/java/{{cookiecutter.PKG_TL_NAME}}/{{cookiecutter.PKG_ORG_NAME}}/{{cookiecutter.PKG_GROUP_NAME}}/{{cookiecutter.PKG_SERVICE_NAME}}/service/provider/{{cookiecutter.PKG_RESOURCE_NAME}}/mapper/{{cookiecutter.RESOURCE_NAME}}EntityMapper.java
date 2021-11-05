@@ -18,9 +18,7 @@ import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public interface {{cookiecutter.RESOURCE_NAME}}EntityMapper {
-{% if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
-  @Mapping(target = "{{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id", ignore = true)
-{%- endif %}
+
   {{cookiecutter.RESOURCE_NAME}}Entity toEntity({{cookiecutter.RESOURCE_NAME}} src);
 
   default Optional<{{cookiecutter.RESOURCE_NAME}}Entity> toEntity(Optional<{{cookiecutter.RESOURCE_NAME}}> src) {
@@ -75,5 +73,25 @@ public interface {{cookiecutter.RESOURCE_NAME}}EntityMapper {
   @Mapping(target = "pii", ignore = true)
   @Mapping(target = "{{cookiecutter.RESOURCE_VAR_NAME}}Id", ignore = true)
   {{cookiecutter.SUB_RESOURCE_NAME}}Entity update{{cookiecutter.SUB_RESOURCE_NAME}}Metadata({{cookiecutter.SUB_RESOURCE_NAME}} src, @MappingTarget {{cookiecutter.SUB_RESOURCE_NAME}}Entity dst);
+
+  @Mapping(target = "{{cookiecutter.RESOURCE_VAR_NAME}}Id", source = "{{cookiecutter.RESOURCE_VAR_NAME}}Id")
+  @Mapping(target = "pii", constant = "FIXME")
+  io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} toService{{cookiecutter.SUB_RESOURCE_NAME}}(
+      {{cookiecutter.SUB_RESOURCE_NAME}} src, String {{cookiecutter.RESOURCE_VAR_NAME}}Id);
+
+  {{cookiecutter.SUB_RESOURCE_NAME}} fromService{{cookiecutter.SUB_RESOURCE_NAME}}(
+      io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} src);
+
+  default Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> fromService{{cookiecutter.SUB_RESOURCE_NAME}}(
+     Optional<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}> src) {
+   return Optional.ofNullable(fromService{{cookiecutter.SUB_RESOURCE_NAME}}(src.orElse(null)));
+  }
+
+  default Page<{{cookiecutter.SUB_RESOURCE_NAME}}> fromService{{cookiecutter.SUB_RESOURCE_NAME}}Page(
+     Page<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}> src) {
+   return src.map(this::fromService{{cookiecutter.SUB_RESOURCE_NAME}});
+  }
+
+
 {%- endif %}
 }

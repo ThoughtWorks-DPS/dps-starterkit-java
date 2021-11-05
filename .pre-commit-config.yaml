@@ -1,6 +1,6 @@
 exclude: >
   (?x)^(
-      template/.* |
+      templates/.* |
       helm/templates/.*
   )
 repos:
@@ -25,7 +25,7 @@ repos:
         stages: *commit-stage
         exclude: |
           (?x)^(
-            templates/project/{{cookiecutter.PROJECT_NAME}}/.circleci/config.yml|
+            templates/.*|
             skeleton/helmchart/templates/deployment.yaml
           )$
       - id: check-xml

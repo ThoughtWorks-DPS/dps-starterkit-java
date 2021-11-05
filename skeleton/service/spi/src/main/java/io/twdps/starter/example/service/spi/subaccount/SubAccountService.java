@@ -19,6 +19,8 @@ public interface SubAccountService {
 
   Page<SubAccount> findAll(Pageable pageable);
 
+  Page<SubAccount> findAllByAccountId(String id, Pageable pageable);
+
   Optional<SubAccount> updateById(String id, SubAccount record) throws RequestValidationException;
 
   Optional<SubAccount> deleteById(String id);

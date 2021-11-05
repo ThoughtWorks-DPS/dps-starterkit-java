@@ -23,7 +23,6 @@ import java.util.Optional;
 public class SubAccountEntityMapperTest {
 
   private SubAccountEntityMapper mapper;
-  private final String parentIdentifier = "abcde";
 
   private SubAccountTestData resourceTestDataLoader = new SubAccountTestData();
   private SubAccountDataFactory resourceTestData =
@@ -45,7 +44,7 @@ public class SubAccountEntityMapperTest {
 
     SubAccountEntity response = mapper.toEntity(resource);
 
-    verifySubAccountEntity(response, false, false);
+    verifySubAccountEntity(response, false, true);
   }
 
   @Test
@@ -54,7 +53,7 @@ public class SubAccountEntityMapperTest {
 
     SubAccountEntity response = mapper.toEntity(resource);
 
-    verifySubAccountEntity(response, true, false);
+    verifySubAccountEntity(response, true, true);
   }
 
   @Test
@@ -83,7 +82,7 @@ public class SubAccountEntityMapperTest {
     Optional<SubAccountEntity> response = mapper.toEntity(resource);
 
     assertThat(response.isPresent());
-    verifySubAccountEntity(response.get(), false, false);
+    verifySubAccountEntity(response.get(), false, true);
   }
 
   @Test
@@ -150,7 +149,8 @@ public class SubAccountEntityMapperTest {
         reference.getUserName(),
         reference.getPii(),
         reference.getFirstName(),
-        reference.getLastName());
+        reference.getLastName(),
+        reference.getAccountId());
   }
 
   /**
@@ -165,7 +165,7 @@ public class SubAccountEntityMapperTest {
         reference.getPii(),
         reference.getFirstName(),
         reference.getLastName(),
-        parentIdentifier);
+        reference.getAccountId());
   }
 
   /**
@@ -179,6 +179,7 @@ public class SubAccountEntityMapperTest {
     assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(response.getLastName()).isEqualTo(reference.getLastName());
     assertThat(response.getId()).isEqualTo(reference.getId());
+    assertThat(response.getAccountId()).isEqualTo(reference.getAccountId());
   }
 
   /**
@@ -204,9 +205,9 @@ public class SubAccountEntityMapperTest {
     assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(response.getLastName()).isEqualTo(reference.getLastName());
     if (hasParentId) {
-      assertThat(response.getAccountId()).isEqualTo(parentIdentifier);
+      assertThat(response.getAccountId()).isEqualTo(reference.getAccountId());
     } else {
-      assertThat(response.getAccountId()).isNotEqualTo(parentIdentifier);
+      assertThat(response.getAccountId()).isNotEqualTo(reference.getAccountId());
     }
     if (hasId) {
       assertThat(response.getId()).isEqualTo(reference.getId());

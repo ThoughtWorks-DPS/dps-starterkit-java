@@ -4,16 +4,12 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class {{cookiecutter.RESOURCE_NAME}}Data {
@@ -24,4 +20,7 @@ public class {{cookiecutter.RESOURCE_NAME}}Data {
   private String firstName;
   private String lastName;
   private String fullName;
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+  private String {{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id;
+{%- endif %}
 }

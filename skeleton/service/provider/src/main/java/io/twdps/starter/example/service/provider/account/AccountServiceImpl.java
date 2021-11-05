@@ -2,12 +2,11 @@ package io.twdps.starter.example.service.provider.account;
 
 import io.twdps.starter.boot.exception.RequestValidationException;
 import io.twdps.starter.example.persistence.model.AccountEntityRepository;
-import io.twdps.starter.example.persistence.model.SubAccountEntity;
-import io.twdps.starter.example.persistence.model.SubAccountEntityRepository;
 import io.twdps.starter.example.service.provider.account.mapper.AccountEntityMapper;
 import io.twdps.starter.example.service.spi.account.AccountService;
 import io.twdps.starter.example.service.spi.account.model.Account;
 import io.twdps.starter.example.service.spi.account.model.SubAccount;
+import io.twdps.starter.example.service.spi.subaccount.SubAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,15 +20,15 @@ public class AccountServiceImpl implements AccountService {
 
   private AccountEntityRepository repository;
   private AccountEntityMapper mapper;
-  private SubAccountEntityRepository subResourceRepository;
+  private SubAccountService subResourceService;
 
   AccountServiceImpl(
       AccountEntityRepository repository,
       AccountEntityMapper mapper,
-      SubAccountEntityRepository subResourceRepository) {
+      SubAccountService subResourceService) {
     this.repository = repository;
     this.mapper = mapper;
-    this.subResourceRepository = subResourceRepository;
+    this.subResourceService = subResourceService;
   }
 
   /**
@@ -117,10 +116,10 @@ public class AccountServiceImpl implements AccountService {
   public SubAccount addSubAccount(String id, SubAccount subResource)
       // CSON: LineLength
       throws RequestValidationException {
-    SubAccountEntity entity = mapper.toSubAccountEntity(subResource);
-    entity.setAccountId(id);
-    SubAccount saved = mapper.toSubAccountModel(subResourceRepository.save(entity));
-    return saved;
+    SubAccount result =
+        mapper.fromServiceSubAccount(
+            subResourceService.add(mapper.toServiceSubAccount(subResource, id)));
+    return result;
   }
 
   /**
@@ -134,9 +133,14 @@ public class AccountServiceImpl implements AccountService {
   // CSOFF: LineLength
   public Optional<SubAccount> getSubAccount(String id, String subResourceId) {
     // CSON: LineLength
-    Optional<SubAccount> resource =
-        mapper.toSubAccountModel(subResourceRepository.findById(subResourceId));
-    return resource;
+    Optional<SubAccount> result =
+        mapper.fromServiceSubAccount(
+            subResourceService
+                .findById(subResourceId)
+                // TODO: In lieu of JPA Specifications, we filter the result based on matching
+                // parent resource
+                .filter((r) -> ((null != r.getAccountId()) && r.getAccountId().equals(id))));
+    return result;
   }
 
   /**
@@ -150,7 +154,7 @@ public class AccountServiceImpl implements AccountService {
   public Page<SubAccount> getSubAccounts(String id, Pageable pageable) {
     // CSON: LineLength
     Page<SubAccount> resources =
-        mapper.toSubAccountModelPage(subResourceRepository.findAllByAccountId(id, pageable));
+        mapper.fromServiceSubAccountPage(subResourceService.findAllByAccountId(id, pageable));
     return resources;
   }
 
@@ -168,11 +172,8 @@ public class AccountServiceImpl implements AccountService {
       // CSON: LineLength
       throws RequestValidationException {
     Optional<SubAccount> resource =
-        mapper.toSubAccountModel(
-            subResourceRepository
-                .findById(subResourceId)
-                .map((obj) -> mapper.updateSubAccountMetadata(record, obj))
-                .map((obj) -> subResourceRepository.save(obj)));
+        mapper.fromServiceSubAccount(
+            subResourceService.updateById(subResourceId, mapper.toServiceSubAccount(record, id)));
 
     return resource;
   }
@@ -188,8 +189,8 @@ public class AccountServiceImpl implements AccountService {
   // CSOFF: LineLength
   public Optional<SubAccount> deleteSubAccount(String id, String subResourceId) {
     // CSON: LineLength
-    Optional<SubAccount> result = getSubAccount(id, subResourceId);
-    subResourceRepository.deleteById(subResourceId);
+    Optional<SubAccount> result =
+        mapper.fromServiceSubAccount(subResourceService.deleteById(subResourceId));
     return result;
   }
 }

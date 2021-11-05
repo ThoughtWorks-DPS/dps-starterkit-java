@@ -89,7 +89,8 @@ public class SubAccountControllerTest {
             reference.getUserName(),
             reference.getPii(),
             reference.getFirstName(),
-            reference.getLastName());
+            reference.getLastName(),
+            reference.getAccountId());
     resource = real.toModel(request);
     output =
         new SubAccount(
@@ -97,7 +98,8 @@ public class SubAccountControllerTest {
             resource.getUserName(),
             resource.getPii(),
             resource.getFirstName(),
-            resource.getLastName());
+            resource.getLastName(),
+            resource.getAccountId());
     response = real.toSubAccountResponse(output);
     optionalResponse = Optional.of(response);
     optionalOutput = Optional.of(output);

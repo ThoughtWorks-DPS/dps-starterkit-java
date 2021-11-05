@@ -3,8 +3,7 @@ package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutte
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.starter.boot.exception.RequestValidationException;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.RESOURCE_NAME}}EntityRepository;
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.SUB_RESOURCE_NAME}}Entity;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.SUB_RESOURCE_NAME}}EntityRepository;
+import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.{{cookiecutter.SUB_RESOURCE_NAME}}Service;
 {%- endif %}
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.provider.{{cookiecutter.PKG_RESOURCE_NAME}}.mapper.{{cookiecutter.RESOURCE_NAME}}EntityMapper;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.{{cookiecutter.RESOURCE_NAME}}Service;
@@ -27,20 +26,20 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   private {{cookiecutter.RESOURCE_NAME}}EntityMapper mapper;
 
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-  private {{cookiecutter.SUB_RESOURCE_NAME}}EntityRepository subResourceRepository;
+  private {{cookiecutter.SUB_RESOURCE_NAME}}Service subResourceService;
 {%- endif %}
 
   {{cookiecutter.RESOURCE_NAME}}ServiceImpl(
       {{cookiecutter.RESOURCE_NAME}}EntityRepository repository,
       {{cookiecutter.RESOURCE_NAME}}EntityMapper mapper
 {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %},
-      {{cookiecutter.SUB_RESOURCE_NAME}}EntityRepository subResourceRepository
+      {{cookiecutter.SUB_RESOURCE_NAME}}Service subResourceService
 {%- endif -%}
     ) {
     this.repository = repository;
     this.mapper = mapper;
     {%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-    this.subResourceRepository = subResourceRepository;
+    this.subResourceService = subResourceService;
     {%- endif %}
   }
 
@@ -95,6 +94,14 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
     return resource;
   }
 
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+  @Override
+  public Page<{{cookiecutter.RESOURCE_NAME}}> findAllBy{{cookiecutter.PARENT_RESOURCE_NAME}}Id(String id, Pageable pageable) {
+    Page<{{cookiecutter.RESOURCE_NAME}}> resource = mapper.toModelPage(repository.findAllBy{{cookiecutter.PARENT_RESOURCE_NAME}}Id(id, pageable));
+    return resource;
+  }
+{%- endif %}
+
   @Override
   // CSOFF: LineLength
   public Optional<{{cookiecutter.RESOURCE_NAME}}> updateById(String id, {{cookiecutter.RESOURCE_NAME}} record)
@@ -131,10 +138,10 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   public {{cookiecutter.SUB_RESOURCE_NAME}} add{{cookiecutter.SUB_RESOURCE_NAME}}(String id, {{cookiecutter.SUB_RESOURCE_NAME}} subResource)
       // CSON: LineLength
       throws RequestValidationException {
-    {{cookiecutter.SUB_RESOURCE_NAME}}Entity entity = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Entity(subResource);
-    entity.set{{cookiecutter.RESOURCE_NAME}}Id(id);
-    {{cookiecutter.SUB_RESOURCE_NAME}} saved = mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(subResourceRepository.save(entity));
-    return saved;
+    {{cookiecutter.SUB_RESOURCE_NAME}} result =
+        mapper.fromService{{cookiecutter.SUB_RESOURCE_NAME}}(
+            subResourceService.add(mapper.toService{{cookiecutter.SUB_RESOURCE_NAME}}(subResource, id)));
+    return result;
   }
 
   /**
@@ -148,9 +155,14 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   // CSOFF: LineLength
   public Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId) {
     // CSON: LineLength
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource =
-        mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(subResourceRepository.findById(subResourceId));
-    return resource;
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> result =
+        mapper.fromService{{cookiecutter.SUB_RESOURCE_NAME}}(
+            subResourceService
+                .findById(subResourceId)
+                // TODO: In lieu of JPA Specifications, we filter the result based on matching
+                // parent resource
+                .filter((r) -> ((null != r.get{{cookiecutter.RESOURCE_NAME}}Id()) && r.get{{cookiecutter.RESOURCE_NAME}}Id().equals(id))));
+    return result;
   }
 
   /**
@@ -164,7 +176,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   public Page<{{cookiecutter.SUB_RESOURCE_NAME}}> get{{cookiecutter.SUB_RESOURCE_NAME}}s(String id, Pageable pageable) {
     // CSON: LineLength
     Page<{{cookiecutter.SUB_RESOURCE_NAME}}> resources =
-        mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}ModelPage(subResourceRepository.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(id, pageable));
+        mapper.fromService{{cookiecutter.SUB_RESOURCE_NAME}}Page(subResourceService.findAllBy{{cookiecutter.RESOURCE_NAME}}Id(id, pageable));
     return resources;
   }
 
@@ -182,11 +194,8 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
       // CSON: LineLength
       throws RequestValidationException {
     Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> resource =
-        mapper.to{{cookiecutter.SUB_RESOURCE_NAME}}Model(
-            subResourceRepository
-                .findById(subResourceId)
-                .map((obj) -> mapper.update{{cookiecutter.SUB_RESOURCE_NAME}}Metadata(record, obj))
-                .map((obj) -> subResourceRepository.save(obj)));
+        mapper.fromService{{cookiecutter.SUB_RESOURCE_NAME}}(
+            subResourceService.updateById(subResourceId, mapper.toService{{cookiecutter.SUB_RESOURCE_NAME}}(record, id)));
 
     return resource;
   }
@@ -202,8 +211,8 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImpl implements {{cookiecutter
   // CSOFF: LineLength
   public Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> delete{{cookiecutter.SUB_RESOURCE_NAME}}(String id, String subResourceId) {
     // CSON: LineLength
-    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> result = get{{cookiecutter.SUB_RESOURCE_NAME}}(id, subResourceId);
-    subResourceRepository.deleteById(subResourceId);
+    Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> result =
+        mapper.fromService{{cookiecutter.SUB_RESOURCE_NAME}}(subResourceService.deleteById(subResourceId));
     return result;
   }
 {%- endif %}

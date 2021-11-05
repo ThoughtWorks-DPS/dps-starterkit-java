@@ -22,12 +22,12 @@ class ExampleAccountApiSimulation extends Simulation {
       .check(jsonPath("$.id").saveAs("userId")))
     .exec(http("Get Account")
       .get("/v1/example/accounts/${userId}")) // 92534752-a39c-499c-aa13-528cd0143f7c
-    .exec(http("Create SubAccount")
+    .exec(http("Create Account SubAccount")
       .post("/v1/example/accounts/${userId}/subaccounts")
       .body(StringBody("""{"userName":"jack.sprat", "firstName": "Jack", "lastName":"Sprat"}"""))
       .asJson
       .check(jsonPath("$.id").saveAs("subUserId")))
-    .exec(http("Get SubAccount")
+    .exec(http("Get Account SubAccount")
       .get("/v1/example/accounts/${userId}/subaccounts/${subUserId}")) // 92534752-a39c-499c-aa13-528cd0143f7c
 
   setUp(scn

@@ -125,7 +125,8 @@ public class SubAccountRequestMapperTest {
         reference.getUserName(),
         reference.getPii(),
         reference.getFirstName(),
-        reference.getLastName());
+        reference.getLastName(),
+        reference.getAccountId());
   }
 
   /**
@@ -138,7 +139,8 @@ public class SubAccountRequestMapperTest {
         reference.getUserName(),
         reference.getPii(),
         reference.getFirstName(),
-        reference.getLastName());
+        reference.getLastName(),
+        reference.getAccountId());
   }
 
   /**
@@ -147,11 +149,12 @@ public class SubAccountRequestMapperTest {
    * @param resource the object to validate
    */
   protected void verifySubAccount(SubAccount resource) {
-    assertThat(resource.getUserName().equals(reference.getUserName()));
-    assertThat(resource.getPii().equals(reference.getPii()));
-    assertThat(resource.getFirstName().equals(reference.getFirstName()));
-    assertThat(resource.getLastName().equals(reference.getLastName()));
+    assertThat(resource.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(resource.getPii()).isEqualTo(reference.getPii());
+    assertThat(resource.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(resource.getLastName()).isEqualTo(reference.getLastName());
     assertThat(resource.getId()).isNotEqualTo(reference.getId());
+    assertThat(resource.getAccountId()).isEqualTo(reference.getAccountId());
   }
 
   /**
@@ -160,9 +163,10 @@ public class SubAccountRequestMapperTest {
    * @param response the object to validate
    */
   private void verifySubAccountResponse(SubAccountResponse response) {
-    assertThat(response.getUserName().equals(reference.getUserName()));
-    assertThat(response.getPii().equals(reference.getPii()));
-    assertThat(response.getFullName().equals(reference.getFullName()));
+    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(response.getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getFullName()).isEqualTo(reference.getFullName());
     assertThat(response.getId()).isEqualTo(reference.getId());
+    assertThat(response.getAccountId()).isEqualTo(reference.getAccountId());
   }
 }

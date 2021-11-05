@@ -96,7 +96,8 @@ class SubAccountErrorHandlingContextTest {
             reference.getUserName(),
             reference.getPii(),
             reference.getFirstName(),
-            reference.getLastName());
+            reference.getLastName(),
+            reference.getAccountId());
     model =
         new SubAccount(
             reference.getUserName(),

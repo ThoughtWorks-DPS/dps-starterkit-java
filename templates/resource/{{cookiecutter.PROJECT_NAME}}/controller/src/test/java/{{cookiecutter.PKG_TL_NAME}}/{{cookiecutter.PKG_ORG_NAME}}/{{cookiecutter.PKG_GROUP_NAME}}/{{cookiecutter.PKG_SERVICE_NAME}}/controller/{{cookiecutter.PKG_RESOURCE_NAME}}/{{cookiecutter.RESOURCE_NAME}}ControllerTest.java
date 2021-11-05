@@ -129,7 +129,10 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
     request = new {{cookiecutter.RESOURCE_NAME}}Request(reference.getUserName(),
         reference.getPii(),
         reference.getFirstName(),
-        reference.getLastName());
+        reference.getLastName()
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+        reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
+{%- endif %});
     resource = real.toModel(request);
     output =
         new {{cookiecutter.RESOURCE_NAME}}(
@@ -137,7 +140,10 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
             resource.getUserName(),
             resource.getPii(),
             resource.getFirstName(),
-            resource.getLastName());
+            resource.getLastName()
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+            resource.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
+{%- endif %});
     response = real.to{{cookiecutter.RESOURCE_NAME}}Response(output);
     optionalResponse = Optional.of(response);
     optionalOutput = Optional.of(output);

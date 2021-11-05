@@ -2,12 +2,16 @@ package io.twdps.starter.example.api.account.responses;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 
 @AllArgsConstructor
 // @RequiredArgsConstructor
 @Getter
+@EqualsAndHashCode
+@ToString
 @Schema(
     name = "SubAccountResponse",
     description = "Metadata describing an Account resource and unique identifier")

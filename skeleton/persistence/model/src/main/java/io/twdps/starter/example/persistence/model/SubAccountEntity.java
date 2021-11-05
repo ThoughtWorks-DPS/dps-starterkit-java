@@ -1,13 +1,10 @@
 package io.twdps.starter.example.persistence.model;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
@@ -18,13 +15,10 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 @Entity
 @Table(name = "subaccount", schema = "example")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
 public class SubAccountEntity {
 
   @Id

@@ -8,6 +8,7 @@ test-data:
         full-name: Agent Smith
         pii: eigenvalue
         id: uuid-unit-vector
+        account-id: uuid-123456789-abcdef
       matrix:
         user-name: neo
         first-name: Neo
@@ -15,6 +16,7 @@ test-data:
         full-name: Neo None
         pii: sunglasses
         id: Reeves
+        account-id: uuid-123456789-abcdef
       raiders:
         user-name: junior
         first-name: Indiana
@@ -22,6 +24,7 @@ test-data:
         full-name: Indiana Jones
         pii: archeologist
         id: Ford
+        account-id: uuid-123456789-abcdef
       bogus:
         user-name: theodore
         first-name: Ted
@@ -29,6 +32,7 @@ test-data:
         full-name: Ted Logan
         pii: wyldstallyns
         id: Reeves
+        account-id: uuid-123456789-abcdef
     collections:
       default:
         - user-name: asmith
@@ -37,12 +41,14 @@ test-data:
           full-name: Agent Smith
           pii: eigenvalue
           id: uuid-unit-vector
+          account-id: uuid-123456789-abcdef
         - user-name: neo
           first-name: Neo
           last-name: None
           full-name: Neo None
           pii: sunglasses
           id: Reeves
+          account-id: uuid-123456789-abcdef
       starwars:
         - user-name: hsolo
           first-name: Han
@@ -50,15 +56,18 @@ test-data:
           full-name: Han Solo
           pii: Falcon
           id: Ford
+          account-id: uuid-123456789-abcdef
         - user-name: lskywalker
           first-name: Luke
           last-name: Skywalker
           full-name: Luke Skywalker
           pii: saber
           id: Hamill
+          account-id: uuid-123456789-abcdef
         - user-name: dvader
           first-name: Anakin
           last-name: Skywalker
           full-name: Anakin Skywalker
           pii: darkhelmet
           id: Jones
+          account-id: uuid-123456789-abcdef

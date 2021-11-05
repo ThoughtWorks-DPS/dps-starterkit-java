@@ -1,13 +1,10 @@
 package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
@@ -18,13 +15,10 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 @Entity
 @Table(name = "{{cookiecutter.RESOURCE_TABLE_NAME}}", schema = "{{cookiecutter.PKG_SERVICE_NAME}}")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
 public class {{cookiecutter.RESOURCE_NAME}}Entity {
 
   @Id

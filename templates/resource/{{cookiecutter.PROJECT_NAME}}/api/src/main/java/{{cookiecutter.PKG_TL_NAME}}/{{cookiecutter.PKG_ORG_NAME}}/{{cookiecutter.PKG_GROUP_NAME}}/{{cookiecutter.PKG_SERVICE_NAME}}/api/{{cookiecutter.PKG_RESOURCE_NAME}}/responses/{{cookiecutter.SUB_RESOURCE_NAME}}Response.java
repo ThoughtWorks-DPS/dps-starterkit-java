@@ -2,12 +2,16 @@ package {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutte
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 
 @AllArgsConstructor
 //@RequiredArgsConstructor
 @Getter
+@EqualsAndHashCode
+@ToString
 @Schema(
     name = "{{cookiecutter.SUB_RESOURCE_NAME}}Response",
     description = "Metadata describing an Account resource and unique identifier")

@@ -13,7 +13,6 @@ import java.util.Optional;
 @Mapper(componentModel = "spring")
 public interface SubAccountEntityMapper {
 
-  @Mapping(target = "accountId", ignore = true)
   SubAccountEntity toEntity(SubAccount src);
 
   default Optional<SubAccountEntity> toEntity(Optional<SubAccount> src) {

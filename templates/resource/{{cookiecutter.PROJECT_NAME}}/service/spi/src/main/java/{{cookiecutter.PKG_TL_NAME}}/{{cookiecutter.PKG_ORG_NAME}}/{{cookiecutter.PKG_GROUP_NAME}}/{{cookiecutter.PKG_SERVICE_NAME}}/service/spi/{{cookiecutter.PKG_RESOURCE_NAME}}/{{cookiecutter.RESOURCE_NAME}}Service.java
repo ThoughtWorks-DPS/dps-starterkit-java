@@ -23,6 +23,10 @@ public interface {{cookiecutter.RESOURCE_NAME}}Service {
 
   Page<{{cookiecutter.RESOURCE_NAME}}> findAll(Pageable pageable);
 
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+  Page<{{cookiecutter.RESOURCE_NAME}}> findAllBy{{cookiecutter.PARENT_RESOURCE_NAME}}Id(String id, Pageable pageable);
+{%- endif %}
+
   Optional<{{cookiecutter.RESOURCE_NAME}}> updateById(String id, {{cookiecutter.RESOURCE_NAME}} record)
       throws RequestValidationException;
 
