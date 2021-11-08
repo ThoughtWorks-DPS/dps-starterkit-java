@@ -4,18 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.twdps.starter.boot.test.data.provider.NamedDataFactory;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
-import io.twdps.starter.example.api.account.requests.SubAccountRequest;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
-import io.twdps.starter.example.api.account.responses.SubAccountResponse;
 import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.data.account.model.AccountData;
 import io.twdps.starter.example.data.account.provider.AccountDataFactory;
 import io.twdps.starter.example.data.account.provider.AccountTestData;
-import io.twdps.starter.example.data.subaccount.model.SubAccountData;
-import io.twdps.starter.example.data.subaccount.provider.SubAccountDataFactory;
-import io.twdps.starter.example.data.subaccount.provider.SubAccountTestData;
 import io.twdps.starter.example.service.spi.account.model.Account;
-import io.twdps.starter.example.service.spi.account.model.SubAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -34,12 +28,8 @@ public class AccountRequestMapperTest {
 
   private AccountTestData resourceTestDataLoader = new AccountTestData();
   private AccountDataFactory resourceTestData = new AccountDataFactory(resourceTestDataLoader);
-  private SubAccountTestData subResourceTestDataLoader = new SubAccountTestData();
-  private SubAccountDataFactory subResourceTestData =
-      new SubAccountDataFactory(subResourceTestDataLoader);
 
   private AccountData reference;
-  private SubAccountData subReference;
 
   /** Setup mapper and test data factory before each test. */
   @BeforeEach
@@ -47,7 +37,6 @@ public class AccountRequestMapperTest {
     mapper = Mappers.getMapper(AccountRequestMapper.class);
 
     reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
-    subReference = subResourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
   }
 
   @Test
@@ -123,64 +112,6 @@ public class AccountRequestMapperTest {
     verifyAccountResponse(response.getItems().get(0));
   }
 
-  @Test
-  public void mapperNewSubAccountTest() {
-    SubAccountRequest resource = createSubAccountRequest();
-
-    SubAccount response = mapper.toModel(resource);
-
-    verifySubAccount(response);
-  }
-
-  @Test
-  public void mapperSubAccountResponseTest() {
-    SubAccount resource = createSubAccount(reference.getId());
-
-    SubAccountResponse response = mapper.toSubAccountResponse(resource);
-
-    verifySubAccountResponse(response);
-  }
-
-  @Test
-  public void mapperOptionalSubAccountTest() {
-    Optional<SubAccount> resource = Optional.of(createSubAccount(reference.getId()));
-
-    SubAccountResponse response = mapper.toSubAccountResponse(resource);
-
-    assertThat(response).isNotNull();
-    verifySubAccountResponse(response);
-  }
-
-  @Test
-  public void mapperOptionalSubAccountNullTest() {
-    Optional<SubAccount> resource = Optional.ofNullable(null);
-
-    SubAccountResponse response = mapper.toSubAccountResponse(resource);
-
-    assertThat(response).isNull();
-  }
-
-  @Test
-  public void mapperOptionalSubAccountEmptyTest() {
-    Optional<SubAccount> resource = Optional.empty();
-
-    SubAccountResponse response = mapper.toSubAccountResponse(resource);
-
-    assertThat(response).isNull();
-  }
-
-  @Test
-  public void mapperSubEntityListTest() {
-    List<SubAccount> resources =
-        Arrays.asList(createSubAccount(reference.getId()), createSubAccount(reference.getId()));
-
-    List<SubAccountResponse> response = mapper.toSubAccountResponseList(resources);
-
-    assertThat(response.size()).isEqualTo(2);
-    verifySubAccountResponse(response.get(0));
-    verifySubAccountResponse(response.get(1));
-  }
-
   /**
    * convenience function to create resource object.
    *
@@ -197,17 +128,6 @@ public class AccountRequestMapperTest {
   }
 
   /**
-   * convenience function to create subresource object.
-   *
-   * @param id whether to create with identifier (null if not)
-   * @return SubAccount object
-   */
-  private SubAccount createSubAccount(String id) {
-    return new SubAccount(
-        id, subReference.getUserName(), subReference.getFirstName(), subReference.getLastName());
-  }
-
-  /**
    * convenience function to create resource request object.
    *
    * @return AccountRequest object
@@ -218,16 +138,6 @@ public class AccountRequestMapperTest {
         reference.getPii(),
         reference.getFirstName(),
         reference.getLastName());
-  }
-
-  /**
-   * convenience function to create subresource request object.
-   *
-   * @return SubAccountRequest object
-   */
-  private SubAccountRequest createSubAccountRequest() {
-    return new SubAccountRequest(
-        subReference.getUserName(), subReference.getFirstName(), subReference.getLastName());
   }
 
   /**
@@ -246,18 +156,6 @@ public class AccountRequestMapperTest {
   /**
    * helper function to validate standard values.
    *
-   * @param resource the object to validate
-   */
-  protected void verifySubAccount(SubAccount resource) {
-    assertThat(resource.getUserName()).isEqualTo(subReference.getUserName());
-    assertThat(resource.getFirstName()).isEqualTo(subReference.getFirstName());
-    assertThat(resource.getLastName()).isEqualTo(subReference.getLastName());
-    assertThat(resource.getId()).isNotEqualTo(subReference.getId());
-  }
-
-  /**
-   * helper function to validate standard values.
-   *
    * @param response the object to validate
    */
   private void verifyAccountResponse(AccountResponse response) {
@@ -265,14 +163,5 @@ public class AccountRequestMapperTest {
     assertThat(response.getPii()).isEqualTo(reference.getPii());
     assertThat(response.getFullName()).isEqualTo(reference.getFullName());
     assertThat(response.getId()).isEqualTo(reference.getId());
-  }
-
-  /**
-   * helper function to validate standard values.
-   *
-   * @param response the object to validate
-   */
-  protected void verifySubAccountResponse(SubAccountResponse response) {
-    assertThat(response.getId()).isEqualTo(subReference.getId());
   }
 }

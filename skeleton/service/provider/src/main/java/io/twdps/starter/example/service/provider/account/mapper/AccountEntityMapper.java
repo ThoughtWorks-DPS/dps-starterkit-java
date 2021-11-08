@@ -1,9 +1,7 @@
 package io.twdps.starter.example.service.provider.account.mapper;
 
 import io.twdps.starter.example.persistence.model.AccountEntity;
-import io.twdps.starter.example.persistence.model.SubAccountEntity;
 import io.twdps.starter.example.service.spi.account.model.Account;
-import io.twdps.starter.example.service.spi.account.model.SubAccount;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -37,49 +35,4 @@ public interface AccountEntityMapper {
 
   @Mapping(target = "id", ignore = true)
   AccountEntity updateMetadata(Account src, @MappingTarget AccountEntity dst);
-
-  @Mapping(target = "pii", constant = "FIXME")
-  @Mapping(target = "accountId", ignore = true)
-  SubAccountEntity toSubAccountEntity(SubAccount src);
-
-  default Optional<SubAccountEntity> toSubAccountEntity(Optional<SubAccount> src) {
-    return Optional.ofNullable(toSubAccountEntity(src.orElse(null)));
-  }
-
-  List<SubAccountEntity> toSubAccountEntityList(List<SubAccount> src);
-
-  SubAccount toSubAccountModel(SubAccountEntity src);
-
-  default Optional<SubAccount> toSubAccountModel(Optional<SubAccountEntity> src) {
-    return Optional.ofNullable(toSubAccountModel(src.orElse(null)));
-  }
-
-  default Page<SubAccount> toSubAccountModelPage(Page<SubAccountEntity> src) {
-    return src.map(this::toSubAccountModel);
-  }
-
-  List<SubAccount> toSubAccountModelList(Iterable<SubAccountEntity> src);
-
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "pii", ignore = true)
-  @Mapping(target = "accountId", ignore = true)
-  SubAccountEntity updateSubAccountMetadata(SubAccount src, @MappingTarget SubAccountEntity dst);
-
-  @Mapping(target = "accountId", source = "accountId")
-  @Mapping(target = "pii", constant = "FIXME")
-  io.twdps.starter.example.service.spi.subaccount.model.SubAccount toServiceSubAccount(
-      SubAccount src, String accountId);
-
-  SubAccount fromServiceSubAccount(
-      io.twdps.starter.example.service.spi.subaccount.model.SubAccount src);
-
-  default Optional<SubAccount> fromServiceSubAccount(
-      Optional<io.twdps.starter.example.service.spi.subaccount.model.SubAccount> src) {
-    return Optional.ofNullable(fromServiceSubAccount(src.orElse(null)));
-  }
-
-  default Page<SubAccount> fromServiceSubAccountPage(
-      Page<io.twdps.starter.example.service.spi.subaccount.model.SubAccount> src) {
-    return src.map(this::fromServiceSubAccount);
-  }
 }

@@ -9,13 +9,6 @@ import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_RESOURCE_NAME}}.provider.{{cookiecutter.RESOURCE_NAME}}TestData;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.persistence.model.{{cookiecutter.RESOURCE_NAME}}Entity;
 import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.RESOURCE_NAME}};
-{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}Data;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.provider.{{cookiecutter.SUB_RESOURCE_NAME}}DataFactory;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.provider.{{cookiecutter.SUB_RESOURCE_NAME}}DataProperties;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.data.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.provider.{{cookiecutter.SUB_RESOURCE_NAME}}TestData;
-import {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}};
-{%- endif %}
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -34,16 +27,8 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
 
   private {{cookiecutter.RESOURCE_NAME}}TestData resourceTestDataLoader = new {{cookiecutter.RESOURCE_NAME}}TestData();
   private {{cookiecutter.RESOURCE_NAME}}DataFactory resourceTestData = new {{cookiecutter.RESOURCE_NAME}}DataFactory(resourceTestDataLoader);
-{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-  private {{cookiecutter.SUB_RESOURCE_NAME}}TestData subResourceTestDataLoader = new {{cookiecutter.SUB_RESOURCE_NAME}}TestData();
-  private {{cookiecutter.SUB_RESOURCE_NAME}}DataFactory subResourceTestData = new {{cookiecutter.SUB_RESOURCE_NAME}}DataFactory(subResourceTestDataLoader);
-{%- endif %}
 
   private {{cookiecutter.RESOURCE_NAME}}Data reference;
-{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-  private {{cookiecutter.SUB_RESOURCE_NAME}}Data subReference;
-{%- endif %}
-
 
   /** Setup mapper and test data factory before each test. */
   @BeforeEach
@@ -51,9 +36,6 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     mapper = Mappers.getMapper({{cookiecutter.RESOURCE_NAME}}EntityMapper.class);
 
     reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
-{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-    subReference = subResourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
-{%- endif %}
   }
 
   @Test
@@ -159,18 +141,6 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     verify{{cookiecutter.RESOURCE_NAME}}(response.toList().get(2));
   }
 
-{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-  @Test
-  public void mapperService{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
-    {{cookiecutter.SUB_RESOURCE_NAME}} resource = create{{cookiecutter.SUB_RESOURCE_NAME}}(subReference.getId());
-
-    io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} model =
-        mapper.toService{{cookiecutter.SUB_RESOURCE_NAME}}(resource, reference.getId());
-
-    verifyService{{cookiecutter.SUB_RESOURCE_NAME}}(model);
-  }
-{%- endif %}
-
   /**
    * convenience function to create resource object.
    *
@@ -188,22 +158,6 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
 {%- endif -%}
     );
   }
-
-{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-
-  /**
-   * convenience function to create resource object.
-   *
-   * @param id whether to create with identifier (null if not)
-   * @return {{cookiecutter.SUB_RESOURCE_NAME}} object
-   */
-  private {{cookiecutter.SUB_RESOURCE_NAME}} create{{cookiecutter.SUB_RESOURCE_NAME}}(String id) {
-    return new {{cookiecutter.SUB_RESOURCE_NAME}}(id,
-        subReference.getUserName(),
-        subReference.getFirstName(),
-        subReference.getLastName());
-  }
-{%- endif %}
 
   /**
    * convenience function to create resource entity object.
@@ -237,24 +191,6 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     assertThat(response.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isEqualTo(reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id());
 {%- endif %}
     }
-
-{%- if cookiecutter.CREATE_SUB_RESOURCE == "y" %}
-
-  /**
-   * helper function to validate standard values.
-   *
-   * @param subResource the object to validate
-   */
-  protected void verifyService{{cookiecutter.SUB_RESOURCE_NAME}}(
-      io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} subResource) {
-    assertThat(subResource.getUserName()).isEqualTo(subReference.getUserName());
-    assertThat(subResource.getFirstName()).isEqualTo(subReference.getFirstName());
-    assertThat(subResource.getLastName()).isEqualTo(subReference.getLastName());
-    assertThat(subResource.getPii()).isEqualTo("FIXME");
-    assertThat(subResource.getId()).isEqualTo(subReference.getId());
-    assertThat(subResource.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isEqualTo(reference.getId());
-  }
-{%- endif %}
 
   /**
    * helper function to validate standard values.

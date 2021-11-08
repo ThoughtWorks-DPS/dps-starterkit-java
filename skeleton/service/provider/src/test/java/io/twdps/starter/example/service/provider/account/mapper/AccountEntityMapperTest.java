@@ -6,12 +6,8 @@ import io.twdps.starter.boot.test.data.provider.NamedDataFactory;
 import io.twdps.starter.example.data.account.model.AccountData;
 import io.twdps.starter.example.data.account.provider.AccountDataFactory;
 import io.twdps.starter.example.data.account.provider.AccountTestData;
-import io.twdps.starter.example.data.subaccount.model.SubAccountData;
-import io.twdps.starter.example.data.subaccount.provider.SubAccountDataFactory;
-import io.twdps.starter.example.data.subaccount.provider.SubAccountTestData;
 import io.twdps.starter.example.persistence.model.AccountEntity;
 import io.twdps.starter.example.service.spi.account.model.Account;
-import io.twdps.starter.example.service.spi.account.model.SubAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -30,12 +26,8 @@ public class AccountEntityMapperTest {
 
   private AccountTestData resourceTestDataLoader = new AccountTestData();
   private AccountDataFactory resourceTestData = new AccountDataFactory(resourceTestDataLoader);
-  private SubAccountTestData subResourceTestDataLoader = new SubAccountTestData();
-  private SubAccountDataFactory subResourceTestData =
-      new SubAccountDataFactory(subResourceTestDataLoader);
 
   private AccountData reference;
-  private SubAccountData subReference;
 
   /** Setup mapper and test data factory before each test. */
   @BeforeEach
@@ -43,7 +35,6 @@ public class AccountEntityMapperTest {
     mapper = Mappers.getMapper(AccountEntityMapper.class);
 
     reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
-    subReference = subResourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
   }
 
   @Test
@@ -143,16 +134,6 @@ public class AccountEntityMapperTest {
     verifyAccount(response.toList().get(2));
   }
 
-  @Test
-  public void mapperServiceSubAccountTest() {
-    SubAccount resource = createSubAccount(subReference.getId());
-
-    io.twdps.starter.example.service.spi.subaccount.model.SubAccount model =
-        mapper.toServiceSubAccount(resource, reference.getId());
-
-    verifyServiceSubAccount(model);
-  }
-
   /**
    * convenience function to create resource object.
    *
@@ -166,17 +147,6 @@ public class AccountEntityMapperTest {
         reference.getPii(),
         reference.getFirstName(),
         reference.getLastName());
-  }
-
-  /**
-   * convenience function to create resource object.
-   *
-   * @param id whether to create with identifier (null if not)
-   * @return SubAccount object
-   */
-  private SubAccount createSubAccount(String id) {
-    return new SubAccount(
-        id, subReference.getUserName(), subReference.getFirstName(), subReference.getLastName());
   }
 
   /**
@@ -204,21 +174,6 @@ public class AccountEntityMapperTest {
     assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(response.getLastName()).isEqualTo(reference.getLastName());
     assertThat(response.getId()).isEqualTo(reference.getId());
-  }
-
-  /**
-   * helper function to validate standard values.
-   *
-   * @param subResource the object to validate
-   */
-  protected void verifyServiceSubAccount(
-      io.twdps.starter.example.service.spi.subaccount.model.SubAccount subResource) {
-    assertThat(subResource.getUserName()).isEqualTo(subReference.getUserName());
-    assertThat(subResource.getFirstName()).isEqualTo(subReference.getFirstName());
-    assertThat(subResource.getLastName()).isEqualTo(subReference.getLastName());
-    assertThat(subResource.getPii()).isEqualTo("FIXME");
-    assertThat(subResource.getId()).isEqualTo(subReference.getId());
-    assertThat(subResource.getAccountId()).isEqualTo(reference.getId());
   }
 
   /**

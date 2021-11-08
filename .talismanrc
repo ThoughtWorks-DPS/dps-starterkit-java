@@ -23,3 +23,7 @@ fileignoreconfig:
   checksum: da38824a5d5a03c2423c2d0e33a0e78d2e3b5541bed5d90677663819ec464981
 - filename: templates/project/{{cookiecutter.PROJECT_NAME}}/app/src/main/resources/application-aws.yml
   checksum: 7678a1a8f00dc97b80e5939688f0e60ae2c55b35da597511ed1fad1415373aec
+- filename: templates/subresource/{{cookiecutter.PROJECT_NAME}}/db-init/src/main/resources/database/migrations/VNEXT__Template_{{cookiecutter.RESOURCE_NAME}}.sql
+  checksum: c35e13bf1c59af56035764d6d471fb22ad718619feee09f0ff82747939982ece
+- filename: templates/subresource/{{cookiecutter.PROJECT_NAME}}/app/src/test/java/{{cookiecutter.PKG_TL_NAME}}/{{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PKG_GROUP_NAME}}/{{cookiecutter.PKG_SERVICE_NAME}}/controller/{{cookiecutter.PKG_RESOURCE_NAME}}/{{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest.java
+  checksum: 22dec0711c06ae096c0751b58a3f2fa0ffbf8effe4f503626619c8deb44775ee

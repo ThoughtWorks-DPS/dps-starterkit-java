@@ -4,15 +4,12 @@ import io.twdps.starter.boot.exception.RequestValidationException;
 import io.twdps.starter.boot.exception.ResourceNotFoundException;
 import io.twdps.starter.boot.notifier.lifecycle.entity.spi.EntityLifecycleNotifier;
 import io.twdps.starter.example.api.account.requests.AccountRequest;
-import io.twdps.starter.example.api.account.requests.SubAccountRequest;
 import io.twdps.starter.example.api.account.resources.AccountResource;
 import io.twdps.starter.example.api.account.responses.AccountResponse;
-import io.twdps.starter.example.api.account.responses.SubAccountResponse;
 import io.twdps.starter.example.api.responses.PagedResponse;
 import io.twdps.starter.example.controller.account.mapper.AccountRequestMapper;
 import io.twdps.starter.example.service.spi.account.AccountService;
 import io.twdps.starter.example.service.spi.account.model.Account;
-import io.twdps.starter.example.service.spi.account.model.SubAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -106,84 +103,6 @@ public class AccountController implements AccountResource {
     return new ResponseEntity<>(
         found
             .map(r -> mapper.toAccountResponse(r))
-            .orElseThrow(() -> new ResourceNotFoundException(id)),
-        HttpStatus.OK);
-  }
-
-  @Override
-  // CSOFF: LineLength
-  public ResponseEntity<SubAccountResponse> addSubAccount(
-      String id, SubAccountRequest addEntityRequest)
-      // CSON: LineLength
-      throws RequestValidationException {
-
-    log.info("username->{}", addEntityRequest.getUserName());
-    SubAccount resource = mapper.toModel(addEntityRequest);
-    SubAccount saved = manager.addSubAccount(id, resource);
-    SubAccountResponse response = mapper.toSubAccountResponse(saved);
-    notifier.created(saved, entityVersion, URI.create("user:anonymous"));
-    return new ResponseEntity<>(response, HttpStatus.CREATED);
-  }
-
-  @Override
-  // CSOFF: LineLength
-  public ResponseEntity<SubAccountResponse> getSubAccount(String id, String subResourceId)
-      // CSON: LineLength
-      throws ResourceNotFoundException {
-
-    log.info("id->{}", id);
-    Optional<SubAccount> found = manager.getSubAccount(id, subResourceId);
-    return new ResponseEntity<>(
-        found
-            .map(r -> mapper.toSubAccountResponse(r))
-            .orElseThrow(() -> new ResourceNotFoundException(id)),
-        HttpStatus.OK);
-  }
-
-  @Override
-  // CSOFF: LineLength
-  public ResponseEntity<PagedResponse<SubAccountResponse>> getSubAccounts(
-      String id, Pageable pageable) {
-    // CSON: LineLength
-    Page<SubAccount> resources = manager.getSubAccounts(id, pageable);
-
-    return new ResponseEntity<>(mapper.toSubAccountResponsePage(resources), HttpStatus.OK);
-  }
-
-  @Override
-  // CSOFF: LineLength
-  public ResponseEntity<SubAccountResponse> updateSubAccount(
-      String id, String subResourceId, SubAccountRequest request)
-      // CSON: LineLength
-      throws ResourceNotFoundException, RequestValidationException {
-
-    log.info("id->{}", id);
-    Optional<SubAccount> found =
-        manager.updateSubAccount(id, subResourceId, mapper.toModel(request));
-    if (found.isPresent()) {
-      notifier.updated(found.get(), entityVersion, URI.create("user:anonymous"));
-    }
-    return new ResponseEntity<>(
-        found
-            .map(r -> mapper.toSubAccountResponse(r))
-            .orElseThrow(() -> new ResourceNotFoundException(id)),
-        HttpStatus.OK);
-  }
-
-  @Override
-  // CSOFF: LineLength
-  public ResponseEntity<SubAccountResponse> deleteSubAccount(String id, String subResourceId)
-      // CSON: LineLength
-      throws ResourceNotFoundException {
-
-    log.info("id->{}", id);
-    Optional<SubAccount> found = manager.deleteSubAccount(id, subResourceId);
-    if (found.isPresent()) {
-      notifier.deleted(found.get(), entityVersion, URI.create("user:anonymous"));
-    }
-    return new ResponseEntity<>(
-        found
-            .map(r -> mapper.toSubAccountResponse(r))
             .orElseThrow(() -> new ResourceNotFoundException(id)),
         HttpStatus.OK);
   }

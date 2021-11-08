@@ -26,14 +26,34 @@ subresource="{{cookiecutter.SUB_RESOURCE_NAME}}"
 if [ "{{cookiecutter.CREATE_SUB_RESOURCE}}" = "n" ]
 then
   remove api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${resource}"/requests/${subresource}Request.java
+  remove api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${resource}"/resources/${resource}${subresource}Resource.java
   remove api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${resource}"/responses/${subresource}Response.java
   remove api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${resource}"/responses/Paged${subresource}Response.java
+  remove controller/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${resource}"/${resource}${subresource}Controller.java
+  remove controller/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${resource}"/mapper/${resource}${subresource}RequestMapper.java
+  remove controller/src/test/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${resource}"/${resource}${subresource}ControllerTest.java
+  remove controller/src/test/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${resource}"/mapper/${resource}${subresource}RequestMapperTest.java
+  remove service/provider/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/provider/"${resource}"/${resource}${subresource}ServiceImpl.java
+  remove service/provider/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/provider/"${resource}"/mapper/${resource}${subresource}EntityMapper.java
+  remove service/provider/src/test/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/provider/"${resource}"/${resource}${subresource}ServiceImplTest.java
+  remove service/provider/src/test/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/provider/"${resource}"/mapper/${resource}${subresource}EntityMapperTest.java
+  remove service/spi/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/spi/"${resource}"/${resource}${subresource}Service.java
   remove service/spi/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/spi/"${resource}"/model/${subresource}.java
 else
   echo "Not removing files" >> /tmp/cc.out
   echo api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${resource}"/requests/${subresource}Request.java >> /tmp/cc.out
+  echo api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${resource}"/resources/${resource}${subresource}Resource.java
   echo api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${resource}"/responses/${subresource}Response.java >> /tmp/cc.out
   echo api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${resource}"/responses/Paged${subresource}Response.java >> /tmp/cc.out
+  echo controller/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${resource}"/${resource}${subresource}Controller.java
+  echo controller/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${resource}"/mapper/${resource}${subresource}RequestMapper.java
+  echo controller/src/test/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${resource}"/${resource}${subresource}ControllerTest.java
+  echo controller/src/test/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${resource}"/mapper/${resource}${subresource}RequestMapperTest.java
+  echo service/provider/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/provider/"${resource}"/${resource}${subresource}ServiceImpl.java
+  echo service/provider/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/provider/"${resource}"/mapper/${resource}${subresource}EntityMapper.java
+  echo service/provider/src/test/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/provider/"${resource}"/${resource}${subresource}ServiceImplTest.java
+  echo service/provider/src/test/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/provider/"${resource}"/mapper/${resource}${subresource}EntityMapperTest.java
+  echo service/spi/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/spi/"${resource}"/${resource}${subresource}Service.java
   echo service/spi/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/service/spi/"${resource}"/model/${subresource}.java >> /tmp/cc.out
 fi
 

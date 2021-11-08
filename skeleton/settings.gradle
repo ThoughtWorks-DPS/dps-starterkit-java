@@ -18,7 +18,7 @@ pluginManagement {
         maven { url  "https://dl.bintray.com/adesso/junit-insights" }
         maven {
             name = "starterBootPkgs"
-            url = uri("https://maven.pkg.github.com/ThoughtWorks-DPS/dps-starter-boot")
+            url = uri("https://maven.pkg.github.com/thoughtworks-dps/dps-starter-boot")
             credentials(HttpHeaderCredentials) {
                 name = "Authorization"
                 def result = System.getenv("GITHUB_ACCESS_TOKEN")
@@ -40,7 +40,7 @@ dependencyResolutionManagement {
         jcenter()
         maven {
             name = "starterBootPkgs"
-            url = uri("https://maven.pkg.github.com/ThoughtWorks-DPS/dps-starter-boot")
+            url = uri("https://maven.pkg.github.com/thoughtworks-dps/dps-starter-boot")
             credentials(HttpHeaderCredentials) {
                 name = "Authorization"
                 def result = System.getenv("GITHUB_ACCESS_TOKEN")

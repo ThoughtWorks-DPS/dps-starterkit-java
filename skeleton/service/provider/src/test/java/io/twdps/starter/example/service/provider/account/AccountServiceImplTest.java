@@ -4,15 +4,10 @@ import io.twdps.starter.boot.test.data.provider.NamedDataFactory;
 import io.twdps.starter.example.data.account.model.AccountData;
 import io.twdps.starter.example.data.account.provider.AccountDataFactory;
 import io.twdps.starter.example.data.account.provider.AccountTestData;
-import io.twdps.starter.example.data.subaccount.model.SubAccountData;
-import io.twdps.starter.example.data.subaccount.provider.SubAccountDataFactory;
-import io.twdps.starter.example.data.subaccount.provider.SubAccountTestData;
 import io.twdps.starter.example.persistence.model.AccountEntity;
 import io.twdps.starter.example.persistence.model.AccountEntityRepository;
 import io.twdps.starter.example.service.provider.account.mapper.AccountEntityMapper;
 import io.twdps.starter.example.service.spi.account.model.Account;
-import io.twdps.starter.example.service.spi.account.model.SubAccount;
-import io.twdps.starter.example.service.spi.subaccount.SubAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,18 +33,12 @@ public class AccountServiceImplTest {
 
   @Mock private AccountEntityRepository repository;
   @Mock private AccountEntityMapper mapper;
-  @Mock private SubAccountService subResourceService;
 
   private AccountTestData resourceTestDataLoader = new AccountTestData();
   private AccountDataFactory resourceTestData = new AccountDataFactory(resourceTestDataLoader);
-  private SubAccountTestData subResourceTestDataLoader = new SubAccountTestData();
-  private SubAccountDataFactory subResourceTestData =
-      new SubAccountDataFactory(subResourceTestDataLoader);
 
   private AccountData reference;
   private AccountData bogus;
-  private SubAccountData subReference;
-  private SubAccountData subBogus;
 
   private Account resource;
   private Account output;
@@ -70,41 +59,14 @@ public class AccountServiceImplTest {
   private Page<Account> emptyOutputPage;
   private Pageable pageable = Pageable.unpaged();
 
-  private io.twdps.starter.example.service.spi.subaccount.model.SubAccount serviceSubResource;
-  private io.twdps.starter.example.service.spi.subaccount.model.SubAccount serviceSubOutput;
-  private Optional<io.twdps.starter.example.service.spi.subaccount.model.SubAccount>
-      optionalServiceSubResource;
-  private List<io.twdps.starter.example.service.spi.subaccount.model.SubAccount>
-      serviceSubOutputList;
-  private List<io.twdps.starter.example.service.spi.subaccount.model.SubAccount>
-      emptyServiceSubOutputList = Arrays.asList();
-  private Page<io.twdps.starter.example.service.spi.subaccount.model.SubAccount>
-      serviceSubOutputPage;
-  private Page<io.twdps.starter.example.service.spi.subaccount.model.SubAccount>
-      emptyServiceSubOutputPage;
-  private Optional<io.twdps.starter.example.service.spi.subaccount.model.SubAccount>
-      optionalServiceSubOutput;
-  private Optional<io.twdps.starter.example.service.spi.subaccount.model.SubAccount>
-      emptyServiceSubOutput = Optional.empty();
-  private SubAccount subResource;
-  private SubAccount subOutput;
-  private Optional<SubAccount> emptySubResource = Optional.empty();
-  private Optional<SubAccount> optionalSubOutput;
-  private List<SubAccount> subOutputList;
-  private List<SubAccount> emptySubOutputList = Arrays.asList();
-  private Page<SubAccount> subOutputPage;
-  private Page<SubAccount> emptySubOutputPage;
-
   /** setup data for each test. */
   @BeforeEach
   public void setup() {
 
-    manager = new AccountServiceImpl(repository, mapper, subResourceService);
+    manager = new AccountServiceImpl(repository, mapper);
 
     reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
     bogus = resourceTestData.createBySpec("bogus");
-    subReference = subResourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
-    subBogus = subResourceTestData.createBySpec("bogus");
 
     // use the real mapper to generate consistent objects to use in mapper stubs
     AccountEntityMapper real = Mappers.getMapper(AccountEntityMapper.class);
@@ -134,39 +96,6 @@ public class AccountServiceImplTest {
     outputPage = new PageImpl<>(outputList);
     emptyEntityPage = new PageImpl<>(emptyEntityList);
     emptyOutputPage = new PageImpl<>(emptyOutputList);
-
-    subResource =
-        SubAccount.builder()
-            .userName(subReference.getUserName())
-            .firstName(subReference.getFirstName())
-            .lastName(subReference.getLastName())
-            .build();
-    serviceSubResource =
-        io.twdps.starter.example.service.spi.subaccount.model.SubAccount.builder()
-            .userName(subReference.getUserName())
-            .firstName(subReference.getFirstName())
-            .lastName(subReference.getLastName())
-            .pii(subReference.getPii())
-            .build();
-    serviceSubOutput =
-        io.twdps.starter.example.service.spi.subaccount.model.SubAccount.builder()
-            .id(subReference.getId())
-            .userName(subReference.getUserName())
-            .firstName(subReference.getFirstName())
-            .lastName(subReference.getLastName())
-            .pii(subReference.getPii())
-            .accountId(reference.getId())
-            .build();
-    optionalServiceSubResource = Optional.of(serviceSubResource);
-    optionalServiceSubOutput = Optional.of(serviceSubOutput);
-    serviceSubOutputList = Arrays.asList(serviceSubOutput, serviceSubOutput);
-    serviceSubOutputPage = new PageImpl<>(serviceSubOutputList);
-    emptyServiceSubOutputPage = new PageImpl<>(emptyServiceSubOutputList);
-    subOutput = real.fromServiceSubAccount(serviceSubOutput);
-    optionalSubOutput = Optional.of(subOutput);
-    subOutputList = Arrays.asList(subOutput, subOutput);
-    subOutputPage = new PageImpl<>(subOutputList);
-    emptySubOutputPage = new PageImpl<>(emptySubOutputList);
   }
 
   private void createMapperStubs() {
@@ -188,33 +117,6 @@ public class AccountServiceImplTest {
 
   private void createEmptyListMapperStubs() {
     Mockito.when(mapper.toModelPage(emptyEntityPage)).thenReturn(emptyOutputPage);
-  }
-
-  private void createSubAccountMapperStubs() {
-    Mockito.when(mapper.toServiceSubAccount(subResource, reference.getId()))
-        .thenReturn(serviceSubResource);
-  }
-
-  private void createReverseSubAccountMapperStubs() {
-    Mockito.when(mapper.fromServiceSubAccount(serviceSubOutput)).thenReturn(subOutput);
-  }
-
-  private void createOptionalSubAccountMapperStubs() {
-    Mockito.when(mapper.fromServiceSubAccount(optionalServiceSubOutput))
-        .thenReturn(optionalSubOutput);
-  }
-
-  private void createEmptySubAccountMapperStubs() {
-    Mockito.when(mapper.fromServiceSubAccount(emptyServiceSubOutput)).thenReturn(emptySubResource);
-  }
-
-  private void createSubAccountListMapperStubs() {
-    Mockito.when(mapper.fromServiceSubAccountPage(serviceSubOutputPage)).thenReturn(subOutputPage);
-  }
-
-  private void createEmptySubAccountListMapperStubs() {
-    Mockito.when(mapper.fromServiceSubAccountPage(emptyServiceSubOutputPage))
-        .thenReturn(emptySubOutputPage);
   }
 
   @Test
@@ -382,134 +284,6 @@ public class AccountServiceImplTest {
     Mockito.when(repository.findById(bogus.getId())).thenReturn(emptyEntity);
 
     Optional<Account> response = manager.deleteById(bogus.getId());
-
-    Assertions.assertThat(response.isEmpty()).isTrue();
-  }
-
-  @Test
-  public void findBySubAccountIdFailTest() {
-
-    createEmptySubAccountMapperStubs();
-    Mockito.when(subResourceService.findById(Mockito.any())).thenReturn(emptyServiceSubOutput);
-
-    Optional<SubAccount> result = manager.getSubAccount(reference.getId(), bogus.getId());
-    Assertions.assertThat(!result.isPresent()).isTrue();
-  }
-
-  @Test
-  public void addSubAccountTest() {
-
-    createSubAccountMapperStubs();
-    createReverseSubAccountMapperStubs();
-    Mockito.when(subResourceService.add(serviceSubResource)).thenReturn(serviceSubOutput);
-
-    SubAccount response = manager.addSubAccount(reference.getId(), subResource);
-
-    Assertions.assertThat(response.getFirstName()).isEqualTo(subResource.getFirstName());
-    Assertions.assertThat(response.getId()).isEqualTo(subReference.getId());
-  }
-
-  @Test
-  public void findSubAccountByIdTest() {
-
-    createOptionalSubAccountMapperStubs();
-    Mockito.when(subResourceService.findById(subReference.getId()))
-        .thenReturn(optionalServiceSubOutput);
-
-    Optional<SubAccount> response = manager.getSubAccount(reference.getId(), subReference.getId());
-
-    Assertions.assertThat(response.isPresent()).isTrue();
-    Assertions.assertThat(response.get().getFirstName()).isEqualTo(subOutput.getFirstName());
-    Assertions.assertThat(response.get().getId()).isEqualTo(subOutput.getId());
-  }
-
-  @Test
-  public void findSubAccountByIdFailedTest() {
-
-    createEmptySubAccountMapperStubs();
-    Mockito.when(subResourceService.findById(bogus.getId())).thenReturn(emptyServiceSubOutput);
-
-    Optional<SubAccount> response = manager.getSubAccount(reference.getId(), bogus.getId());
-
-    Assertions.assertThat(response.isEmpty()).isTrue();
-  }
-
-  @Test
-  public void findAllSubAccountTest() {
-
-    createSubAccountListMapperStubs();
-    Mockito.when(subResourceService.findAllByAccountId(reference.getId(), pageable))
-        .thenReturn(serviceSubOutputPage);
-
-    Page<SubAccount> response = manager.getSubAccounts(reference.getId(), pageable);
-
-    Assertions.assertThat(response.getContent().size()).isEqualTo(2);
-  }
-
-  @Test
-  public void findAllSubAccountEmptyTest() {
-
-    createEmptySubAccountListMapperStubs();
-    Mockito.when(subResourceService.findAllByAccountId(reference.getId(), pageable))
-        .thenReturn(emptyServiceSubOutputPage);
-
-    Page<SubAccount> response = manager.getSubAccounts(reference.getId(), pageable);
-
-    Assertions.assertThat(response.getContent().size()).isEqualTo(0);
-  }
-
-  @Test
-  public void updateSubAccountTest() {
-
-    createSubAccountMapperStubs();
-    createOptionalSubAccountMapperStubs();
-    Mockito.when(subResourceService.updateById(subReference.getId(), serviceSubResource))
-        .thenReturn(optionalServiceSubOutput);
-
-    Optional<SubAccount> response =
-        manager.updateSubAccount(reference.getId(), subReference.getId(), subResource);
-
-    Assertions.assertThat(response.isPresent()).isTrue();
-    Assertions.assertThat(response.get().getFirstName()).isEqualTo(subResource.getFirstName());
-    Assertions.assertThat(response.get().getId()).isEqualTo(subReference.getId());
-  }
-
-  @Test
-  public void updateSubAccountFailedTest() {
-
-    createSubAccountMapperStubs();
-    createEmptySubAccountMapperStubs();
-    Mockito.when(subResourceService.updateById(subReference.getId(), serviceSubResource))
-        .thenReturn(emptyServiceSubOutput);
-
-    Optional<SubAccount> response =
-        manager.updateSubAccount(reference.getId(), subReference.getId(), subResource);
-
-    Assertions.assertThat(response.isEmpty()).isTrue();
-  }
-
-  @Test
-  public void deleteSubAccountTest() {
-
-    createOptionalSubAccountMapperStubs();
-    Mockito.when(subResourceService.deleteById(subReference.getId()))
-        .thenReturn(optionalServiceSubOutput);
-
-    Optional<SubAccount> response =
-        manager.deleteSubAccount(reference.getId(), subReference.getId());
-
-    Assertions.assertThat(response.isPresent()).isTrue();
-    Assertions.assertThat(response.get().getFirstName()).isEqualTo(subOutput.getFirstName());
-    Assertions.assertThat(response.get().getId()).isEqualTo(subOutput.getId());
-  }
-
-  @Test
-  public void deleteSubAccountFailedTest() {
-
-    createEmptySubAccountMapperStubs();
-    Mockito.when(subResourceService.deleteById(bogus.getId())).thenReturn(emptyServiceSubOutput);
-
-    Optional<SubAccount> response = manager.deleteSubAccount(reference.getId(), bogus.getId());
 
     Assertions.assertThat(response.isEmpty()).isTrue();
   }
