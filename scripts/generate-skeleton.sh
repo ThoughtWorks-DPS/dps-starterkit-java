@@ -9,12 +9,15 @@ projectName="dps-starterkit-java"
 serviceName="Example"
 binary="cookiecutter"
 tag=""
+tl="io"
+org="twdps"
 
 function usage {
   echo "${0} [--tag <tag>] [--parent <name>] [--child <name>] [--resource <name>] \ "
   echo "     [--gen-parent] [--gen-child] [--gen-resource] [--gen-link] \ "
   echo "     [--repo <repo>] [--output <path>]  [--binary <path>] \ "
   echo "     [--project <projectName>] [--service <serviceName>]"
+  echo "     [--org <orgName>] [--tl <tlName>]"
   echo "  --tag          release tag to checkout ($tag)"
   echo "  --parent       name of parent resource variable name (${parent})"
   echo "  --child        name of child resource variable name (${child})"
@@ -24,6 +27,8 @@ function usage {
   echo "  --project      name of project (${projectName})"
   echo "  --service      name of the service (${serviceName})"
   echo "  --output       path for generated output (${outputPath})"
+  echo "  --tl           top-level package name (${tl})"
+  echo "  --org          org-level package name (${org})"
   echo "  --gen-skeleton generate the core service structure"
   echo "  --gen-parent   generate the parent resource"
   echo "  --gen-child    generate the child resource"
@@ -52,6 +57,8 @@ function get_baseline {
   [ -z "${tag}" ] || baseline="${baseline} --checkout ${tag}"
   baseline="${baseline} PROJECT_TITLE=${projectName}"
   baseline="${baseline} SERVICE_NAME=${serviceName}"
+  baseline="${baseline} PKG_TL_NAME=${tl}"
+  baseline="${baseline} PKG_ORG_NAME=${org}"
 
   echo "${baseline}"
 }
@@ -121,6 +128,8 @@ do
   --binary) shift; binary=$1;;
   --repo) shift; repo=$1;;
   --output) shift; outputPath=$1;;
+  --tl) shift; tl=$1;;
+  --org) shift; org=$1;;
   --gen-skeleton) generate_skeleton "${resource}";;
   --gen-parent) generate_parent "${parent}" "${child}";;
   --gen-child) generate_child "${parent}" "${child}";;
