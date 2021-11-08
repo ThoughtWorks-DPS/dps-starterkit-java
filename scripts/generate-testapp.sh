@@ -4,8 +4,8 @@ path=$(dirname "$0")
 binary="${path}"/generate-skeleton.sh
 release=release-0.1.0
 releaseOpt="--tag ${release}"
-repoPath="--repo https://github.com/thoughtworks-dps/dps-starterkit-java"
-#repoPath="--repo ~/Documents/src/gst/gst-starterkit-java"
+#repoPath="--repo https://github.com/thoughtworks-dps/dps-starterkit-java"
+repoPath="--repo ~/src/dps/dps-starterkit-java"
 tl="--tl com"
 org="--org tw"
 project="--project collector"
@@ -13,7 +13,7 @@ service="--service Collector"
 output="--output ~/src/dps/tmp"
 
 function cmdLineOptions {
-  echo "${repoPath} ${project} ${service} ${output}"
+  echo "${repoPath} ${project} ${service} ${output} ${tl} ${org}"
 }
 
 function exec_cmd {

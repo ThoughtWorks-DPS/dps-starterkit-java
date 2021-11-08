@@ -1,7 +1,8 @@
 {
-  "PROJECT_NAME" : "dps-starterkit-java",
+  "PROJECT_TITLE": "DPS StarterKit Java",
+  "PROJECT_NAME": "{{cookiecutter.PROJECT_TITLE|lower|replace(' ', '-')|replace('_', '-')}}",
   "GITHUB_ORG_NAME": "thoughtworks-dps",
-  "PACKAGE_NAME": "{{cookiecutter.PROJECT_NAME|lower|replace(' ', '-')|replace('_', '-')}}",
+  "PACKAGE_NAME": "{{cookiecutter.PROJECT_TITLE|lower|replace(' ', '-')|replace('_', '-')}}",
   "PROJECT_DESCRIPTION": "Java API Starter from Template",
   "PROJECT_OWNER": "starter-java@example.com",
   "DOCKER_REGISTRY" : "docker.pkg.github.com/{{cookiecutter.GITHUB_ORG_NAME}}/{{cookiecutter.PACKAGE_NAME}}",
