@@ -82,6 +82,7 @@ then
     mkdir -p "${dst}" || exit 1
   else
     [[ "${clear}" == "y" ]] && rm -rf "${dst:?}"/{*,.*} 2> /dev/null
+    [[ -e "${dst}"/.git ]] && [[ "${nukeGit}" == "y" ]] && rm -rf "${dst:?}"/.git
   fi
   cp -r "${path}" "${dst}"
   path="${dst}"
