@@ -15,19 +15,19 @@ public interface {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}
 
   @Mapping(target = "{{cookiecutter.RESOURCE_VAR_NAME}}Id", source = "{{cookiecutter.RESOURCE_VAR_NAME}}Id")
   @Mapping(target = "pii", constant = "FIXME")
-  io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} toServiceModel(
+  {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} toServiceModel(
       {{cookiecutter.SUB_RESOURCE_NAME}} src, String {{cookiecutter.RESOURCE_VAR_NAME}}Id);
 
   {{cookiecutter.SUB_RESOURCE_NAME}} fromServiceModel(
-      io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} src);
+      {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} src);
 
   default Optional<{{cookiecutter.SUB_RESOURCE_NAME}}> fromServiceModel(
-     Optional<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}> src) {
+     Optional<{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}> src) {
    return Optional.ofNullable(fromServiceModel(src.orElse(null)));
   }
 
   default Page<{{cookiecutter.SUB_RESOURCE_NAME}}> fromServiceModelPage(
-     Page<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}> src) {
+     Page<{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}> src) {
    return src.map(this::fromServiceModel);
   }
 

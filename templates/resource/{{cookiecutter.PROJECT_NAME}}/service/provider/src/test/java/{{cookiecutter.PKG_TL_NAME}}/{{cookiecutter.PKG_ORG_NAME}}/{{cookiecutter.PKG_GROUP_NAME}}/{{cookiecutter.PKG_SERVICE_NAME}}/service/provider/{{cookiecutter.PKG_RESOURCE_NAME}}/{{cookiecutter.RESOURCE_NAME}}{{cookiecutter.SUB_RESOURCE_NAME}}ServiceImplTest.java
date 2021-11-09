@@ -46,19 +46,19 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Ser
 
   private final Pageable pageable = Pageable.unpaged();
   private final String parentIdentifier = "uuid-parent";
-  private io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} serviceResource;
-  private io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} serviceOutput;
-  private List<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+  private {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} serviceResource;
+  private {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} serviceOutput;
+  private List<{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
       serviceOutputList;
-  private List<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+  private List<{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
       emptyServiceOutputList = Arrays.asList();
-  private Page<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+  private Page<{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
       serviceOutputPage;
-  private Page<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+  private Page<{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
       emptyServiceOutputPage;
-  private Optional<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+  private Optional<{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
       optionalServiceOutput;
-  private Optional<io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
+  private Optional<{{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}>
       emptyServiceOutput = Optional.empty();
   private {{cookiecutter.SUB_RESOURCE_NAME}} subResource;
   private {{cookiecutter.SUB_RESOURCE_NAME}} subOutput;
@@ -78,9 +78,6 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Ser
     reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
     bogus = resourceTestData.createBySpec("bogus");
 
-    // use the real mapper to generate consistent objects to use in mapper stubs
-    {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}EntityMapper real = Mappers.getMapper({{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}EntityMapper.class);
-
     subResource =
         {{cookiecutter.SUB_RESOURCE_NAME}}.builder()
             .userName(reference.getUserName())
@@ -88,34 +85,35 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Ser
             .lastName(reference.getLastName())
             .build();
     serviceResource =
-        io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}.builder()
+        {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}.builder()
             .userName(reference.getUserName())
             .firstName(reference.getFirstName())
             .lastName(reference.getLastName())
             .pii(reference.getPii())
             .build();
     serviceOutput =
-        io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}.builder()
+        {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}.builder()
             .id(reference.getId())
             .userName(reference.getUserName())
             .firstName(reference.getFirstName())
             .lastName(reference.getLastName())
             .pii(reference.getPii())
-{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
-            .{{cookiecutter.PARENT_RESOURCE_VAR_NAME}}(reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id())
-{%- endif %}
-            .accountId(parentIdentifier)
+            .{{cookiecutter.RESOURCE_VAR_NAME}}Id(parentIdentifier)
             .build();
     optionalServiceOutput = Optional.of(serviceOutput);
     serviceOutputList = Arrays.asList(serviceOutput, serviceOutput);
     serviceOutputPage = new PageImpl<>(serviceOutputList);
     emptyServiceOutputPage = new PageImpl<>(emptyServiceOutputList);
+    emptySubOutputPage = new PageImpl<>(emptySubOutputList);
+
+    // use the real mapper to generate consistent objects to use in mapper stubs
+    {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}EntityMapper real = Mappers.getMapper({{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}EntityMapper.class);
     subOutput = real.fromServiceModel(serviceOutput);
     optionalSubOutput = Optional.of(subOutput);
     subOutputList = Arrays.asList(subOutput, subOutput);
     subOutputPage = new PageImpl<>(subOutputList);
-    emptySubOutputPage = new PageImpl<>(emptySubOutputList);
-  }
+
+    }
 
   private void create{{cookiecutter.SUB_RESOURCE_NAME}}MapperStubs() {
     Mockito.when(mapper.toServiceModel(subResource, parentIdentifier)).thenReturn(serviceResource);

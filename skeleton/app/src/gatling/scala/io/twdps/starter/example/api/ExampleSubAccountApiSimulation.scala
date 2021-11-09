@@ -4,8 +4,6 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 
 import scala.concurrent.duration.DurationInt
-import scala.concurrent.duration._
-
 
 class ExampleSubAccountApiSimulation extends Simulation {
 
@@ -17,7 +15,7 @@ class ExampleSubAccountApiSimulation extends Simulation {
   val scn = scenario("API Endpoint Simulation")
     .exec(http("Create SubAccount")
       .post("/v1/example/subaccounts")
-      .body(StringBody("""{"userName":"mary.q.contrary", "pii": "987-65-4321", "firstName": "Mary", "lastName":"Contrary"}"""))
+      .body(StringBody("""{"userName":"mary.q.contrary", "pii": "987-65-4321", "firstName": "Mary", "lastName":"Contrary", "accountId": "uuid-parent"}"""))
       .asJson
       .check(jsonPath("$.id").saveAs("userId")))
     .exec(http("Get SubAccount")

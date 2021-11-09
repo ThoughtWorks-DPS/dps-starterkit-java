@@ -72,9 +72,6 @@ public class AccountSubAccountServiceImplTest {
     reference = resourceTestData.createBySpec(NamedDataFactory.DEFAULT_SPEC);
     bogus = resourceTestData.createBySpec("bogus");
 
-    // use the real mapper to generate consistent objects to use in mapper stubs
-    AccountSubAccountEntityMapper real = Mappers.getMapper(AccountSubAccountEntityMapper.class);
-
     subResource =
         SubAccount.builder()
             .userName(reference.getUserName())
@@ -101,11 +98,14 @@ public class AccountSubAccountServiceImplTest {
     serviceOutputList = Arrays.asList(serviceOutput, serviceOutput);
     serviceOutputPage = new PageImpl<>(serviceOutputList);
     emptyServiceOutputPage = new PageImpl<>(emptyServiceOutputList);
+    emptySubOutputPage = new PageImpl<>(emptySubOutputList);
+
+    // use the real mapper to generate consistent objects to use in mapper stubs
+    AccountSubAccountEntityMapper real = Mappers.getMapper(AccountSubAccountEntityMapper.class);
     subOutput = real.fromServiceModel(serviceOutput);
     optionalSubOutput = Optional.of(subOutput);
     subOutputList = Arrays.asList(subOutput, subOutput);
     subOutputPage = new PageImpl<>(subOutputList);
-    emptySubOutputPage = new PageImpl<>(emptySubOutputList);
   }
 
   private void createSubAccountMapperStubs() {

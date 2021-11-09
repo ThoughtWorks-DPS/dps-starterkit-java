@@ -45,7 +45,7 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Ent
   public void mapperService{{cookiecutter.SUB_RESOURCE_NAME}}Test() {
     {{cookiecutter.SUB_RESOURCE_NAME}} resource = createResource(reference.getId());
 
-    io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} model =
+    {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} model =
         mapper.toServiceModel(resource, parentIdentifier);
 
     verifyServiceModel(model);
@@ -70,13 +70,13 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Ent
    * @param subResource the object to validate
    */
   protected void verifyServiceModel(
-      io.twdps.starter.example.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} subResource) {
+      {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}} subResource) {
     assertThat(subResource.getUserName()).isEqualTo(reference.getUserName());
     assertThat(subResource.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(subResource.getLastName()).isEqualTo(reference.getLastName());
     assertThat(subResource.getPii()).isEqualTo("FIXME");
     assertThat(subResource.getId()).isEqualTo(reference.getId());
-    assertThat(subResource.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isEqualTo(parentIdentifier);
+    assertThat(subResource.get{{cookiecutter.RESOURCE_NAME}}Id()).isEqualTo(parentIdentifier);
   }
 }
 {%- endif %}

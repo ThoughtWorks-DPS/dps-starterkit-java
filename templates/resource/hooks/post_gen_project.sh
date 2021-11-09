@@ -20,6 +20,7 @@ tl="{{cookiecutter.PKG_TL_NAME}}"
 org="{{cookiecutter.PKG_ORG_NAME}}"
 group="{{cookiecutter.PKG_GROUP_NAME}}"
 service="{{cookiecutter.PKG_SERVICE_NAME}}"
+serviceName="{{cookiecutter.SERVICE_NAME}}"
 pkgResource="{{cookiecutter.PKG_RESOURCE_NAME}}"
 resource="{{cookiecutter.RESOURCE_NAME}}"
 subresource="{{cookiecutter.SUB_RESOURCE_NAME}}"
@@ -30,6 +31,7 @@ then
   remove api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${pkgResource}"/resources/${resource}${subresource}Resource.java
   remove api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${pkgResource}"/responses/${subresource}Response.java
   remove api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${pkgResource}"/responses/Paged${subresource}Response.java
+  remove app/src/gatling/scala/"${tl}"/"${org}"/"${group}"/"${service}"/api/${serviceName}${resource}${subresource}ApiSimulation.scala
   remove controller/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${pkgResource}"/${resource}${subresource}Controller.java
   remove controller/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${pkgResource}"/mapper/${resource}${subresource}RequestMapper.java
   remove controller/src/test/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${pkgResource}"/${resource}${subresource}ControllerTest.java
@@ -46,6 +48,7 @@ else
   echo api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${pkgResource}"/resources/${resource}${subresource}Resource.java
   echo api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${pkgResource}"/responses/${subresource}Response.java >> /tmp/cc.out
   echo api/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/api/"${pkgResource}"/responses/Paged${subresource}Response.java >> /tmp/cc.out
+  echo app/src/gatling/scala/"${tl}"/"${org}"/"${group}"/"${service}"/api/${serviceName}${resource}${subresource}ApiSimulation.scala
   echo controller/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${pkgResource}"/${resource}${subresource}Controller.java
   echo controller/src/main/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${pkgResource}"/mapper/${resource}${subresource}RequestMapper.java
   echo controller/src/test/java/"${tl}"/"${org}"/"${group}"/"${service}"/controller/"${pkgResource}"/${resource}${subresource}ControllerTest.java
