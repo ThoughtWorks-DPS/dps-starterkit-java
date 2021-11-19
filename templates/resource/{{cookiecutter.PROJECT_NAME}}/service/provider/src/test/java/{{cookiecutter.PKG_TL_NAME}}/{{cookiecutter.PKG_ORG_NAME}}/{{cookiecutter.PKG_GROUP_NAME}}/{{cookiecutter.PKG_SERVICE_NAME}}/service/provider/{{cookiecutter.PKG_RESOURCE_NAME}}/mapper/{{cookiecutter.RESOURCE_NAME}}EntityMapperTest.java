@@ -154,9 +154,12 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
         reference.getFirstName(),
         reference.getLastName()
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+        // TODO: Additional {{cookiecutter.RESOURCE_NAME}} data elements
         reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
-{%- endif -%}
-    );
+{%- else %}
+        // TODO: Additional {{cookiecutter.RESOURCE_NAME}} data elements
+{%- endif %}
+        );
   }
 
   /**
@@ -171,9 +174,12 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
         reference.getFirstName(),
         reference.getLastName()
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+        // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Entity data elements
         reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
-{%- endif -%}
-    );
+{%- else %}
+        // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Entity data elements
+{%- endif %}
+        );
   }
 
   /**
@@ -186,6 +192,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     assertThat(response.getPii()).isEqualTo(reference.getPii());
     assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional {{cookiecutter.RESOURCE_NAME}} fields
     assertThat(response.getId()).isEqualTo(reference.getId());
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
     assertThat(response.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isEqualTo(reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id());
@@ -217,6 +224,7 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityMapperTest {
     assertThat(response.getPii()).isEqualTo(reference.getPii());
     assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional {{cookiecutter.RESOURCE_NAME}}Entity fields
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
     if (hasParentId) {
       assertThat(response.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isEqualTo(reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id());

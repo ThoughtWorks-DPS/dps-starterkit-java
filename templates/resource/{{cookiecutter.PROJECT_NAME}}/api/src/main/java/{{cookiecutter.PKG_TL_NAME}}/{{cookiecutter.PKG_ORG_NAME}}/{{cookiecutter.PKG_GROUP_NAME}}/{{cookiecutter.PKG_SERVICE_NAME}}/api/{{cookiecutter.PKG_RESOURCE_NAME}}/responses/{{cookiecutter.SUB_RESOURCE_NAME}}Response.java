@@ -17,6 +17,7 @@ import lombok.ToString;
     description = "Metadata describing an Account resource and unique identifier")
 public class {{cookiecutter.SUB_RESOURCE_NAME}}Response {
 
+  // TODO: Refactor {{cookiecutter.SUB_RESOURCE_NAME}}Response by renaming variable names, migrate types
   @NonNull
   @Schema(description = "unique id of the {{cookiecutter.SUB_RESOURCE_NAME}} resource")
   private final String id;
@@ -32,4 +33,6 @@ public class {{cookiecutter.SUB_RESOURCE_NAME}}Response {
   @NonNull
   @Schema(description = "Family name of the {{cookiecutter.SUB_RESOURCE_NAME}} holder")
   private final String lastName;
+
+  // TODO: Additional {{cookiecutter.SUB_RESOURCE_NAME}}Response data elements
 }

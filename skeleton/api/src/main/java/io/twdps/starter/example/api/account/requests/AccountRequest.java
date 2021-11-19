@@ -19,6 +19,7 @@ import lombok.ToString;
 @Schema(name = "AccountRequest", description = "Metadata describing an Account resource")
 public class AccountRequest {
 
+  // TODO: Refactor AccountRequest by renaming variable names, migrate types
   @NonNull
   @Schema(description = "username of the Account holder", example = "lvanpelt")
   private final String userName;
@@ -34,6 +35,8 @@ public class AccountRequest {
   @NonNull
   @Schema(description = "Family name of the Account holder", example = "Van Pelt")
   private final String lastName;
+
+  // TODO: Additional AccountRequest data elements
 
   /**
    * Create object from json.

@@ -42,6 +42,13 @@ test-data:
           pii: eigenvalue
           id: uuid-unit-vector
           account-id: uuid-123456789-abcdef
+        - user-name: osmith
+          first-name: Oops
+          last-name: Smith
+          full-name: Oops Smith
+          pii: for-your-eyes-only
+          id: uuid-license-to-fail
+          account-id: uuid-123456789-abcdef
         - user-name: neo
           first-name: Neo
           last-name: None

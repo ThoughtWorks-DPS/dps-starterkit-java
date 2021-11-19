@@ -22,6 +22,7 @@ public class AccountDataPropertiesTest {
 
   @Autowired private AccountDataProperties testData;
 
+  // TODO: Align these with the AccountData test data
   private final String firstName = "Agent";
   private final String lastName = "Smith";
   private final String pii = "eigenvalue";
@@ -33,6 +34,7 @@ public class AccountDataPropertiesTest {
     assertThat(data.getLastName()).isEqualTo(lastName);
     assertThat(data.getPii()).isEqualTo(pii);
     assertThat(data.getUserName()).isEqualTo(userName);
+    // TODO: Add assertions for additional AccountData fields
   }
 
   @Test

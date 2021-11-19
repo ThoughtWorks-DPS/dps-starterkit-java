@@ -22,6 +22,7 @@ public class {{cookiecutter.RESOURCE_NAME}}DataPropertiesTest {
 
   @Autowired private {{cookiecutter.RESOURCE_NAME}}DataProperties testData;
 
+  // TODO: Align these with the {{cookiecutter.RESOURCE_NAME}}Data test data
   private final String firstName = "Agent";
   private final String lastName = "Smith";
   private final String pii = "eigenvalue";
@@ -33,6 +34,7 @@ public class {{cookiecutter.RESOURCE_NAME}}DataPropertiesTest {
     assertThat(data.getLastName()).isEqualTo(lastName);
     assertThat(data.getPii()).isEqualTo(pii);
     assertThat(data.getUserName()).isEqualTo(userName);
+    // TODO: Add assertions for additional {{cookiecutter.RESOURCE_NAME}}Data fields
   }
 
   @Test

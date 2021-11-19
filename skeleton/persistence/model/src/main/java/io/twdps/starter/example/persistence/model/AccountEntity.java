@@ -30,8 +30,10 @@ public class AccountEntity {
   @XmlAttribute
   private String id;
 
+  // TODO: Refactor AccountEntity by renaming variable names, migrate types
   @NonNull private String userName;
   @NonNull private String pii;
   @NonNull private String firstName;
   @NonNull private String lastName;
+  // TODO: Additional AccountEntity data elements
 }

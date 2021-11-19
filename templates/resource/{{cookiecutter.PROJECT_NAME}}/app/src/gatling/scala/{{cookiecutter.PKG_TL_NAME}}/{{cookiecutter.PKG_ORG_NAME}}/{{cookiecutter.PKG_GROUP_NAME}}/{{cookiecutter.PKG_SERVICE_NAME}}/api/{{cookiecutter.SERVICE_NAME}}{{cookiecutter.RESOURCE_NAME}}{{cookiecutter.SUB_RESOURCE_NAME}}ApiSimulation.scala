@@ -16,6 +16,7 @@ class {{cookiecutter.SERVICE_NAME}}{{cookiecutter.RESOURCE_NAME}}{{cookiecutter.
   val scn = scenario("API Endpoint Simulation")
     .exec(http("Create {{cookiecutter.RESOURCE_NAME}}")
       .post("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}")
+      // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Request data elements
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
       .body(StringBody("""{"userName":"mary.q.contrary", "pii": "987-65-4321", "firstName": "Mary", "lastName":"Contrary", "{{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id": "uuid-parent"}"""))
 {%- else %}
@@ -27,6 +28,7 @@ class {{cookiecutter.SERVICE_NAME}}{{cookiecutter.RESOURCE_NAME}}{{cookiecutter.
       .get("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/${userId}")) // 92534752-a39c-499c-aa13-528cd0143f7c
     .exec(http("Create {{cookiecutter.RESOURCE_NAME}} {{cookiecutter.SUB_RESOURCE_NAME}}")
       .post("/v1/{{cookiecutter.SERVICE_URL}}/{{cookiecutter.RESOURCE_URL}}/${userId}/{{cookiecutter.SUB_RESOURCE_URL}}")
+      // TODO: Additional {{cookiecutter.SUB_RESOURCE_NAME}}Request data elements
       .body(StringBody("""{"userName":"jack.sprat", "firstName": "Jack", "lastName":"Sprat", "{{cookiecutter.RESOURCE_VAR_NAME}}Id": "uuid-parent"}"""))
       .asJson
       .check(jsonPath("$.id").saveAs("subUserId")))

@@ -83,6 +83,7 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Ser
             .userName(reference.getUserName())
             .firstName(reference.getFirstName())
             .lastName(reference.getLastName())
+            // TODO: Additional {{cookiecutter.SUB_RESOURCE_NAME}} data elements
             .build();
     serviceResource =
         {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}.builder()
@@ -90,6 +91,7 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Ser
             .firstName(reference.getFirstName())
             .lastName(reference.getLastName())
             .pii(reference.getPii())
+            // TODO: Additional {{cookiecutter.SUB_RESOURCE_NAME}} data elements
             .build();
     serviceOutput =
         {{cookiecutter.PKG_TL_NAME}}.{{cookiecutter.PKG_ORG_NAME}}.{{cookiecutter.PKG_GROUP_NAME}}.{{cookiecutter.PKG_SERVICE_NAME}}.service.spi.{{cookiecutter.PKG_SUB_RESOURCE_NAME}}.model.{{cookiecutter.SUB_RESOURCE_NAME}}.builder()
@@ -98,6 +100,7 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Ser
             .firstName(reference.getFirstName())
             .lastName(reference.getLastName())
             .pii(reference.getPii())
+            // TODO: Additional {{cookiecutter.SUB_RESOURCE_NAME}} data elements
             .{{cookiecutter.RESOURCE_VAR_NAME}}Id(parentIdentifier)
             .build();
     optionalServiceOutput = Optional.of(serviceOutput);

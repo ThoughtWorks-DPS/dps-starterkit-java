@@ -78,6 +78,7 @@ public class SubAccountServiceImplTest {
             .pii(reference.getPii())
             .firstName(reference.getFirstName())
             .lastName(reference.getLastName())
+            // TODO: Additional SubAccount data elements
             .build();
     entity = real.toEntity(resource);
     added =
@@ -87,6 +88,7 @@ public class SubAccountServiceImplTest {
             entity.getPii(),
             entity.getFirstName(),
             entity.getLastName(),
+            // TODO: Additional SubAccountEntity data elements
             entity.getAccountId());
     output = real.toModel(added);
     optionalEntity = Optional.of(entity);

@@ -90,14 +90,18 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Con
 
     subRequest = new {{cookiecutter.SUB_RESOURCE_NAME}}Request(subReference.getUserName(),
         subReference.getFirstName(),
-        subReference.getLastName());
+        subReference.getLastName()
+        // TODO: Additional {{cookiecutter.SUB_RESOURCE_NAME}}Request data elements
+        );
     subResource = real.toModel(subRequest);
     subOutput =
         new {{cookiecutter.SUB_RESOURCE_NAME}}(
             subReference.getId(),
             subResource.getUserName(),
             subResource.getFirstName(),
-            subResource.getLastName());
+            subResource.getLastName()
+            // TODO: Additional {{cookiecutter.SUB_RESOURCE_NAME}} data elements
+            );
     subResponse = real.to{{cookiecutter.SUB_RESOURCE_NAME}}Response(subOutput);
     optionalSubResponse = Optional.of(subResponse);
     optionalSubOutput = Optional.of(subOutput);
@@ -270,12 +274,37 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Con
    * helper function to validate standard values.
    *
    * @param resource the object to validate
+   * @param reference what to compare with
+   */
+  protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}({{cookiecutter.SUB_RESOURCE_NAME}} resource, {{cookiecutter.SUB_RESOURCE_NAME}}Data reference) {
+    assertThat(resource.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(resource.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(resource.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional {{cookiecutter.SUB_RESOURCE_NAME}} fields
+    assertThat(resource.getId()).isNotEqualTo(reference.getId());
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param response the object to validate
+   * @param reference what to compare with
+   */
+  protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}Response({{cookiecutter.SUB_RESOURCE_NAME}}Response response, {{cookiecutter.SUB_RESOURCE_NAME}}Data reference) {
+    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional {{cookiecutter.SUB_RESOURCE_NAME}}Response fields
+    assertThat(response.getId()).isEqualTo(reference.getId());
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param resource the object to validate
    */
   protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}({{cookiecutter.SUB_RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(subReference.getUserName()));
-    assertThat(resource.getFirstName().equals(subReference.getFirstName()));
-    assertThat(resource.getLastName().equals(subReference.getLastName()));
-    assertThat(resource.getId()).isNotEqualTo(subReference.getId());
+    verify{{cookiecutter.SUB_RESOURCE_NAME}}(resource, subReference);
   }
 
   /**
@@ -284,7 +313,7 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Con
    * @param response the object to validate
    */
   protected void verify{{cookiecutter.SUB_RESOURCE_NAME}}Response({{cookiecutter.SUB_RESOURCE_NAME}}Response response) {
-    assertThat(response.getId()).isEqualTo(subReference.getId());
+    verify{{cookiecutter.SUB_RESOURCE_NAME}}Response(response, subReference);
   }
 
 }

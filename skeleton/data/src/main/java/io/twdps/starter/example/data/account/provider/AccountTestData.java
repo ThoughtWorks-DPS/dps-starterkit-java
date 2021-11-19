@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class AccountTestData extends GenericDataLoader<AccountData> {
 
   /** construct hard-coded test data. */
+  // TODO: Additional AccountData data values.  See also ./resources/application-account.yml
   public AccountTestData() {
     getData()
         .put(
@@ -42,6 +43,14 @@ public class AccountTestData extends GenericDataLoader<AccountData> {
                     .fullName("Agent Smith")
                     .pii("eigenvalue")
                     .id("uuid-unit-vector")
+                    .build(),
+                AccountData.builder()
+                    .firstName("Oops")
+                    .lastName("Smith")
+                    .userName("osmith")
+                    .fullName("Oops Smith")
+                    .pii("for-your-eyes-only")
+                    .id("uuid-license-to-fail")
                     .build(),
                 AccountData.builder()
                     .firstName("Neo")

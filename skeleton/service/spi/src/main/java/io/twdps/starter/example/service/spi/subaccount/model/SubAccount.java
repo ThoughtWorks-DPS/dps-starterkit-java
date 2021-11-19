@@ -19,9 +19,11 @@ public class SubAccount {
 
   private String id;
 
+  // TODO: Refactor SubAccount by renaming variable names, migrate types
   @NonNull private String userName;
   @NonNull private String pii;
   @NonNull private String firstName;
   @NonNull private String lastName;
+  // TODO: Additional SubAccount data elements
   private String accountId;
 }

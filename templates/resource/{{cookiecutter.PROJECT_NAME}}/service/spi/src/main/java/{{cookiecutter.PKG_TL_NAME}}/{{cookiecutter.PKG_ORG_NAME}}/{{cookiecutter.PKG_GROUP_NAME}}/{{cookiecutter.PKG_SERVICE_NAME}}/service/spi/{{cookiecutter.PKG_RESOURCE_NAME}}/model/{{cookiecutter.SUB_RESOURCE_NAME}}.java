@@ -19,10 +19,12 @@ public class {{cookiecutter.SUB_RESOURCE_NAME}} {
 
   private String id;
 
+  // TODO: Refactor {{cookiecutter.SUB_RESOURCE_NAME}} by renaming variable names, migrate types
   @NonNull
   private String userName;
   @NonNull
   private String firstName;
   @NonNull
   private String lastName;
+  // TODO: Additional {{cookiecutter.SUB_RESOURCE_NAME}} data elements
 }

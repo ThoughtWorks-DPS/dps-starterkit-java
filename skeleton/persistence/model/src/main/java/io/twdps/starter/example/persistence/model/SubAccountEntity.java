@@ -30,9 +30,11 @@ public class SubAccountEntity {
   @XmlAttribute
   private String id;
 
+  // TODO: Refactor SubAccountEntity by renaming variable names, migrate types
   @NonNull private String userName;
   @NonNull private String pii;
   @NonNull private String firstName;
   @NonNull private String lastName;
+  // TODO: Additional SubAccountEntity data elements
   private String accountId;
 }

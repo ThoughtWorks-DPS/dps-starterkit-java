@@ -150,6 +150,7 @@ public class SubAccountEntityMapperTest {
         reference.getPii(),
         reference.getFirstName(),
         reference.getLastName(),
+        // TODO: Additional SubAccount data elements
         reference.getAccountId());
   }
 
@@ -165,6 +166,7 @@ public class SubAccountEntityMapperTest {
         reference.getPii(),
         reference.getFirstName(),
         reference.getLastName(),
+        // TODO: Additional SubAccountEntity data elements
         reference.getAccountId());
   }
 
@@ -178,6 +180,7 @@ public class SubAccountEntityMapperTest {
     assertThat(response.getPii()).isEqualTo(reference.getPii());
     assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional SubAccount fields
     assertThat(response.getId()).isEqualTo(reference.getId());
     assertThat(response.getAccountId()).isEqualTo(reference.getAccountId());
   }
@@ -204,6 +207,7 @@ public class SubAccountEntityMapperTest {
     assertThat(response.getPii()).isEqualTo(reference.getPii());
     assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional SubAccountEntity fields
     if (hasParentId) {
       assertThat(response.getAccountId()).isEqualTo(reference.getAccountId());
     } else {

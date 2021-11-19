@@ -19,6 +19,7 @@ public class {{cookiecutter.RESOURCE_NAME}} {
 
   private String id;
 
+  // TODO: Refactor {{cookiecutter.RESOURCE_NAME}} by renaming variable names, migrate types
   @NonNull
   private String userName;
   @NonNull
@@ -27,6 +28,7 @@ public class {{cookiecutter.RESOURCE_NAME}} {
   private String firstName;
   @NonNull
   private String lastName;
+  // TODO: Additional {{cookiecutter.RESOURCE_NAME}} data elements
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
   private String {{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id;
 {%- endif %}

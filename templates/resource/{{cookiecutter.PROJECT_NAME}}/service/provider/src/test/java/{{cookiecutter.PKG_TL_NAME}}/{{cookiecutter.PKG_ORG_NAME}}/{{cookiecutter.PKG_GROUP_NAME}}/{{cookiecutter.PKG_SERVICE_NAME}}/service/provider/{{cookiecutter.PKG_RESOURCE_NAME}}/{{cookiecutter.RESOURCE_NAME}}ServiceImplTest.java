@@ -78,6 +78,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
             .pii(reference.getPii())
             .firstName(reference.getFirstName())
             .lastName(reference.getLastName())
+            // TODO: Additional {{cookiecutter.RESOURCE_NAME}} data elements
             .build();
     entity = real.toEntity(resource);
     added =
@@ -88,9 +89,12 @@ public class {{cookiecutter.RESOURCE_NAME}}ServiceImplTest {
             entity.getFirstName(),
             entity.getLastName()
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+            // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Entity data elements
             entity.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
-{%- endif -%}
-    );
+{%- else %}
+            // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Entity data elements
+{%- endif %}
+            );
     output = real.toModel(added);
     optionalEntity = Optional.of(entity);
     optionalAdded = Optional.of(added);

@@ -19,8 +19,10 @@ public class Account {
 
   private String id;
 
+  // TODO: Refactor Account by renaming variable names, migrate types
   @NonNull private String userName;
   @NonNull private String pii;
   @NonNull private String firstName;
   @NonNull private String lastName;
+  // TODO: Additional Account data elements
 }

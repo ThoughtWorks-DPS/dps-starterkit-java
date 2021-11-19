@@ -14,12 +14,14 @@ import lombok.NoArgsConstructor;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class {{cookiecutter.RESOURCE_NAME}}Data {
 
+  // TODO: Refactor {{cookiecutter.RESOURCE_NAME}}Data by renaming variable names, migrate types
   private String id;
   private String userName;
   private String pii;
   private String firstName;
   private String lastName;
   private String fullName;
+  // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Data data elements
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
   private String {{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id;
 {%- endif %}

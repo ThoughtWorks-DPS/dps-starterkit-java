@@ -49,6 +49,7 @@ public class AccountSubAccountEntityMapperTest {
   private SubAccount createResource(String id) {
     return new SubAccount(
         id, reference.getUserName(), reference.getFirstName(), reference.getLastName());
+    // TODO: Additional SubAccount data elements
   }
 
   /**
@@ -64,5 +65,6 @@ public class AccountSubAccountEntityMapperTest {
     assertThat(subResource.getPii()).isEqualTo("FIXME");
     assertThat(subResource.getId()).isEqualTo(reference.getId());
     assertThat(subResource.getAccountId()).isEqualTo(parentIdentifier);
+    // TODO: Add assertions for additional SubAccount fields
   }
 }

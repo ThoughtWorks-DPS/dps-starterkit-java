@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class SubAccountTestData extends GenericDataLoader<SubAccountData> {
 
   /** construct hard-coded test data. */
+  // TODO: Additional SubAccountData data values.  See also ./resources/application-subaccount.yml
   public SubAccountTestData() {
     getData()
         .put(
@@ -44,6 +45,15 @@ public class SubAccountTestData extends GenericDataLoader<SubAccountData> {
                     .fullName("Agent Smith")
                     .pii("eigenvalue")
                     .id("uuid-unit-vector")
+                    .accountId("uuid-123456789-abcdef")
+                    .build(),
+                SubAccountData.builder()
+                    .firstName("Oops")
+                    .lastName("Smith")
+                    .userName("osmith")
+                    .fullName("Oops Smith")
+                    .pii("for-your-eyes-only")
+                    .id("uuid-license-to-fail")
                     .accountId("uuid-123456789-abcdef")
                     .build(),
                 SubAccountData.builder()

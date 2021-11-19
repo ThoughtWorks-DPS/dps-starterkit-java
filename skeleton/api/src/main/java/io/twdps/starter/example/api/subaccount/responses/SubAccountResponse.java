@@ -17,6 +17,7 @@ import lombok.ToString;
     description = "Metadata describing an SubAccount resource and unique identifier")
 public class SubAccountResponse {
 
+  // TODO: Refactor SubAccountResponse by renaming variable names, migrate types
   @NonNull
   @Schema(
       description = "unique id of the SubAccount resource",
@@ -44,6 +45,8 @@ public class SubAccountResponse {
       description = "Constructed full name (given + family) of the SubAccount holder",
       example = "Lucy van Pelt")
   private final String fullName;
+
+  // TODO: Additional SubAccountResponse data elements
 
   @NonNull
   @Schema(

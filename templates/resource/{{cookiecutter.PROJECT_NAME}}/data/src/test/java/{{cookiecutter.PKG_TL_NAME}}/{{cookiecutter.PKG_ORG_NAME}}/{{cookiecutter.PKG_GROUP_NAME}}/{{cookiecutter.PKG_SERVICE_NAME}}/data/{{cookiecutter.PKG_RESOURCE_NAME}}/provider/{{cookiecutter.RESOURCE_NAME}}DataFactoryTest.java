@@ -32,6 +32,7 @@ public class {{cookiecutter.RESOURCE_NAME}}DataFactoryTest {
     assertThat(data.getLastName()).isEqualTo(control.getLastName());
     assertThat(data.getPii()).isEqualTo(control.getPii());
     assertThat(data.getUserName()).isEqualTo(control.getUserName());
+    // TODO: Add assertions for additional {{cookiecutter.RESOURCE_NAME}} fields
   }
 
   @Test

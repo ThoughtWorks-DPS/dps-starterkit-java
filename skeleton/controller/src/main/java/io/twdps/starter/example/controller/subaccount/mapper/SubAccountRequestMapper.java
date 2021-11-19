@@ -17,6 +17,7 @@ public interface SubAccountRequestMapper {
   @Mapping(constant = "UNKNOWN_ID", target = "id")
   SubAccount toModel(SubAccountRequest request);
 
+  // TODO: possibly remove this constructed field value
   @Mapping(
       target = "fullName",
       expression = "java(String.format(\"%s %s\",src.getFirstName(),src.getLastName()))")

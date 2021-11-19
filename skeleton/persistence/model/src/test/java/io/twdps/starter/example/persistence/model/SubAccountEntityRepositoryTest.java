@@ -21,7 +21,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -54,7 +56,9 @@ public class SubAccountEntityRepositoryTest {
             reference.getUserName(),
             reference.getPii(),
             reference.getFirstName(),
-            reference.getLastName());
+            reference.getLastName()
+            // TODO: Additional SubAccountEntity data elements
+            );
   }
 
   /**
@@ -62,16 +66,18 @@ public class SubAccountEntityRepositoryTest {
    *
    * @return one of the saved entities
    */
-  public SubAccountEntity populate() {
-    SubAccountEntity result = modelEntityRepository.save(entity);
-    testData.createCollectionBySpec(NamedDataFactory.DEFAULT_SPEC).stream()
-        .forEach(
-            d -> {
-              SubAccountEntity ref =
-                  new SubAccountEntity(
-                      d.getUserName(), d.getPii(), d.getFirstName(), d.getLastName());
-              modelEntityRepository.save(ref);
-            });
+  public List<SubAccountEntity> populate() {
+    List<SubAccountEntity> result =
+        testData.createCollectionBySpec(NamedDataFactory.DEFAULT_SPEC).stream()
+            .map(
+                d -> {
+                  SubAccountEntity ref =
+                      // TODO: Additional SubAccountEntity data elements
+                      new SubAccountEntity(
+                          d.getUserName(), d.getPii(), d.getFirstName(), d.getLastName());
+                  return modelEntityRepository.save(ref);
+                })
+            .collect(Collectors.toList());
 
     return result;
   }
@@ -130,12 +136,16 @@ public class SubAccountEntityRepositoryTest {
 
   @Test
   public void testDeleteRecord() {
-    SubAccountEntity saved = populate();
-
-    modelEntityRepository.deleteById(saved.getId());
+    populate();
+    SubAccountEntity saved = modelEntityRepository.save(entity);
 
     Page<SubAccountEntity> results =
         modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
+    assertThat(results.getContent().size()).isEqualTo(2);
+
+    modelEntityRepository.deleteById(saved.getId());
+
+    results = modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
     assertThat(results.getContent().size()).isEqualTo(1);
   }
 

@@ -146,7 +146,9 @@ public class AccountEntityMapperTest {
         reference.getUserName(),
         reference.getPii(),
         reference.getFirstName(),
-        reference.getLastName());
+        reference.getLastName()
+        // TODO: Additional Account data elements
+        );
   }
 
   /**
@@ -160,7 +162,9 @@ public class AccountEntityMapperTest {
         reference.getUserName(),
         reference.getPii(),
         reference.getFirstName(),
-        reference.getLastName());
+        reference.getLastName()
+        // TODO: Additional AccountEntity data elements
+        );
   }
 
   /**
@@ -173,6 +177,7 @@ public class AccountEntityMapperTest {
     assertThat(response.getPii()).isEqualTo(reference.getPii());
     assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional Account fields
     assertThat(response.getId()).isEqualTo(reference.getId());
   }
 
@@ -197,6 +202,7 @@ public class AccountEntityMapperTest {
     assertThat(response.getPii()).isEqualTo(reference.getPii());
     assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional AccountEntity fields
     if (hasId) {
       assertThat(response.getId()).isEqualTo(reference.getId());
     } else {

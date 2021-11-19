@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface AccountEntityRepository extends PagingAndSortingRepository<AccountEntity, String> {
 
+  // TODO: Refactor AccountEntity queries
   Optional<AccountEntity> findByUserName(String userName);
 
   Page<AccountEntity> findByLastName(String lastName, Pageable pageable);

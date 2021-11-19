@@ -125,8 +125,12 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
         reference.getFirstName(),
         reference.getLastName()
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+        // TODO: Additional {{cookiecutter.RESOURCE_NAME}} data elements
         reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
-{%- endif %});
+{%- else %}
+        // TODO: Additional {{cookiecutter.RESOURCE_NAME}} data elements
+{%- endif %}
+    );
   }
 
   /**
@@ -140,20 +144,26 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
         reference.getFirstName(),
         reference.getLastName()
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+        // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Request data elements
         reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
-{%- endif %});
+{%- else %}
+        // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Request data elements
+{%- endif %}
+    );
   }
 
   /**
    * helper function to validate standard values.
    *
    * @param resource the object to validate
+   * @param reference what to compare with
    */
-  protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource) {
+  protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource, {{cookiecutter.RESOURCE_NAME}}Data reference) {
     assertThat(resource.getUserName()).isEqualTo(reference.getUserName());
     assertThat(resource.getPii()).isEqualTo(reference.getPii());
     assertThat(resource.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(resource.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional {{cookiecutter.RESOURCE_NAME}} fields
     assertThat(resource.getId()).isNotEqualTo(reference.getId());
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
     assertThat(resource.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isEqualTo(reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id());
@@ -164,15 +174,35 @@ public class {{cookiecutter.RESOURCE_NAME}}RequestMapperTest {
    * helper function to validate standard values.
    *
    * @param response the object to validate
+   * @param reference what to compare with
    */
-  private void verify{{cookiecutter.RESOURCE_NAME}}Response({{cookiecutter.RESOURCE_NAME}}Response response) {
+  private void verify{{cookiecutter.RESOURCE_NAME}}Response({{cookiecutter.RESOURCE_NAME}}Response response, {{cookiecutter.RESOURCE_NAME}}Data reference) {
     assertThat(response.getUserName()).isEqualTo(reference.getUserName());
     assertThat(response.getPii()).isEqualTo(reference.getPii());
     assertThat(response.getFullName()).isEqualTo(reference.getFullName());
+    // TODO: Add assertions for additional {{cookiecutter.RESOURCE_NAME}}Response fields
     assertThat(response.getId()).isEqualTo(reference.getId());
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
     assertThat(response.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()).isEqualTo(reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id());
 {%- endif %}
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param resource the object to validate
+   */
+  protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource) {
+    verify{{cookiecutter.RESOURCE_NAME}}(resource, reference);
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param response the object to validate
+   */
+  private void verify{{cookiecutter.RESOURCE_NAME}}Response({{cookiecutter.RESOURCE_NAME}}Response response) {
+    verify{{cookiecutter.RESOURCE_NAME}}Response(response, reference);
   }
 
 }

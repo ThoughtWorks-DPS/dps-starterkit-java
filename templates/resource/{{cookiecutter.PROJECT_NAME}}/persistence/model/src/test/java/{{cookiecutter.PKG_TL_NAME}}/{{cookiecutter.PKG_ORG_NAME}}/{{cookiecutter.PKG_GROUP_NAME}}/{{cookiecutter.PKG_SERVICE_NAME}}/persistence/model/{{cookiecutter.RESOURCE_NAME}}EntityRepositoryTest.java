@@ -21,6 +21,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.stream.Collectors;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
@@ -53,7 +55,9 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
         reference.getUserName(),
         reference.getPii(),
         reference.getFirstName(),
-        reference.getLastName());
+        reference.getLastName()
+        // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Entity data elements
+    );
   }
 
   /**
@@ -61,15 +65,17 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
    *
    * @return one of the saved entities
    */
-  public {{cookiecutter.RESOURCE_NAME}}Entity populate() {
-    {{cookiecutter.RESOURCE_NAME}}Entity result = modelEntityRepository.save(entity);
-    testData.createCollectionBySpec(NamedDataFactory.DEFAULT_SPEC).stream()
-        .forEach(
-            d -> {
-              {{cookiecutter.RESOURCE_NAME}}Entity ref =
-                  new {{cookiecutter.RESOURCE_NAME}}Entity(d.getUserName(), d.getPii(), d.getFirstName(), d.getLastName());
-              modelEntityRepository.save(ref);
-            });
+  public List<{{cookiecutter.RESOURCE_NAME}}Entity> populate() {
+    List<{{cookiecutter.RESOURCE_NAME}}Entity> result =
+      testData.createCollectionBySpec(NamedDataFactory.DEFAULT_SPEC).stream()
+          .map(
+              d -> {
+                {{cookiecutter.RESOURCE_NAME}}Entity ref =
+                    // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Entity data elements
+                    new {{cookiecutter.RESOURCE_NAME}}Entity(d.getUserName(), d.getPii(), d.getFirstName(), d.getLastName());
+                return modelEntityRepository.save(ref);
+              })
+          .collect(Collectors.toList());
 
     return result;
   }
@@ -126,12 +132,16 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
 
   @Test
   public void testDeleteRecord() {
-    {{cookiecutter.RESOURCE_NAME}}Entity saved = populate();
+    populate();
+    {{cookiecutter.RESOURCE_NAME}}Entity saved = modelEntityRepository.save(entity);
+
+    Page<{{cookiecutter.RESOURCE_NAME}}Entity> results =
+    modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
+    assertThat(results.getContent().size()).isEqualTo(2);
 
     modelEntityRepository.deleteById(saved.getId());
 
-    Page<{{cookiecutter.RESOURCE_NAME}}Entity> results =
-        modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
+    results = modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
     assertThat(results.getContent().size()).isEqualTo(1);
   }
 

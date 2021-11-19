@@ -14,10 +14,12 @@ import lombok.NoArgsConstructor;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class AccountData {
 
+  // TODO: Refactor AccountData by renaming variable names, migrate types
   private String id;
   private String userName;
   private String pii;
   private String firstName;
   private String lastName;
   private String fullName;
+  // TODO: Additional AccountData data elements
 }

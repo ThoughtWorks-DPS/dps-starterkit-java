@@ -17,6 +17,7 @@ import lombok.ToString;
     description = "Metadata describing an {{cookiecutter.RESOURCE_NAME}} resource and unique identifier")
 public class {{cookiecutter.RESOURCE_NAME}}Response {
 
+  // TODO: Refactor {{cookiecutter.RESOURCE_NAME}}Response by renaming variable names, migrate types
   @NonNull
   @Schema(
       description = "unique id of the {{cookiecutter.RESOURCE_NAME}} resource",
@@ -45,7 +46,9 @@ public class {{cookiecutter.RESOURCE_NAME}}Response {
       example = "Lucy van Pelt")
   private final String fullName;
 
+  // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Response data elements
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+
   @NonNull
   @Schema(
     description = "Parent {{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id of the {{cookiecutter.RESOURCE_NAME}} holder",

@@ -21,7 +21,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -54,7 +56,9 @@ public class AccountEntityRepositoryTest {
             reference.getUserName(),
             reference.getPii(),
             reference.getFirstName(),
-            reference.getLastName());
+            reference.getLastName()
+            // TODO: Additional AccountEntity data elements
+            );
   }
 
   /**
@@ -62,15 +66,18 @@ public class AccountEntityRepositoryTest {
    *
    * @return one of the saved entities
    */
-  public AccountEntity populate() {
-    AccountEntity result = modelEntityRepository.save(entity);
-    testData.createCollectionBySpec(NamedDataFactory.DEFAULT_SPEC).stream()
-        .forEach(
-            d -> {
-              AccountEntity ref =
-                  new AccountEntity(d.getUserName(), d.getPii(), d.getFirstName(), d.getLastName());
-              modelEntityRepository.save(ref);
-            });
+  public List<AccountEntity> populate() {
+    List<AccountEntity> result =
+        testData.createCollectionBySpec(NamedDataFactory.DEFAULT_SPEC).stream()
+            .map(
+                d -> {
+                  AccountEntity ref =
+                      // TODO: Additional AccountEntity data elements
+                      new AccountEntity(
+                          d.getUserName(), d.getPii(), d.getFirstName(), d.getLastName());
+                  return modelEntityRepository.save(ref);
+                })
+            .collect(Collectors.toList());
 
     return result;
   }
@@ -129,12 +136,16 @@ public class AccountEntityRepositoryTest {
 
   @Test
   public void testDeleteRecord() {
-    AccountEntity saved = populate();
-
-    modelEntityRepository.deleteById(saved.getId());
+    populate();
+    AccountEntity saved = modelEntityRepository.save(entity);
 
     Page<AccountEntity> results =
         modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
+    assertThat(results.getContent().size()).isEqualTo(2);
+
+    modelEntityRepository.deleteById(saved.getId());
+
+    results = modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
     assertThat(results.getContent().size()).isEqualTo(1);
   }
 

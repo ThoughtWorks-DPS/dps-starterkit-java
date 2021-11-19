@@ -88,14 +88,18 @@ public class AccountSubAccountControllerTest {
 
     subRequest =
         new SubAccountRequest(
-            subReference.getUserName(), subReference.getFirstName(), subReference.getLastName());
+            subReference.getUserName(), subReference.getFirstName(), subReference.getLastName()
+            // TODO: Additional SubAccountRequest data elements
+            );
     subResource = real.toModel(subRequest);
     subOutput =
         new SubAccount(
             subReference.getId(),
             subResource.getUserName(),
             subResource.getFirstName(),
-            subResource.getLastName());
+            subResource.getLastName()
+            // TODO: Additional SubAccount data elements
+            );
     subResponse = real.toSubAccountResponse(subOutput);
     optionalSubResponse = Optional.of(subResponse);
     optionalSubOutput = Optional.of(subOutput);
@@ -272,12 +276,37 @@ public class AccountSubAccountControllerTest {
    * helper function to validate standard values.
    *
    * @param resource the object to validate
+   * @param reference what to compare with
+   */
+  protected void verifySubAccount(SubAccount resource, SubAccountData reference) {
+    assertThat(resource.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(resource.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(resource.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional SubAccount fields
+    assertThat(resource.getId()).isNotEqualTo(reference.getId());
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param response the object to validate
+   * @param reference what to compare with
+   */
+  protected void verifySubAccountResponse(SubAccountResponse response, SubAccountData reference) {
+    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional SubAccountResponse fields
+    assertThat(response.getId()).isEqualTo(reference.getId());
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param resource the object to validate
    */
   protected void verifySubAccount(SubAccount resource) {
-    assertThat(resource.getUserName().equals(subReference.getUserName()));
-    assertThat(resource.getFirstName().equals(subReference.getFirstName()));
-    assertThat(resource.getLastName().equals(subReference.getLastName()));
-    assertThat(resource.getId()).isNotEqualTo(subReference.getId());
+    verifySubAccount(resource, subReference);
   }
 
   /**
@@ -286,6 +315,6 @@ public class AccountSubAccountControllerTest {
    * @param response the object to validate
    */
   protected void verifySubAccountResponse(SubAccountResponse response) {
-    assertThat(response.getId()).isEqualTo(subReference.getId());
+    verifySubAccountResponse(response, subReference);
   }
 }

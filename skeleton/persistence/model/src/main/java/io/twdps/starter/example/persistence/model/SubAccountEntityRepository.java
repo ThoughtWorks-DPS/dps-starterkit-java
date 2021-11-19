@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface SubAccountEntityRepository
     extends PagingAndSortingRepository<SubAccountEntity, String> {
 
+  // TODO: Refactor SubAccountEntity queries
   Optional<SubAccountEntity> findByUserName(String userName);
 
   Page<SubAccountEntity> findByLastName(String lastName, Pageable pageable);

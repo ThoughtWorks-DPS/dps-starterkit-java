@@ -84,7 +84,10 @@ then
     [[ "${clear}" == "y" ]] && rm -rf "${dst:?}"/{*,.*} 2> /dev/null
     [[ -e "${dst}"/.git ]] && [[ "${nukeGit}" == "y" ]] && rm -rf "${dst:?}"/.git
   fi
-  cp -r "${path}" "${dst}"
+  find "${path}" -name .git -prune -o -depth 1 -print | while read -r i
+  do
+    cp -r "${i}" "${dst}"
+  done
   path="${dst}"
 fi
 

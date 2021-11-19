@@ -124,7 +124,9 @@ public class AccountRequestMapperTest {
         reference.getUserName(),
         reference.getPii(),
         reference.getFirstName(),
-        reference.getLastName());
+        reference.getLastName()
+        // TODO: Additional Account data elements
+        );
   }
 
   /**
@@ -137,7 +139,38 @@ public class AccountRequestMapperTest {
         reference.getUserName(),
         reference.getPii(),
         reference.getFirstName(),
-        reference.getLastName());
+        reference.getLastName()
+        // TODO: Additional AccountRequest data elements
+        );
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param resource the object to validate
+   * @param reference what to compare with
+   */
+  protected void verifyAccount(Account resource, AccountData reference) {
+    assertThat(resource.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(resource.getPii()).isEqualTo(reference.getPii());
+    assertThat(resource.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(resource.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional Account fields
+    assertThat(resource.getId()).isNotEqualTo(reference.getId());
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param response the object to validate
+   * @param reference what to compare with
+   */
+  private void verifyAccountResponse(AccountResponse response, AccountData reference) {
+    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(response.getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getFullName()).isEqualTo(reference.getFullName());
+    // TODO: Add assertions for additional AccountResponse fields
+    assertThat(response.getId()).isEqualTo(reference.getId());
   }
 
   /**
@@ -146,11 +179,7 @@ public class AccountRequestMapperTest {
    * @param resource the object to validate
    */
   protected void verifyAccount(Account resource) {
-    assertThat(resource.getUserName()).isEqualTo(reference.getUserName());
-    assertThat(resource.getPii()).isEqualTo(reference.getPii());
-    assertThat(resource.getFirstName()).isEqualTo(reference.getFirstName());
-    assertThat(resource.getLastName()).isEqualTo(reference.getLastName());
-    assertThat(resource.getId()).isNotEqualTo(reference.getId());
+    verifyAccount(resource, reference);
   }
 
   /**
@@ -159,9 +188,6 @@ public class AccountRequestMapperTest {
    * @param response the object to validate
    */
   private void verifyAccountResponse(AccountResponse response) {
-    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
-    assertThat(response.getPii()).isEqualTo(reference.getPii());
-    assertThat(response.getFullName()).isEqualTo(reference.getFullName());
-    assertThat(response.getId()).isEqualTo(reference.getId());
+    verifyAccountResponse(response, reference);
   }
 }

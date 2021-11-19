@@ -19,6 +19,7 @@ import lombok.ToString;
 @Schema(name = "SubAccountRequest", description = "Metadata describing an SubAccount resource")
 public class SubAccountRequest {
 
+  // TODO: Refactor SubAccountRequest by renaming variable names, migrate types
   @NonNull
   @Schema(description = "username of the SubAccount holder", example = "lvanpelt")
   private final String userName;
@@ -34,6 +35,8 @@ public class SubAccountRequest {
   @NonNull
   @Schema(description = "Family name of the SubAccount holder", example = "Van Pelt")
   private final String lastName;
+
+  // TODO: Additional SubAccountRequest data elements
 
   @NonNull
   @Schema(

@@ -96,13 +96,17 @@ class AccountErrorHandlingContextTest {
             reference.getUserName(),
             reference.getPii(),
             reference.getFirstName(),
-            reference.getLastName());
+            reference.getLastName()
+            // TODO: Additional AccountRequest data elements
+            );
     model =
         new Account(
             reference.getUserName(),
             reference.getPii(),
             reference.getFirstName(),
-            reference.getLastName());
+            reference.getLastName()
+            // TODO: Additional Account data elements
+            );
   }
 
   @Test
@@ -164,6 +168,7 @@ class AccountErrorHandlingContextTest {
   @Test
   void whenHttpMessageNotReadable_thenReturns400() throws Exception {
 
+    // TODO: update this AccountRequest message based on request content
     String requestMessage =
         "{ \"userName\": null, \"pii\": null, \"firstName\": null, \"lastName\": null}";
 
@@ -188,6 +193,7 @@ class AccountErrorHandlingContextTest {
     assertThat(error.getStatus().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     assertThat(error.getType().toString()).isEqualTo(requestValidationType);
     assertThat(error.getInstance().toString()).isEqualTo("%s/%s", baseUrl, traceInfo);
+    // TODO: update the fieldname in the error message, first field in AccountRequest
     assertThat(error.getDetail()).contains("userName is marked non-null but is null");
   }
 

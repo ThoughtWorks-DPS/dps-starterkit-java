@@ -15,6 +15,7 @@ class ExampleSubAccountApiSimulation extends Simulation {
   val scn = scenario("API Endpoint Simulation")
     .exec(http("Create SubAccount")
       .post("/v1/example/subaccounts")
+      // TODO: Additional SubAccountRequest data elements
       .body(StringBody("""{"userName":"mary.q.contrary", "pii": "987-65-4321", "firstName": "Mary", "lastName":"Contrary", "accountId": "uuid-parent"}"""))
       .asJson
       .check(jsonPath("$.id").saveAs("userId")))

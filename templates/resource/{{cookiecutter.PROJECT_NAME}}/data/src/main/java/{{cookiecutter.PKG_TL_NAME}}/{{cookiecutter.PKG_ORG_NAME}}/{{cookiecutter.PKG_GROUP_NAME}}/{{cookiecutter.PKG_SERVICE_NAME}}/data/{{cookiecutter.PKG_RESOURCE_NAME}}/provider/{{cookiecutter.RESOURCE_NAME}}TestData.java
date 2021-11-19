@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class {{cookiecutter.RESOURCE_NAME}}TestData extends GenericDataLoader<{{cookiecutter.RESOURCE_NAME}}Data> {
 
   /** construct hard-coded test data. */
+  // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Data data values.  See also ./resources/application-{{cookiecutter.PKG_RESOURCE_NAME}}.yml
   public {{cookiecutter.RESOURCE_NAME}}TestData() {
     getData()
         .put(
@@ -48,6 +49,17 @@ public class {{cookiecutter.RESOURCE_NAME}}TestData extends GenericDataLoader<{{
                     .fullName("Agent Smith")
                     .pii("eigenvalue")
                     .id("uuid-unit-vector")
+{%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+                    .{{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id("uuid-123456789-abcdef")
+{%- endif %}
+                    .build(),
+                {{cookiecutter.RESOURCE_NAME}}Data.builder()
+                    .firstName("Oops")
+                    .lastName("Smith")
+                    .userName("osmith")
+                    .fullName("Oops Smith")
+                    .pii("for-your-eyes-only")
+                    .id("uuid-license-to-fail")
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
                     .{{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id("uuid-123456789-abcdef")
 {%- endif %}

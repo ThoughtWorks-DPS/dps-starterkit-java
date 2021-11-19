@@ -77,6 +77,7 @@ public class AccountSubAccountServiceImplTest {
             .userName(reference.getUserName())
             .firstName(reference.getFirstName())
             .lastName(reference.getLastName())
+            // TODO: Additional SubAccount data elements
             .build();
     serviceResource =
         io.twdps.starter.example.service.spi.subaccount.model.SubAccount.builder()
@@ -84,6 +85,7 @@ public class AccountSubAccountServiceImplTest {
             .firstName(reference.getFirstName())
             .lastName(reference.getLastName())
             .pii(reference.getPii())
+            // TODO: Additional SubAccount data elements
             .build();
     serviceOutput =
         io.twdps.starter.example.service.spi.subaccount.model.SubAccount.builder()
@@ -92,6 +94,7 @@ public class AccountSubAccountServiceImplTest {
             .firstName(reference.getFirstName())
             .lastName(reference.getLastName())
             .pii(reference.getPii())
+            // TODO: Additional SubAccount data elements
             .accountId(parentIdentifier)
             .build();
     optionalServiceOutput = Optional.of(serviceOutput);

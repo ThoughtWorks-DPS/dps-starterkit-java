@@ -105,3 +105,17 @@ project
       └─cookiecutter.json
       └─template.yaml
 ```
+
+## TODO
+
+use Builder patterns everywhere
+/ validator functions in controller and service tests
+/ ActionSubActionControllerTest - response validator needs more
+X Add TODO: in all the spots necessary to update for refactoring
+X fix .equals -> .isEqualTo
+X remove ignore for parentId mapper
+/ update architecter naming conventions, add Builders
+/ update coding rules, exceptions for field injection provider.subresources
+Note which resource elements are expected to be unique or not, for data repository testing
+X persistence tests, don't add default single in populate()  make function void
+ServiceImplTest, add assertion functions

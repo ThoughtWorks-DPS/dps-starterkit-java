@@ -90,19 +90,25 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
 
     request =
        new {{cookiecutter.RESOURCE_NAME}}Request(
-           reference.getUserName(),
-           reference.getPii(),
-           reference.getFirstName(),
-           reference.getLastName()
+            reference.getUserName(),
+            reference.getPii(),
+            reference.getFirstName(),
+            reference.getLastName()
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
-          reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
-{%- endif %});
+            // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Request data elements
+            reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
+{%- else %}
+            // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Request data elements
+{%- endif %}
+            );
     model =
        new {{cookiecutter.RESOURCE_NAME}}(
-           reference.getUserName(),
-           reference.getPii(),
-           reference.getFirstName(),
-           reference.getLastName());
+            reference.getUserName(),
+            reference.getPii(),
+            reference.getFirstName(),
+            reference.getLastName()
+            // TODO: Additional {{cookiecutter.RESOURCE_NAME}} data elements
+            );
   }
 
   @Test
@@ -164,6 +170,7 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
   @Test
   void whenHttpMessageNotReadable_thenReturns400() throws Exception {
 
+    // TODO: update this {{cookiecutter.RESOURCE_NAME}}Request message based on request content
     String requestMessage =
         "{ \"userName\": null, \"pii\": null, \"firstName\": null, \"lastName\": null}";
 
@@ -189,6 +196,7 @@ class {{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest {
     assertThat(error.getType().toString()).isEqualTo(requestValidationType);
     assertThat(error.getInstance().toString())
         .isEqualTo("%s/%s", baseUrl, traceInfo);
+    // TODO: update the fieldname in the error message, first field in {{cookiecutter.RESOURCE_NAME}}Request
     assertThat(error.getDetail()).contains("userName is marked non-null but is null");
   }
 

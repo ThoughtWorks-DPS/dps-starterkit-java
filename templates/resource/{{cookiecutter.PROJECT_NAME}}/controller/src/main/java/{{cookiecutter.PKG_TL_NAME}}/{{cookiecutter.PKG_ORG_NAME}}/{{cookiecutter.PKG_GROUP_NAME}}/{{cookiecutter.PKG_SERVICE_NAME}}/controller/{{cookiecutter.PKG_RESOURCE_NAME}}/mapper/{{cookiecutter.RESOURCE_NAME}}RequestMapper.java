@@ -17,6 +17,7 @@ public interface {{cookiecutter.RESOURCE_NAME}}RequestMapper {
   @Mapping(constant = "UNKNOWN_ID", target = "id")
   {{cookiecutter.RESOURCE_NAME}} toModel({{cookiecutter.RESOURCE_NAME}}Request request);
 
+  // TODO: possibly remove this constructed field value
   @Mapping(
       target = "fullName",
       expression = "java(String.format(\"%s %s\",src.getFirstName(),src.getLastName()))")

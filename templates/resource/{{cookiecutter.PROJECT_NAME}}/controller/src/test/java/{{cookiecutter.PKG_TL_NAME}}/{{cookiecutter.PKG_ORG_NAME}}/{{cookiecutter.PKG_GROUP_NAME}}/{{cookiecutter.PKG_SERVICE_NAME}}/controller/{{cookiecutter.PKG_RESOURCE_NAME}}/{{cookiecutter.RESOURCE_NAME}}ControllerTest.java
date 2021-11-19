@@ -89,8 +89,12 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
         reference.getFirstName(),
         reference.getLastName()
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+        // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Request data elements
         reference.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
-{%- endif %});
+{%- else %}
+        // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Request data elements
+{%- endif %}
+        );
     resource = real.toModel(request);
     output =
         new {{cookiecutter.RESOURCE_NAME}}(
@@ -100,8 +104,12 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
             resource.getFirstName(),
             resource.getLastName()
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %},
+            // TODO: Additional {{cookiecutter.RESOURCE_NAME}} data elements
             resource.get{{cookiecutter.PARENT_RESOURCE_NAME}}Id()
-{%- endif %});
+{%- else %}
+            // TODO: Additional {{cookiecutter.RESOURCE_NAME}} data elements
+{%- endif %}
+            );
     response = real.to{{cookiecutter.RESOURCE_NAME}}Response(output);
     optionalResponse = Optional.of(response);
     optionalOutput = Optional.of(output);
@@ -271,13 +279,39 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
    * helper function to validate standard values.
    *
    * @param resource the object to validate
+   * @param reference what to compare with
+   */
+  protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource, {{cookiecutter.RESOURCE_NAME}}Data reference) {
+    assertThat(resource.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(resource.getPii()).isEqualTo(reference.getPii());
+    assertThat(resource.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(resource.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional {{cookiecutter.RESOURCE_NAME}} fields
+    assertThat(resource.getId()).isNotEqualTo(reference.getId());
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param response the object to validate
+   * @param reference what to compare with
+   */
+  private void verify{{cookiecutter.RESOURCE_NAME}}Response({{cookiecutter.RESOURCE_NAME}}Response response, {{cookiecutter.RESOURCE_NAME}}Data reference) {
+    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(response.getPii()).isEqualTo(reference.getPii());
+    assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(response.getFullName()).isEqualTo(reference.getFullName());
+    // TODO: Add assertions for additional {{cookiecutter.RESOURCE_NAME}}Response fields
+    assertThat(response.getId()).isEqualTo(reference.getId());
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param resource the object to validate
    */
   protected void verify{{cookiecutter.RESOURCE_NAME}}({{cookiecutter.RESOURCE_NAME}} resource) {
-    assertThat(resource.getUserName().equals(reference.getUserName()));
-    assertThat(resource.getPii().equals(reference.getPii()));
-    assertThat(resource.getFirstName().equals(reference.getFirstName()));
-    assertThat(resource.getLastName().equals(reference.getLastName()));
-    assertThat(resource.getId()).isNotEqualTo(reference.getId());
+    verify{{cookiecutter.RESOURCE_NAME}}(resource, reference);
   }
 
   /**
@@ -286,11 +320,7 @@ public class {{cookiecutter.RESOURCE_NAME}}ControllerTest {
    * @param response the object to validate
    */
   private void verify{{cookiecutter.RESOURCE_NAME}}Response({{cookiecutter.RESOURCE_NAME}}Response response) {
-    assertThat(response.getUserName().equals(reference.getUserName()));
-    assertThat(response.getPii().equals(reference.getPii()));
-    assertThat(response.getFirstName().equals(reference.getFirstName()));
-    assertThat(response.getFullName().equals(reference.getFullName()));
-    assertThat(response.getId()).isEqualTo(reference.getId());
+    verify{{cookiecutter.RESOURCE_NAME}}Response(response, reference);
   }
 
 }

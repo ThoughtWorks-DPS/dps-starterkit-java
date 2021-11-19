@@ -15,6 +15,7 @@ class ExampleAccountApiSimulation extends Simulation {
   val scn = scenario("API Endpoint Simulation")
     .exec(http("Create Account")
       .post("/v1/example/accounts")
+      // TODO: Additional AccountRequest data elements
       .body(StringBody("""{"userName":"mary.q.contrary", "pii": "987-65-4321", "firstName": "Mary", "lastName":"Contrary"}"""))
       .asJson
       .check(jsonPath("$.id").saveAs("userId")))

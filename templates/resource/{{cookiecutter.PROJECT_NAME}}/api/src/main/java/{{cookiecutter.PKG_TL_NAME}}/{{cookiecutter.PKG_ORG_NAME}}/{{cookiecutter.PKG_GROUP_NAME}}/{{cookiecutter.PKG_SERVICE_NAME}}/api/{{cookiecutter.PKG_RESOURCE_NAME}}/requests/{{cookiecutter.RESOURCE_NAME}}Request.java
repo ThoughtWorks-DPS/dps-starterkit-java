@@ -19,6 +19,7 @@ import lombok.ToString;
 @Schema(name = "{{cookiecutter.RESOURCE_NAME}}Request", description = "Metadata describing an {{cookiecutter.RESOURCE_NAME}} resource")
 public class {{cookiecutter.RESOURCE_NAME}}Request {
 
+   // TODO: Refactor {{cookiecutter.RESOURCE_NAME}}Request by renaming variable names, migrate types
   @NonNull
   @Schema(description = "username of the {{cookiecutter.RESOURCE_NAME}} holder", example = "lvanpelt")
   private final String userName;
@@ -35,7 +36,9 @@ public class {{cookiecutter.RESOURCE_NAME}}Request {
   @Schema(description = "Family name of the {{cookiecutter.RESOURCE_NAME}} holder", example = "Van Pelt")
   private final String lastName;
 
+  // TODO: Additional {{cookiecutter.RESOURCE_NAME}}Request data elements
 {%- if cookiecutter.CREATE_PARENT_RESOURCE == "y" %}
+
   @NonNull
   @Schema(
       description = "Parent {{cookiecutter.PARENT_RESOURCE_VAR_NAME}}Id of the {{cookiecutter.RESOURCE_NAME}} holder",

@@ -37,6 +37,12 @@ test-data:
           full-name: Agent Smith
           pii: eigenvalue
           id: uuid-unit-vector
+        - user-name: osmith
+          first-name: Oops
+          last-name: Smith
+          full-name: Oops Smith
+          pii: for-your-eyes-only
+          id: uuid-license-to-fail
         - user-name: neo
           first-name: Neo
           last-name: None

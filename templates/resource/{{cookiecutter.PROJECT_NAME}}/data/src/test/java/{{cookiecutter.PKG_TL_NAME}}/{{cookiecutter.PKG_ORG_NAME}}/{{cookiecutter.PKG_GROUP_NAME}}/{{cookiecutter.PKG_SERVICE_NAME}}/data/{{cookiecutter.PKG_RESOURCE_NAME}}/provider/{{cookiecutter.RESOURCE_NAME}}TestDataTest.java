@@ -12,6 +12,7 @@ public class {{cookiecutter.RESOURCE_NAME}}TestDataTest {
 
   private {{cookiecutter.RESOURCE_NAME}}TestData testData = new {{cookiecutter.RESOURCE_NAME}}TestData();
 
+  // TODO: Align these with the {{cookiecutter.RESOURCE_NAME}}Data test data
   private final String firstName = "Agent";
   private final String lastName = "Smith";
   private final String pii = "eigenvalue";
@@ -23,6 +24,7 @@ public class {{cookiecutter.RESOURCE_NAME}}TestDataTest {
     assertThat(data.getLastName()).isEqualTo(lastName);
     assertThat(data.getPii()).isEqualTo(pii);
     assertThat(data.getUserName()).isEqualTo(userName);
+    // TODO: Add assertions for additional {{cookiecutter.RESOURCE_NAME}}Data fields
   }
 
   @Test

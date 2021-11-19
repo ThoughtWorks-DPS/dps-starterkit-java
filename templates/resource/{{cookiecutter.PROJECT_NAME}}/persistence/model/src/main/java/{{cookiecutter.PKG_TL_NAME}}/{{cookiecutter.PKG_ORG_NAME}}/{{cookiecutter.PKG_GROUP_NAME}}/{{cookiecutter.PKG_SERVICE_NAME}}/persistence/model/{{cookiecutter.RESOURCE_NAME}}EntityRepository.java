@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface {{cookiecutter.RESOURCE_NAME}}EntityRepository
     extends PagingAndSortingRepository<{{cookiecutter.RESOURCE_NAME}}Entity, String> {
 
+  // TODO: Refactor {{cookiecutter.RESOURCE_NAME}}Entity queries
   Optional<{{cookiecutter.RESOURCE_NAME}}Entity> findByUserName(String userName);
 
   Page<{{cookiecutter.RESOURCE_NAME}}Entity> findByLastName(String lastName, Pageable pageable);

@@ -121,7 +121,9 @@ public class AccountSubAccountRequestMapperTest {
    */
   private SubAccount createSubAccount(String id) {
     return new SubAccount(
-        id, reference.getUserName(), reference.getFirstName(), reference.getLastName());
+        id, reference.getUserName(), reference.getFirstName(), reference.getLastName()
+        // TODO: Additional SubAccount data elements
+        );
   }
 
   /**
@@ -131,7 +133,37 @@ public class AccountSubAccountRequestMapperTest {
    */
   private SubAccountRequest createSubAccountRequest() {
     return new SubAccountRequest(
-        reference.getUserName(), reference.getFirstName(), reference.getLastName());
+        reference.getUserName(), reference.getFirstName(), reference.getLastName()
+        // TODO: Additional SubAccountRequest data elements
+        );
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param resource the object to validate
+   * @param reference what to compare with
+   */
+  private void verifySubAccount(SubAccount resource, SubAccountData reference) {
+    assertThat(resource.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(resource.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(resource.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional SubAccount fields
+    assertThat(resource.getId()).isNotEqualTo(reference.getId());
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param response the object to validate
+   * @param reference what to compare with
+   */
+  private void verifySubAccountResponse(SubAccountResponse response, SubAccountData reference) {
+    assertThat(response.getId()).isEqualTo(reference.getId());
+    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
+    assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
+    assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional SubAccountResponse fields
   }
 
   /**
@@ -140,10 +172,7 @@ public class AccountSubAccountRequestMapperTest {
    * @param resource the object to validate
    */
   private void verifySubAccount(SubAccount resource) {
-    assertThat(resource.getUserName()).isEqualTo(reference.getUserName());
-    assertThat(resource.getFirstName()).isEqualTo(reference.getFirstName());
-    assertThat(resource.getLastName()).isEqualTo(reference.getLastName());
-    assertThat(resource.getId()).isNotEqualTo(reference.getId());
+    verifySubAccount(resource, reference);
   }
 
   /**
@@ -152,9 +181,6 @@ public class AccountSubAccountRequestMapperTest {
    * @param response the object to validate
    */
   private void verifySubAccountResponse(SubAccountResponse response) {
-    assertThat(response.getId()).isEqualTo(reference.getId());
-    assertThat(response.getUserName()).isEqualTo(reference.getUserName());
-    assertThat(response.getFirstName()).isEqualTo(reference.getFirstName());
-    assertThat(response.getLastName()).isEqualTo(reference.getLastName());
+    verifySubAccountResponse(response, reference);
   }
 }

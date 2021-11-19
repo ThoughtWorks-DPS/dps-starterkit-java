@@ -62,6 +62,7 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Ent
         reference.getUserName(),
         reference.getFirstName(),
         reference.getLastName());
+        // TODO: Additional {{cookiecutter.SUB_RESOURCE_NAME}} data elements
   }
 
   /**
@@ -77,6 +78,7 @@ public class {{cookiecutter.RESOURCE_NAME}}{{cookiecutter.SUB_RESOURCE_NAME}}Ent
     assertThat(subResource.getPii()).isEqualTo("FIXME");
     assertThat(subResource.getId()).isEqualTo(reference.getId());
     assertThat(subResource.get{{cookiecutter.RESOURCE_NAME}}Id()).isEqualTo(parentIdentifier);
+    // TODO: Add assertions for additional {{cookiecutter.SUB_RESOURCE_NAME}} fields
   }
 }
 {%- endif %}

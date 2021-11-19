@@ -126,6 +126,7 @@ public class SubAccountRequestMapperTest {
         reference.getPii(),
         reference.getFirstName(),
         reference.getLastName(),
+        // TODO: Additional SubAccount data elements
         reference.getAccountId());
   }
 
@@ -140,6 +141,7 @@ public class SubAccountRequestMapperTest {
         reference.getPii(),
         reference.getFirstName(),
         reference.getLastName(),
+        // TODO: Additional SubAccountRequest data elements
         reference.getAccountId());
   }
 
@@ -147,12 +149,14 @@ public class SubAccountRequestMapperTest {
    * helper function to validate standard values.
    *
    * @param resource the object to validate
+   * @param reference what to compare with
    */
-  protected void verifySubAccount(SubAccount resource) {
+  protected void verifySubAccount(SubAccount resource, SubAccountData reference) {
     assertThat(resource.getUserName()).isEqualTo(reference.getUserName());
     assertThat(resource.getPii()).isEqualTo(reference.getPii());
     assertThat(resource.getFirstName()).isEqualTo(reference.getFirstName());
     assertThat(resource.getLastName()).isEqualTo(reference.getLastName());
+    // TODO: Add assertions for additional SubAccount fields
     assertThat(resource.getId()).isNotEqualTo(reference.getId());
     assertThat(resource.getAccountId()).isEqualTo(reference.getAccountId());
   }
@@ -161,12 +165,32 @@ public class SubAccountRequestMapperTest {
    * helper function to validate standard values.
    *
    * @param response the object to validate
+   * @param reference what to compare with
    */
-  private void verifySubAccountResponse(SubAccountResponse response) {
+  private void verifySubAccountResponse(SubAccountResponse response, SubAccountData reference) {
     assertThat(response.getUserName()).isEqualTo(reference.getUserName());
     assertThat(response.getPii()).isEqualTo(reference.getPii());
     assertThat(response.getFullName()).isEqualTo(reference.getFullName());
+    // TODO: Add assertions for additional SubAccountResponse fields
     assertThat(response.getId()).isEqualTo(reference.getId());
     assertThat(response.getAccountId()).isEqualTo(reference.getAccountId());
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param resource the object to validate
+   */
+  protected void verifySubAccount(SubAccount resource) {
+    verifySubAccount(resource, reference);
+  }
+
+  /**
+   * helper function to validate standard values.
+   *
+   * @param response the object to validate
+   */
+  private void verifySubAccountResponse(SubAccountResponse response) {
+    verifySubAccountResponse(response, reference);
   }
 }
