@@ -37,7 +37,7 @@ public class SubAccountTestDataTest {
   @Test
   public void collectionPropertiesPopulated() {
     List<SubAccountData> collection = testData.loadCollections().get(NamedDataFactory.DEFAULT_SPEC);
-    assertThat(collection.size()).isEqualTo(2);
+    assertThat(collection.size()).isEqualTo(3);
     SubAccountData data = collection.get(0);
 
     validate(data);

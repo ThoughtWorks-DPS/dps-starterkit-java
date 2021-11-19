@@ -37,7 +37,7 @@ public class AccountTestDataTest {
   @Test
   public void collectionPropertiesPopulated() {
     List<AccountData> collection = testData.loadCollections().get(NamedDataFactory.DEFAULT_SPEC);
-    assertThat(collection.size()).isEqualTo(2);
+    assertThat(collection.size()).isEqualTo(3);
     AccountData data = collection.get(0);
 
     validate(data);

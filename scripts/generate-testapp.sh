@@ -2,8 +2,7 @@
 
 path=$(dirname "$0")
 binary="${path}"/generate-skeleton.sh
-release=release-0.1.0
-releaseOpt="--tag ${release}"
+#release="release-0.1.0"
 #repoPath="--repo https://github.com/thoughtworks-dps/dps-starterkit-java"
 repoPath="--repo ~/src/dps/dps-starterkit-java"
 tl="--tl io"
@@ -17,12 +16,13 @@ function cmdLineOptions {
 }
 
 function exec_cmd {
-  echo "${binary}" $* >> /tmp/cc
-  sh -c "${binary} $*"
+  echo "${binary}" "$@" >> /tmp/cc
+  sh -c "${binary}" "$@"
 }
 
 function exec_std {
-  exec_cmd $(cmdLineOptions) $*
+# shellcheck disable=SC2046
+  exec_cmd $(cmdLineOptions) "$@"
 }
 
 exec_std --gen-skeleton

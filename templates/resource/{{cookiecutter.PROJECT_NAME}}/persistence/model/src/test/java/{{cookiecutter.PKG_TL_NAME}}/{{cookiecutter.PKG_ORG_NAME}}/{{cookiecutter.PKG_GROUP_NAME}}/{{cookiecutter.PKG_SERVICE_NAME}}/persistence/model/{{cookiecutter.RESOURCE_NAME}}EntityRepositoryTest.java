@@ -137,12 +137,12 @@ public class {{cookiecutter.RESOURCE_NAME}}EntityRepositoryTest {
 
     Page<{{cookiecutter.RESOURCE_NAME}}Entity> results =
     modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
-    assertThat(results.getContent().size()).isEqualTo(2);
+    assertThat(results.getContent().size()).isEqualTo(3);
 
     modelEntityRepository.deleteById(saved.getId());
 
     results = modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
-    assertThat(results.getContent().size()).isEqualTo(1);
+    assertThat(results.getContent().size()).isEqualTo(2);
   }
 
   @Test

@@ -2,7 +2,6 @@
 
 rawSource="https://raw.githubusercontent.com/thoughtworks-dps/dps-starterkit-java/main/scripts/generate-skeleton.sh"
 installPath="/usr/local/bin"
-localInstallPath="~/bin"
 useSudo=n
 
 function usage {
@@ -14,7 +13,7 @@ function usage {
 function get_command {
   local cmd=$1
 
-  if [[ $useSudo == y ]]
+  if [[ $useSudo == "y" ]]
   then
     echo "sudo ${cmd}"
   else
@@ -59,12 +58,12 @@ done
 
 ensure_path "${installPath}"
 
-if [[ ! -z "$(which wget)" ]]
+if [[ -n "$(which wget)" ]]
 then
-  use_wget $installPath
-elif [[ ! -z "$(which curl)" ]]
+  use_wget "${installPath}"
+elif [[ -n "$(which curl)" ]]
 then
-  use_curl $installPath
+  use_curl "${installPath}"
 else
   echo "Error: wget or curl not available"
   exit 1

@@ -141,12 +141,12 @@ public class AccountEntityRepositoryTest {
 
     Page<AccountEntity> results =
         modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
-    assertThat(results.getContent().size()).isEqualTo(2);
+    assertThat(results.getContent().size()).isEqualTo(3);
 
     modelEntityRepository.deleteById(saved.getId());
 
     results = modelEntityRepository.findByLastName(reference.getLastName(), Pageable.unpaged());
-    assertThat(results.getContent().size()).isEqualTo(1);
+    assertThat(results.getContent().size()).isEqualTo(2);
   }
 
   @Test
