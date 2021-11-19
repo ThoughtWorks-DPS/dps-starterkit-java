@@ -27,3 +27,5 @@ fileignoreconfig:
   checksum: c35e13bf1c59af56035764d6d471fb22ad718619feee09f0ff82747939982ece
 - filename: templates/subresource/{{cookiecutter.PROJECT_NAME}}/app/src/test/java/{{cookiecutter.PKG_TL_NAME}}/{{cookiecutter.PKG_ORG_NAME}}/{{cookiecutter.PKG_GROUP_NAME}}/{{cookiecutter.PKG_SERVICE_NAME}}/controller/{{cookiecutter.PKG_RESOURCE_NAME}}/{{cookiecutter.RESOURCE_NAME}}ErrorHandlingContextTest.java
   checksum: 22dec0711c06ae096c0751b58a3f2fa0ffbf8effe4f503626619c8deb44775ee
+- filename: docs/diagrams/demo.puml
+  checksum: b450bbcfd8f0c05a29ef5e40bea125a64b1a5d7a6bc25f04a01a1d87af3a3999

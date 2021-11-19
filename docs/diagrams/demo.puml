@@ -1,0 +1,69 @@
+@startuml
+
+object producer {
+  name = "example"
+  active = true
+  uri = "http://example.com"
+  username = "tlogan"
+  password = "not-the-password"
+}
+
+object channel {
+  name = "example"
+  active = true
+  path = "/path/to/radar-data"
+  process = "[ { functionName: 'dateAppender'},\n\t{ functionName: 'download' } ]"
+  producerId = <parentId>
+}
+
+object artifact {
+  sourceUri = "http://example.com/path/to/radar-data/file"
+  localUri = "file:///tmp/collector/radar/file"
+  acquiredAt = "2021-05-05T05:05:05.005Z"
+  etag = "abc123def"
+  state = "complete"
+  channelId = <parentId>
+}
+
+object job {
+  schedule = "T10M"
+  channelId = <parentId>
+}
+
+producer --* "1..*" channel
+channel --* "1..*" job
+channel --* "1..*" artifact
+
+note right of producer
+/v1/collector/producers/
+/v1/collector/producers/{id}/channels
+end note
+
+note right of channel
+/v1/collector/channels/
+/v1/collector/channels/{id}/artifacts/
+/v1/collector/channels/{id}/jobs/
+end note
+
+note right of artifact : /v1/collector/artifacts/
+
+note right of job : /v1/collector/jobs/
+
+note left of producer : parent
+
+note left of channel : link
+
+note left of artifact : child
+
+note left of job : child
+
+note as N1
+generate-skeleton.sh --gen-skeleton
+generate-skeleton.sh -parent producer -child channel -gen-parent
+generate-skeleton.sh -parent producer -resource channel -child job --gen-link
+generate-skeleton.sh -parent producer -resource channel -child artifact --gen-link
+generate-skeleton.sh -parent channel -child job --gen-child
+generate-skeleton.sh -parent channel -child artifact --gen-child
+end note
+
+@enduml

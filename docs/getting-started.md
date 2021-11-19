@@ -1,5 +1,21 @@
 # Getting Started
 
+## Installing the StarterKit CLI
+
+Paste the following in your macOS Terminal or Linux shell prompt.
+This will install the StarterKit CLI `skcli` to `/usr/local/bin`.
+
+```bash
+sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/thoughtworks-dps/dps-starterkit-java/main/scripts/install-starterkit-cli.sh)"
+```
+
+```bash
+skcli --help   # show help
+```
+
+You can use the `skcli` to create new projects.
+You can also use it to add resource skeletons to your existing code base (providing it is already a starterkit project).
+
 ## Dev Tools Setup
 
 After you've generated a skeleton project, ensure that the required developer tools are installed:
