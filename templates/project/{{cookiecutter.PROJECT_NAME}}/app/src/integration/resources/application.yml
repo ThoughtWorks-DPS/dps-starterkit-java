@@ -52,6 +52,9 @@ server:
     enabled: false
   port: 8080
 
+log4j2:
+  formatMsgNoLookups: true
+
 spring:
   application:
     name: {{cookiecutter.SERVICE_NAME}}
